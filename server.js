@@ -50,7 +50,7 @@ io.sockets.on('connection', function (client) {
             cb('taken');
         } else {
             client.join(name);
-            cb(null, name);
+            if (cb) cb(null, name);
         }
     });
 });

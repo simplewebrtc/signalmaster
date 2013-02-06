@@ -22,7 +22,6 @@ io.sockets.on('connection', function (client) {
         io.sockets.in(name).emit('joined', {
             room: name,
             id: client.id
-            //people: io.sockets.clients(name)
         });
     });
 
@@ -40,7 +39,8 @@ io.sockets.on('connection', function (client) {
 
     client.on('create', function (name, cb) {
         if (arguments.length == 2) {
-            cb = typeof cb == 'function' ? cb : function () {};
+            cb = (typeof cb == 'function') ? cb : function () {};
+            name = name || uuid();
         } else {
             cb = name;
             name = uuid();

@@ -25,7 +25,7 @@ io.sockets.on('connection', function (client) {
         });
     });
 
-    client.on('disconnect', function () {
+    function leave() {
         var rooms = io.sockets.manager.roomClients[client.id];
         for (var name in rooms) {
             if (name) {
@@ -35,7 +35,10 @@ io.sockets.on('connection', function (client) {
                 });
             }
         }
-    });
+    }
+
+    client.on('disconnect', leave);
+    client.on('leave', leave);
 
     client.on('create', function (name, cb) {
         if (arguments.length == 2) {

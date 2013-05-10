@@ -4,41 +4,64 @@ var yetify = require('yetify'),
     uuid = require('node-uuid'),
     io = require('socket.io').listen(config.server.port);
 
+function describeRoom(name) {
+    var clients = io.sockets.clients(name),
+        result = {};
+    clients.forEach(function (client) {
+        result[client.id] = client.resources;
+    });
+    return result;
+}
+
 io.sockets.on('connection', function (client) {
-    // pass a message
+    client.resources = {
+        screen: false,
+        video: true,
+        audio: false
+    };
+
+    // pass a message to another id
     client.on('message', function (details) {
         var otherClient = io.sockets.sockets[details.to];
-
-        if (!otherClient) {
-            return;
-        }
-        delete details.to;
+        if (!otherClient) return;
         details.from = client.id;
         otherClient.emit('message', details);
     });
 
-    client.on('join', function (name) {
-        client.join(name);
-        io.sockets.in(name).emit('joined', {
-            room: name,
-            id: client.id
-        });
+    client.on('shareScreen', function () {
+        client.resources.screen = true;
     });
 
-    function leave() {
-        var rooms = io.sockets.manager.roomClients[client.id];
-        for (var name in rooms) {
-            if (name) {
-                io.sockets.in(name.slice(1)).emit('left', {
-                    room: name,
-                    id: client.id
-                });
-            }
-        }
+    client.on('unshareScreen', function (type) {
+        client.resources.screen = false;
+        if (client.room) removeFeed('screen');
+    });
+
+    client.on('join', join);
+
+    function removeFeed(type) {
+        io.sockets.in(client.room).emit('remove', {
+            id: client.id,
+            type: type
+        });
     }
 
-    client.on('disconnect', leave);
-    client.on('leave', leave);
+    function join(name, cb) {
+        // sanity check
+        if (typeof name !== 'string') return;
+        // leave any existing rooms
+        if (client.room) removeFeed();
+        if (typeof cb === 'function') cb(describeRoom(name))
+        client.join(name);
+        client.room = name;
+    }
+
+    // we don't want to pass "leave" directly because the
+    // event type string of "socket end" gets passed too.
+    client.on('disconnect', function () {
+        removeFeed();
+    });
+    client.on('leave', removeFeed);
 
     client.on('create', function (name, cb) {
         if (arguments.length == 2) {
@@ -52,7 +75,7 @@ io.sockets.on('connection', function (client) {
         if (io.sockets.clients(name).length) {
             cb('taken');
         } else {
-            client.join(name);
+            join(name);
             if (cb) cb(null, name);
         }
     });

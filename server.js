@@ -5,10 +5,12 @@ var yetify = require('yetify'),
     io = require('socket.io').listen(config.server.port);
 
 function describeRoom(name) {
-    var clients = io.sockets.clients(name),
-        result = {};
+    var clients = io.sockets.clients(name);
+    var result = {
+        clients: {}
+    };
     clients.forEach(function (client) {
-        result[client.id] = client.resources;
+        result.clients[client.id] = client.resources;
     });
     return result;
 }
@@ -51,7 +53,7 @@ io.sockets.on('connection', function (client) {
         if (typeof name !== 'string') return;
         // leave any existing rooms
         if (client.room) removeFeed();
-        if (typeof cb === 'function') cb(describeRoom(name))
+        if (typeof cb === 'function') cb(null, describeRoom(name))
         client.join(name);
         client.room = name;
     }

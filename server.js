@@ -15,6 +15,14 @@ function describeRoom(name) {
     return result;
 }
 
+function safeCb(cb) {
+    if (typeof cb === 'function') {
+        return cb;
+    } else {
+        return function () {};
+    }
+}
+
 io.sockets.on('connection', function (client) {
     client.resources = {
         screen: false,
@@ -53,7 +61,7 @@ io.sockets.on('connection', function (client) {
         if (typeof name !== 'string') return;
         // leave any existing rooms
         if (client.room) removeFeed();
-        if (typeof cb === 'function') cb(null, describeRoom(name))
+        safeCb(cb)(null, describeRoom(name))
         client.join(name);
         client.room = name;
     }
@@ -75,10 +83,10 @@ io.sockets.on('connection', function (client) {
         }
         // check if exists
         if (io.sockets.clients(name).length) {
-            cb('taken');
+            safeCb(cb)('taken');
         } else {
             join(name);
-            if (cb) cb(null, name);
+            safeCb(cb)(null, name);
         }
     });
 });

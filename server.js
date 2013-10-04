@@ -49,11 +49,13 @@ io.sockets.on('connection', function (client) {
 
     client.on('join', join);
 
-    function removeFeed(type) {
+    function removeFeed() {
         io.sockets.in(client.room).emit('remove', {
-            id: client.id,
-            type: type
+            id: client.id
         });
+        if (client.room) {
+          client.leave(client.room)
+        }
     }
 
     function join(name, cb) {

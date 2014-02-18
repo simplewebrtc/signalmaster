@@ -61,7 +61,7 @@ io.sockets.on('connection', function (client) {
         if (typeof name !== 'string') return;
         // leave any existing rooms
         if (client.room) removeFeed();
-        safeCb(cb)(null, describeRoom(name))
+        safeCb(cb)(null, describeRoom(name));
         client.join(name);
         client.room = name;
     }

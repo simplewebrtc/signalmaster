@@ -1,8 +1,8 @@
 {
   "name": "signal-master",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "repository": {
-    "type": "git", 
+    "type": "git",
     "url": "git@github.com:andyet/signal-master.git"
   },
   "description": "Mind-meldification for teams",

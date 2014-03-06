@@ -2,5 +2,15 @@
     "isDev": true,
     "server": {
         "port": 8888
-    }
+    },
+    "stunservers" : [
+        {"url": "stun:stun.l.google.com:19302"}
+    ],
+    "turnservers" : [
+        /*
+        { "url": "turn:your.turn.server.here",
+          "secret": "turnserversharedsecret"
+          "expiry": 86400 }
+          */
+    ]
 }

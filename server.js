@@ -2,6 +2,7 @@
 var yetify = require('yetify'),
     config = require('getconfig'),
     uuid = require('node-uuid'),
+    crypto = require('crypto'),
     io = require('socket.io').listen(config.server.port);
 
 function describeRoom(name) {
@@ -61,7 +62,7 @@ io.sockets.on('connection', function (client) {
         if (typeof name !== 'string') return;
         // leave any existing rooms
         if (client.room) removeFeed();
-        safeCb(cb)(null, describeRoom(name))
+        safeCb(cb)(null, describeRoom(name));
         client.join(name);
         client.room = name;
     }
@@ -89,6 +90,28 @@ io.sockets.on('connection', function (client) {
             safeCb(cb)(null, name);
         }
     });
+
+    // tell client about stun and turn servers and generate nonces
+    if (config.stunservers) {
+        client.emit('stunservers', config.stunservers);
+    }
+    if (config.turnservers) {
+        // create shared secret nonces for TURN authentication
+        // the process is described in draft-uberti-behave-turn-rest
+        var credentials = [];
+        config.turnservers.forEach(function (server) {
+            var hmac = crypto.createHmac('sha1', server.secret);
+            // default to 86400 seconds timeout unless specified
+            var username = new Date().getTime() + (server.expiry || 86400) + "";
+            hmac.update(username);
+            credentials.push({
+                username: username,
+                credential: hmac.digest('base64'),
+                url: server.url
+            });
+        });
+        client.emit('turnservers', credentials);
+    }
 });
 
 if (config.uid) process.setuid(config.uid);

@@ -5,7 +5,7 @@
     "type": "git",
     "url": "git@github.com:andyet/signal-master.git"
   },
-  "description": "Mind-meldification for teams",
+  "description": "Simple signaling server for SimpleWebRTC",
   "dependencies": {
     "async": "0.1.9",
     "node-uuid": "1.2.0",

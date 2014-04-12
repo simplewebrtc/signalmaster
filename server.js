@@ -72,7 +72,9 @@ io.sockets.on('connection', function (client) {
     client.on('disconnect', function () {
         removeFeed();
     });
-    client.on('leave', removeFeed);
+    client.on('leave', function () {
+        removeFeed();
+    });
 
     client.on('create', function (name, cb) {
         if (arguments.length == 2) {

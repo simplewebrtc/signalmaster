@@ -56,8 +56,10 @@ io.sockets.on('connection', function (client) {
                 id: client.id,
                 type: type
             });
-            client.leave(client.room);
-            client.room = undefined;
+            if (!type) {
+                client.leave(client.room);
+                client.room = undefined;
+            }
         }
     }
 

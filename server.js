@@ -45,23 +45,27 @@ io.sockets.on('connection', function (client) {
 
     client.on('unshareScreen', function (type) {
         client.resources.screen = false;
-        if (client.room) removeFeed('screen');
+        removeFeed('screen');
     });
 
     client.on('join', join);
 
     function removeFeed(type) {
-        io.sockets.in(client.room).emit('remove', {
-            id: client.id,
-            type: type
-        });
+        if (client.room) { 
+            io.sockets.in(client.room).emit('remove', {
+                id: client.id,
+                type: type
+            });
+            client.leave(client.room);
+            client.room = undefined;
+        }
     }
 
     function join(name, cb) {
         // sanity check
         if (typeof name !== 'string') return;
         // leave any existing rooms
-        if (client.room) removeFeed();
+        removeFeed();
         safeCb(cb)(null, describeRoom(name));
         client.join(name);
         client.room = name;

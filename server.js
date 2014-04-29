@@ -111,7 +111,7 @@ io.sockets.on('connection', function (client) {
         config.turnservers.forEach(function (server) {
             var hmac = crypto.createHmac('sha1', server.secret);
             // default to 86400 seconds timeout unless specified
-            var username = new Date().getTime() + (server.expiry || 86400) + "";
+            var username = Math.floor(new Date().getTime() / 1000) + (server.expiry || 86400) + "";
             hmac.update(username);
             credentials.push({
                 username: username,

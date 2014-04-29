@@ -3,7 +3,8 @@ var yetify = require('yetify'),
     config = require('getconfig'),
     uuid = require('node-uuid'),
     crypto = require('crypto'),
-    io = require('socket.io').listen(config.server.port);
+    port = parseInt(process.env.PORT || config.server.port, 10),
+    io = require('socket.io').listen(port);
 
 function describeRoom(name) {
     var clients = io.sockets.clients(name);
@@ -115,4 +116,4 @@ io.sockets.on('connection', function (client) {
 });
 
 if (config.uid) process.setuid(config.uid);
-console.log(yetify.logo() + ' -- signal master is running at: http://localhost:' + config.server.port);
+console.log(yetify.logo() + ' -- signal master is running at: http://localhost:' + port);

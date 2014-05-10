@@ -64,6 +64,13 @@ io.sockets.on('connection', function (client) {
         }
     }
 
+    function emitToRoom(eventName, data) {
+        io.sockets.in(client.room).emit(eventName, {
+            id: client.id,
+            here: Object.keys(io.sockets.in(client.room).sockets)
+        });
+    }
+
     function join(name, cb) {
         // sanity check
         if (typeof name !== 'string') return;
@@ -72,6 +79,7 @@ io.sockets.on('connection', function (client) {
         safeCb(cb)(null, describeRoom(name));
         client.join(name);
         client.room = name;
+        emitToRoom('join');
     }
 
     // we don't want to pass "leave" directly because the

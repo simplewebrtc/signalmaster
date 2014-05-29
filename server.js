@@ -6,6 +6,11 @@ var yetify = require('yetify'),
     port = parseInt(process.env.PORT || config.server.port, 10),
     io = require('socket.io').listen(port);
 
+if (config.logLevel) {
+    // https://github.com/Automattic/socket.io/wiki/Configuring-Socket.IO
+    io.set('log level', config.logLevel);
+}
+
 function describeRoom(name) {
     var clients = io.sockets.clients(name);
     var result = {

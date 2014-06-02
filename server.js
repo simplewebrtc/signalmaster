@@ -39,8 +39,11 @@ io.sockets.on('connection', function (client) {
 
     // pass a message to another id
     client.on('message', function (details) {
+        if (!details) return;
+
         var otherClient = io.sockets.sockets[details.to];
         if (!otherClient) return;
+
         details.from = client.id;
         otherClient.emit('message', details);
     });
@@ -57,7 +60,7 @@ io.sockets.on('connection', function (client) {
     client.on('join', join);
 
     function removeFeed(type) {
-        if (client.room) { 
+        if (client.room) {
             io.sockets.in(client.room).emit('remove', {
                 id: client.id,
                 type: type

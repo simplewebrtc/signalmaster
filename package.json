@@ -13,5 +13,12 @@
   "repository": {
     "type": "git",
     "url": "git@github.com:andyet/signal-master.git"
+  },
+  "devDependencies": {
+    "socket.io-client": "0.9.16",
+    "tape": "^2.13.1"
+  },
+  "scripts": {
+    "test": "node test.js"
   }
 }

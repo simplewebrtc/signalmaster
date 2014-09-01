@@ -42,7 +42,7 @@ io.sockets.on('connection', function (client) {
         if (!details) return;
 
         var otherClient = io.sockets.sockets[details.to];
-        if (!otherClient) return;
+        if (!otherClient || otherClient.room !== client.room) return;
 
         details.from = client.id;
         otherClient.emit('message', details);

@@ -6,16 +6,12 @@ var yetify = require('yetify'),
     port = parseInt(process.env.PORT || config.server.port, 10),
     io = require('socket.io').listen(port);
 
-if (config.logLevel) {
-    // https://github.com/Automattic/socket.io/wiki/Configuring-Socket.IO
-    io.set('log level', config.logLevel);
-}
-
 function describeRoom(name) {
-    var clients = io.sockets.clients(name);
+    var clients = io.nsps['/'].adapter.rooms[name] || {};
     var result = {
         clients: {}
     };
+    console.log(clients);
     clients.forEach(function (client) {
         result.clients[client.id] = client.resources;
     });
@@ -100,7 +96,8 @@ io.sockets.on('connection', function (client) {
             name = uuid();
         }
         // check if exists
-        if (io.sockets.clients(name).length) {
+        var room = io.nsps['/'].adapter.rooms[name];
+        if (room && room.length) {
             safeCb(cb)('taken');
         } else {
             join(name);

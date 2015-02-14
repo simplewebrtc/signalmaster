@@ -2,7 +2,11 @@
     "isDev": true,
     "logLevel": 3,
     "server": {
-        "port": 8888
+        "port": 8888,
+        "secure": false, /* whether this connects via https */
+        "key": null,
+        "cert": null,
+        "password": null 
     },
     "stunservers" : [
         {"url": "stun:stun.l.google.com:19302"}

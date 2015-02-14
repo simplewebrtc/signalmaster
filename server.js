@@ -3,8 +3,27 @@ var yetify = require('yetify'),
     config = require('getconfig'),
     uuid = require('node-uuid'),
     crypto = require('crypto'),
+    fs = require('fs'),
     port = parseInt(process.env.PORT || config.server.port, 10),
-    io = require('socket.io').listen(port);
+    server_handler = function (req, res) {
+        res.writeHead(404);
+        res.end();
+    },
+    server = null;
+
+// Create an http(s) server instance to that socket.io can listen to
+if (config.server.secure) {
+    server = require('https').Server({
+        key: fs.readFileSync(config.server.key),
+        cert: fs.readFileSync(config.server.cert),
+        passphrase: config.server.password
+    }, server_handler);
+} else {
+    server = require('http').Server(server_handler);
+}
+server.listen(port);
+
+var io = require('socket.io').listen(server);
 
 if (config.logLevel) {
     // https://github.com/Automattic/socket.io/wiki/Configuring-Socket.IO
@@ -129,4 +148,11 @@ io.sockets.on('connection', function (client) {
 });
 
 if (config.uid) process.setuid(config.uid);
-console.log(yetify.logo() + ' -- signal master is running at: http://localhost:' + port);
+
+var httpUrl;
+if (config.server.secure) {
+    httpUrl = "https://localhost:" + port;
+} else {
+    httpUrl = "http://localhost:" + port;
+}
+console.log(yetify.logo() + ' -- signal master is running at: ' + httpUrl);

@@ -101,6 +101,7 @@ io.sockets.on('connection', function (client) {
         // check if maximum number of clients reached
         if (config.rooms && config.rooms.maxClients > 0 && 
           clientsInRoom(name) >= config.rooms.maxClients) {
+            safeCb(cb)('full');
             return;
         }
         // leave any existing rooms

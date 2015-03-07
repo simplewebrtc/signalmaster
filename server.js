@@ -42,7 +42,7 @@ function describeRoom(name) {
 }
 
 function clientsInRoom(name) {
-  return io.sockets.clients(name).length;
+    return io.sockets.clients(name).length;
 }
 
 function safeCb(cb) {
@@ -99,7 +99,10 @@ io.sockets.on('connection', function (client) {
         // sanity check
         if (typeof name !== 'string') return;
         // check if maximum number of clients reached
-        if (config.rooms.maxClients > 0 && clientsInRoom(name) >= config.rooms.maxClients) return;
+        if (config.rooms && config.rooms.maxClients > 0 && 
+          clientsInRoom(name) >= config.rooms.maxClients) {
+            return;
+        }
         // leave any existing rooms
         removeFeed();
         safeCb(cb)(null, describeRoom(name));

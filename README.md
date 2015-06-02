@@ -10,3 +10,15 @@ Read more:
  - [Introducing SimpleWebRTC and conversat.io](http://blog.andyet.com/2013/02/22/introducing-simplewebrtcjs-and-conversatio/)
  - [SimpleWebRTC.com](http://simplewebrtc.com)
  - [talky.io](https://talky.io)
+
+## Docker
+
+You can build this image simply by calling:  
+
+    docker build -t signalmaster https://github.com/andyet/signalmaster.git
+
+To run the image execute this:  
+
+    docker run --name signalmaster -d -p 8888:8888 signalmaster
+
+This will start a signal master server on port 8888 exposed on port 8888.

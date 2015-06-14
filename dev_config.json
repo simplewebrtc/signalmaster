@@ -17,7 +17,7 @@
     "turnservers" : [
         /*
         { "url": "turn:your.turn.server.here",
-          "secret": "turnserversharedsecret"
+          "secret": "turnserversharedsecret",
           "expiry": 86400 }
           */
     ]

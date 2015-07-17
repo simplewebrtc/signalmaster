@@ -1,9 +1,9 @@
 {
   "name": "signal-master",
   "description": "Simple signaling server for SimpleWebRTC",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "dependencies": {
-    "getconfig": "0.3.0",
+    "getconfig": "2.1.0",
     "node-uuid": "1.2.0",
     "socket.io": "0.9.16",
     "yetify": "0.0.1"

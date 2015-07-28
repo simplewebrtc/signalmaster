@@ -11,7 +11,6 @@ output.on('end', function () {
     process.exit(0);
 });
 
-
 var io = require('socket.io-client');
 
 var socketURL;

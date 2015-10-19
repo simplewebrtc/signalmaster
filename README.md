@@ -27,6 +27,18 @@ Running the server requires a valid installation of node.js which can be install
 
                         "Welcome to socket.io"
 
+### Production Environment
+* generate your ssl certs
+
+```shell
+$ ./scripts/generare-ssl-certs.sh
+```
+* run in Production mode
+
+```shell
+$ NODE_ENV=production node server.js
+```
+
 ## Use with Express
     var express = require('express')
     var sockets = require('signalmaster/sockets')

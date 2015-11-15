@@ -21,7 +21,7 @@ module.exports = function (server, config) {
         client.on('message', function (details) {
             if (!details) return;
 
-            var otherClient = io.sockets.sockets[details.to];
+            var otherClient = io.to(details.to);
             if (!otherClient) return;
 
             details.from = client.id;
@@ -86,7 +86,8 @@ module.exports = function (server, config) {
                 name = uuid();
             }
             // check if exists
-            if (io.sockets.clients(name).length) {
+            var room = io.nsps['/'].adapter.rooms[name];
+            if (room && room.length) {
                 safeCb(cb)('taken');
             } else {
                 join(name);
@@ -125,12 +126,13 @@ module.exports = function (server, config) {
 
 
     function describeRoom(name) {
-        var clients = io.sockets.clients(name);
+        var adapter = io.nsps['/'].adapter;
+        var clients = adapter.rooms[name] || {};
         var result = {
             clients: {}
         };
-        clients.forEach(function (client) {
-            result.clients[client.id] = client.resources;
+        Object.keys(clients).forEach(function (id) {
+            result.clients[id] = adapter.nsp.connected[id].resources;
         });
         return result;
     }

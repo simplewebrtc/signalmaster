@@ -118,7 +118,7 @@ module.exports = function (server, config) {
             credentials.push({
                 username: username,
                 credential: hmac.digest('base64'),
-                url: server.url
+                urls: server.urls || [server.url]
             });
         });
         client.emit('turnservers', credentials);

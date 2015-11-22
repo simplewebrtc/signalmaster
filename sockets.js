@@ -110,7 +110,6 @@ module.exports = function (server, config) {
         // create shared secret nonces for TURN authentication
         // the process is described in draft-uberti-behave-turn-rest
         var credentials = [];
-
         // allow selectively vending turn credentials based on origin.
         var origin = client.handshake.headers.origin;
         if (!config.turnorigins || config.turnorigins.indexOf(origin) !== -1) {
@@ -122,7 +121,7 @@ module.exports = function (server, config) {
                 credentials.push({
                     username: username,
                     credential: hmac.digest('base64'),
-                    url: server.url
+                    urls: server.urls || server.url
                 });
             });
         }

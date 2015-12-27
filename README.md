@@ -31,7 +31,7 @@ Running the server requires a valid installation of node.js which can be install
 * generate your ssl certs
 
 ```shell
-$ ./scripts/generare-ssl-certs.sh
+$ ./scripts/generate-ssl-certs.sh
 ```
 * run in Production mode
 

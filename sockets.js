@@ -142,7 +142,12 @@ module.exports = function (server, config) {
     }
 
     function clientsInRoom(name) {
-        return io.sockets.clients(name).length;
+        var room = io.sockets.adapter.rooms[name];
+        if (room && room.length) {
+            return room.length;
+        } else {
+            return 0;
+        }
     }
 
 };

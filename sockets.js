@@ -142,9 +142,10 @@ module.exports = function (server, config) {
     }
 
     function clientsInRoom(name) {
-        var room = io.sockets.adapter.rooms[name];
-        if (room && room.length) {
-            return room.length;
+        var adapter = io.nsps['/'].adapter;
+        var room = adapter.rooms[name];
+        if (room && Object.keys(room).length) {
+            return Object.keys(room).length;
         } else {
             return 0;
         }

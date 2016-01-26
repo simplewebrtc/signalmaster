@@ -1,6 +1,5 @@
 {
   "isDev": false,
-  "logLevel": 3,
   "server": {
     "port": 8888,
     "/* secure */": "/* whether this connects via https */",

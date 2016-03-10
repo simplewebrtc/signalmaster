@@ -5,11 +5,6 @@ var socketIO = require('socket.io'),
 module.exports = function (server, config) {
     var io = socketIO.listen(server);
 
-    if (config.logLevel) {
-        // https://github.com/Automattic/socket.io/wiki/Configuring-Socket.IO
-        io.set('log level', config.logLevel);
-    }
-
     io.sockets.on('connection', function (client) {
         client.resources = {
             screen: false,

@@ -4,6 +4,7 @@ var yetify = require('yetify'),
     fs = require('fs'),
     sockets = require('./sockets'),
     port = parseInt(process.env.PORT || config.server.port, 10),
+    host = process.env.HOST || config.server.host,
     server_handler = function (req, res) {
         res.writeHead(404);
         res.end();
@@ -28,8 +29,8 @@ if (config.uid) process.setuid(config.uid);
 
 var httpUrl;
 if (config.server.secure) {
-    httpUrl = "https://localhost:" + port;
+    httpUrl = "https://" + host + ":" + port;
 } else {
-    httpUrl = "http://localhost:" + port;
+    httpUrl = "http://" + host + ":" + port;
 }
 console.log(yetify.logo() + ' -- signal master is running at: ' + httpUrl);

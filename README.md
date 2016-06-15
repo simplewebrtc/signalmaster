@@ -61,4 +61,10 @@ This will start a signal master server on port 8888 exposed on port 8888.
 
 ## Differences
 
-This version allows you to set the host for listening. 
+This version allows you to set the host for listening.
+
+    docker build -t signalmaster .
+
+Run the image:
+
+    docker run -d -p 8080:8080 -e PORT=8080 -e HOST=0.0.0.0 -e NODE_ENV=production auser/signalmaster

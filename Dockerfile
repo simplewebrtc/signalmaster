@@ -1,5 +1,5 @@
 FROM node:4-onbuild
-ARG DOMAIN=runfullstack.com
+ARG DOMAIN=runfullstack.co
 
 COPY ./config /usr/src/app
 ENV NODE_ENV production

@@ -5,6 +5,7 @@ var yetify = require('yetify'),
     sockets = require('./sockets'),
     port = parseInt(process.env.PORT || config.server.port, 10),
     host = process.env.HOST || config.server.host,
+    le_domain = process.env.DOMAIN || false,
     server_handler = function (req, res) {
         res.writeHead(404);
         res.end();
@@ -13,6 +14,18 @@ var yetify = require('yetify'),
 
 // Create an http(s) server instance to that socket.io can listen to
 if (config.server.secure) {
+  var fileExists = function (fp) {
+    try { fs.accessSync(fp); return true } catch (err) { return false; }
+  }
+  if (le_domain) {
+    var le_path = "/etc/letsencrypt/live/" + le_domain + "/";
+    if (fileExists(le_path + "privkey.pem")) {
+      config.server.key = le_path + "privkey.pem"
+    }
+    if (fileExists((le_path + "cert.pem"))) {
+      config.server.cert = le_path + "cert.pem"
+    }
+  }
     server = require('https').Server({
         key: fs.readFileSync(config.server.key),
         cert: fs.readFileSync(config.server.cert),

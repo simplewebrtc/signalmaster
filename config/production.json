@@ -5,8 +5,8 @@
     "host": "0.0.0.0",
     "/* secure */": "/* whether this connects via https */",
     "secure": true,
-    "key": "/etc/letsencrypt/live/runfullstack.co/privkey.pem",
-    "cert": "/etc/letsencrypt/live/runfullstack.co/cert.pem",
+    "key": "config/sslcerts/key.pem",
+    "cert": "config/sslcerts/cert.pem",
     "password": null
   },
   "rooms": {

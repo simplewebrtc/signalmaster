@@ -1,0 +1,7 @@
+#create user
+turnadmin -a -M "host=localhost dbname=coturn user=<user> password=<passwd> connect_timeout=300"  -u siplo -r realm -p siplo1234
+#create secreat
+turnadmin -s siplo4321 --mysql-userdb="host=localhost dbname=coturn user=<user> password=<passwd> connect_timeout=300" -r realm
+
+#All commands
+#https://github.com/coturn/rfc5766-turn-server/blob/v3.2/README.turnadmin

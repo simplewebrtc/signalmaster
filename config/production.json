@@ -19,9 +19,9 @@
   ],
   "turnservers": [
     {
-      "urls": ["$TURNSERVER_HOST"],
-      "secret": "$TURNSERVER_SECRET",
-      "expiry": "$TURNSERVER_EXPIERY"
+      "urls": ["turn:your.turn.servers.here"],
+      "secret": "turnserversharedsecret",
+      "expiry": 86400
     }
   ]
 }

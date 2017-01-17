@@ -3,7 +3,7 @@
   "server": {
     "port": 8888,
     "/* secure */": "/* whether this connects via https */",
-    "secure": false,
+    "secure": true,
     "key": null,
     "cert": null,
     "password": null

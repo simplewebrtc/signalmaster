@@ -58,3 +58,8 @@ To run the image execute this:
     docker run --name signalmaster -d -p 8888:8888 signalmaster
 
 This will start a signal master server on port 8888 exposed on port 8888.
+
+## Environmental Variables
+* TURNSERVER_HOST
+* TURNSERVER_SECRET
+* TURNSERVER_EXPIERY

@@ -3,7 +3,7 @@
   "server": {
     "port": 8888,
     "/* secure */": "/* whether this connects via https */",
-    "secure": true,
+    "secure": false,
     "key": "config/sslcerts/key.pem",
     "cert": "config/sslcerts/cert.pem",
     "password": null
@@ -19,9 +19,9 @@
   ],
   "turnservers": [
     {
-      "urls": ["turn:your.turn.servers.here"],
-      "secret": "turnserversharedsecret",
-      "expiry": 86400
+      "urls": ["$TURNSERVER_HOST"],
+      "secret": "$TURNSERVER_SECRET",
+      "expiry": "$TURNSERVER_EXPIERY"
     }
   ]
 }

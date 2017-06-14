@@ -5,13 +5,18 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon index.js",
+    "migrate": "knex migrate:latest",
+    "seed": "node seed",
     "createdb": "psql -d postgres -c \"CREATE ROLE talky WITH PASSWORD 'password' NOSUPERUSER NOCREATEDB NOCREATEROLE INHERIT LOGIN\" && createdb talky_api -O talky",
+    "destroydb": "psql -d postgres -c \"DROP DATABASE talky_api\" && psql -d postgres -c \"DROP ROLE talky;\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "chance": "^1.0.9",
     "hapi": "^16.4.3",
+    "knex": "^0.13.0",
     "muckraker": "^3.4.0",
     "pg": "^6.2.4"
   }

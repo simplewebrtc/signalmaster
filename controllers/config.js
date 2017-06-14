@@ -1,5 +1,5 @@
 const post = (req, reply) => {
-  reply(`I got ${req.payload.sup}`)
+  reply(`I got ${req.payload}`)
 }
 
 module.exports = {

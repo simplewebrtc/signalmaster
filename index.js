@@ -1,7 +1,9 @@
 const Hapi = require('hapi');
 const Muckraker = require('muckraker');
-const config = require('./config');
+const config = require('getconfig');
+
 const Routes = require('./routes');
+
 
 const server = new Hapi.Server();
 const db = new Muckraker({ connection: config.db })

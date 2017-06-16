@@ -1,4 +1,7 @@
 module.exports = {
+  talky: {
+    apiDomain: 'talky-core-api.local'
+  },
   db: {
     user: 'talky',
     password: 'password',

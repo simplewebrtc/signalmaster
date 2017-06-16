@@ -1,6 +1,11 @@
 module.exports = {
   talky: {
-    apiDomain: 'talky-core-api.local',
+    apiKey: '',
+
+    domains: {
+      api: 'talky-core-api.local',
+    },
+
     ice: {
       secret: 'foo',
       servers: [

@@ -14,29 +14,29 @@ If you want to destroy the DB and start over just run `npm run destroydb`
 ## Schema
 
 ### Rooms
-- `id`
-- `name`
-- `jid`
-- `created`
-- `ended`
+- `id` - Unique identifier
+- `name` - `some-room-name`
+- `jid` - `some-room-name@rooms.talky-api.local`
+- `created` - Timestamp
+- `ended` - Timestamp
 
 ### Users
-- `sessionid`
-- `userid`
-- `type`
+- `sessionid` - Unique identifier
+- `userid` - User identity, `registered-user@users.talky-api.local`
+- `type` - `browser` or `mobile`
 - `os`
 - `browser`
 - `useragent`
-- `created`
-- `ended`
+- `created` - Timestamp
+- `ended` - Timestamp
 
 ### Events
-- `type`
-- `room id`
-- `actor id`
-- `peer id`
-- `time`
-- `data`
+- `type` - See below
+- `room id` - Room where the event happened
+- `actor id` - User that triggered the event
+- `peer id` - User that was affected by the event (i.e. it was specifically between two users, not the whole room)
+- `time` - Timestamp
+- `data` - JSON blob
 
 ## Event Types
 

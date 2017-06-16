@@ -3,6 +3,7 @@
 const Joi = require('joi');
 const UUID = require('uuid');
 
+const fetchICE = require('../../lib/fetchIce');
 
 const TalkyCoreConfig = require('getconfig').talky;
 
@@ -18,14 +19,17 @@ module.exports = {
 
     const userId = UUID.v4();
 
-    return reply({
-      sessionId: userId,
-      userId: `${userId}@${GUEST_DOMAIN}`,
-      signalingUrl: `wss://${API_DOMAIN}/xmpp-websocket`,
-      telemetryUrl: `https://${API_DOMAIN}/telemetry`,
-      roomServer: ROOM_DOMAIN,
-      iceServers: [],
-      credential: 'some-signed-jwt-token'
+    return fetchICE().then(ice => {
+
+      return reply({
+        sessionId: userId,
+        userId: `${userId}@${GUEST_DOMAIN}`,
+        signalingUrl: `wss://${API_DOMAIN}/xmpp-websocket`,
+        telemetryUrl: `https://${API_DOMAIN}/telemetry`,
+        roomServer: ROOM_DOMAIN,
+        iceServers: ice,
+        credential: 'some-signed-jwt-token'
+      });
     });
   },
   validate: {

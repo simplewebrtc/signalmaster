@@ -1,6 +1,12 @@
 module.exports = {
   talky: {
-    apiDomain: 'talky-core-api.local'
+    apiDomain: 'talky-core-api.local',
+    ice: {
+      secret: 'foo',
+      servers: [
+        'http://ice.kestrel.link'
+      ]
+    }
   },
   db: {
     user: 'talky',

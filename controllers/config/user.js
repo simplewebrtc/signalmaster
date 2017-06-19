@@ -29,12 +29,13 @@ module.exports = {
         roomServer: Domains.rooms,
         iceServers: ice,
         credential: JWT.sign({
-            iss: Domains.api,
-            aud: Domains.api,
-            sub: userId,
+          registeredUser: true
         }, Config.auth.secret, {
           algorithm: 'HS256',
-          expiresIn: '1 day'
+          expiresIn: '1 day',
+          issuer: Domains.api,
+          audience: Domains.api,
+          subject: userId
         })
       });
     });

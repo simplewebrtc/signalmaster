@@ -5,8 +5,8 @@ module.exports = {
   tags: ['api', 'prosody', 'auth'],
   handler: function (request, reply) {
 
-    return reply('true').code(200);
+    return reply('true').type('text/plain').code(200);
   },
-  validate: {
-  }
+  auth: 'prosody'
 };
+

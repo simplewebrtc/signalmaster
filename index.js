@@ -14,8 +14,16 @@ server.register([
   {
     register: require('good'),
     options: Config.good
+  },
+  {
+    register: require('hapi-auth-basic')
   }
 ]).then(() => {
+
+  server.auth.strategy('prosody', 'basic', {
+    validateFunc: require('./lib/prosodyAuth')
+  });
+
   server.start((err) => {
     if (err) throw err;
   

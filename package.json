@@ -9,7 +9,11 @@
     "seed": "node seed",
     "createdb": "psql -d postgres -c \"CREATE ROLE talky WITH PASSWORD 'password' NOSUPERUSER NOCREATEDB NOCREATEROLE INHERIT LOGIN\" && createdb talky_api -O talky",
     "destroydb": "psql -d postgres -c \"DROP DATABASE talky_api\" && psql -d postgres -c \"DROP ROLE talky;\"",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start-prosody": "prosody",
+    "prosody-config": "node ./scripts/prosody-config",
+    "prosody-config-install-local": "npm run -s prosody-config > /usr/local/etc/prosody/prosody.cfg.lua",
+    "prosody-config-install-etc": "npm run -s prosody-config > /etc/prosody/prosody.cfg.lua"
   },
   "author": "",
   "license": "ISC",

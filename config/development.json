@@ -1,4 +1,6 @@
 {
+  "isDev": true,
+  "isDevTLS": false,
   "talky": {
     "apiKey": "",
 

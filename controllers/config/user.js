@@ -5,6 +5,7 @@ const Joi = require('joi');
 const JWT = require('jsonwebtoken');
 const UUID = require('uuid');
 
+const buildUrl = require('../../lib/buildUrl');
 const fetchICE = require('../../lib/fetchIce');
 const inflateDomains = require('../../lib/domains');
 
@@ -18,17 +19,19 @@ module.exports = {
   handler: function (request, reply) {
 
     const userId = UUID.v4();
+    const jid = `${userId}@${Domains.users}`;
 
     return fetchICE().then(ice => {
 
       return reply({
         sessionId: userId,
-        userId: `${userId}@${Domains.users}`,
-        signalingUrl: `wss://${Domains.api}/xmpp-websocket`,
-        telemetryUrl: `https://${Domains.api}/telemetry`,
+        userId: jid,
+        signalingUrl: `${buildUrl('ws', Domains.api, 5280)}/xmpp-websocket`,
+        telemetryUrl: `${buildUrl('http', Domains.api)}/telemetry`,
         roomServer: Domains.rooms,
         iceServers: ice,
         credential: JWT.sign({
+          jid,
           registeredUser: true
         }, Config.auth.secret, {
           algorithm: 'HS256',

@@ -3,6 +3,7 @@
 const Joi = require('joi');
 const UUID = require('uuid');
 
+const buildUrl = require('../../lib/buildUrl');
 const fetchICE = require('../../lib/fetchIce');
 const inflateDomains = require('../../lib/domains');
 
@@ -22,8 +23,8 @@ module.exports = {
       return reply({
         sessionId: userId,
         userId: `${userId}@${Domains.bots}`,
-        signalingUrl: `wss://${Domains.api}/xmpp-websocket`,
-        telemetryUrl: `https://${Domains.api}/telemetry`,
+        signalingUrl: `${buildUrl('ws', Domains.api, 5280)}/xmpp-websocket`,
+        telemetryUrl: `${buildUrl('http', Domains.api)}/telemetry`,
         roomServer: Domains.rooms,
         iceServers: ice,
         credential: 'some-signed-jwt-token'

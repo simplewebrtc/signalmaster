@@ -7,6 +7,6 @@ module.exports = {
 
     return reply('true').type('text/plain').code(200);
   },
-  auth: 'prosody'
+  auth: 'prosody-bots'
 };
 

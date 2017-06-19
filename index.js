@@ -4,6 +4,8 @@ const Config = require('getconfig');
 
 const Routes = require('./routes');
 
+const ProsodyAuth = require('./lib/prosodyAuth');
+
 
 const server = new Hapi.Server();
 const db = new Muckraker({ connection: Config.db })
@@ -20,8 +22,16 @@ server.register([
   }
 ]).then(() => {
 
-  server.auth.strategy('prosody', 'basic', {
-    validateFunc: require('./lib/prosodyAuth')
+  server.auth.strategy('prosody-guests', 'basic', {
+    validateFunc: ProsodyAuth('guests')
+  });
+
+  server.auth.strategy('prosody-users', 'basic', {
+    validateFunc: ProsodyAuth('guests')
+  });
+
+  server.auth.strategy('prosody-bots', 'basic', {
+    validateFunc: ProsodyAuth('bots')
   });
 
   server.start((err) => {

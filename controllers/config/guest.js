@@ -34,7 +34,7 @@ module.exports = {
           algorithm: 'HS256',
           expiresIn: '1 day',
           issuer: Domains.api,
-          audience: Domains.api,
+          audience: Domains.guests,
           subject: userId
         })
       });

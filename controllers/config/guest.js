@@ -1,6 +1,8 @@
 'use strict';
 
+const Config = require('getconfig');
 const Joi = require('joi');
+const JWT = require('jsonwebtoken');
 const UUID = require('uuid');
 
 const fetchICE = require('../../lib/fetchIce');
@@ -26,7 +28,14 @@ module.exports = {
         telemetryUrl: `https://${Domains.api}/telemetry`,
         roomServer: Domains.rooms,
         iceServers: ice,
-        credential: 'some-signed-jwt-token'
+        credential: JWT.sign({
+            iss: Domains.api,
+            aud: Domains.api,
+            sub: userId,
+        }, Config.auth.secret, {
+          algorithm: 'HS256',
+          expiresIn: '1 day'
+        })
       });
     });
   },

@@ -9,6 +9,7 @@ module.exports = {
   handler: function (request, reply) {
 
     return reply(fetchICE());
-  }
+  },
+  auth: 'client-token'
 };
 

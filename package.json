@@ -21,6 +21,7 @@
     "good-squeeze": "^5.0.2",
     "hapi": "^16.4.3",
     "hapi-auth-basic": "^4.2.0",
+    "hapi-auth-jwt2": "^7.2.4",
     "jsonwebtoken": "^7.4.1",
     "keyfob": "^1.0.0",
     "knex": "^0.13.0",

@@ -11,6 +11,12 @@ I think it's safe for us to just work out of the [initial migrations]('./migrati
 
 If you want to destroy the DB and start over just run `npm run destroydb`
 
+## Setting up Prosody locally
+
+1. If using OSX: `brew tap legastero/homebrew-prosody` and `brew install --HEAD prosody`
+2. `npm run prosody-config-install-local`
+3. `npm run start-prosody`
+
 ## Schema
 
 ### Rooms

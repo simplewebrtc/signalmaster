@@ -13,6 +13,8 @@ local new_sasl = require "util.sasl".new;
 local base64 = require "util.encodings".base64.encode;
 
 local auth_url = module:get_option_string("talky_core_auth_url",  "");
+local allow_anon = module:get_option_boolean("talky_core_auth_allow_anonymous",  false);
+
 
 local request;
 if string.sub(auth_url, 1, string.len('https')) == 'https' then
@@ -69,11 +71,19 @@ function provider.delete_user(username)
 end
 
 function provider.get_sasl_handler()
-    return new_sasl(module.host, {
+    local profile = {
         plain_test = function(sasl, username, password, realm)
             return provider.test_password(username, password), true;
-        end
-    });
+        end;
+    };
+
+    if allow_anon then
+        profile.anonymous = function (sasl, username, realm)
+            return true;
+        end;
+    end
+
+    return new_sasl(module.host, profile);
 end
 
 module:provides("auth", provider);

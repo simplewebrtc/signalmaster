@@ -6,10 +6,15 @@ const Controllers = require('keyfob').load({ path: './controllers', fn: require 
 module.exports = [
   { method: 'GET', path: '/', handler: Controllers.home.get },
 
-  { method: '*', path: '/ws-bind', config: Controllers.signaling },
 
   // Public routes for clients
   // ---------------------------------------------------------------------
+
+  // Signaling
+  { method: '*', path: '/ws-bind', config: Controllers.signaling },
+
+  // Alternate connection discovery method for XMPP clients
+  { method: 'GET', path: '/.well-known/host-meta.json', config: Controllers.hostmeta },
 
   // Client auto-configuration
   { method: 'POST', path: '/config/user', config: Controllers.config.user },

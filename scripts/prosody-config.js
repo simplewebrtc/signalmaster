@@ -16,7 +16,8 @@ daemonize = false
 use_libevent = true
 
 modules_enabled = {
-    "saslauth"; "roster";
+    "saslauth";
+    "roster";
     "tls";
     "dialback";
     "disco";
@@ -29,7 +30,6 @@ modules_enabled = {
     "pep";
     "admin_adhoc";
     "admin_telnet";
-    "http_altconnect";
     "posix";
     "bosh";
     "websocket";
@@ -37,7 +37,7 @@ modules_enabled = {
 
 allow_registration = false
 
-c2s_require_encryption = true
+c2s_require_encryption = ${Config.isDevTLS} 
 s2s_secure_auth = true
 
 cross_domain_bosh = true
@@ -52,6 +52,8 @@ http_paths = {
 }
 
 network_default_read_size = 66560
+
+interfaces = { "0.0.0.0" }
 
 log = {
     debug = "*console";
@@ -77,6 +79,7 @@ VirtualHost "${Domains.api}"
 console.log(`
 VirtualHost "${Domains.guests}"
     authentication = "talky_core";
+    talky_core_auth_allow_anonymous = true;
     talky_core_auth_url = "${buildUrl('http', Domains.api)}/prosody/auth/guest";
 `);
 
@@ -98,8 +101,10 @@ Component "${Domains.rooms}" "muc"
         "muc_allhidden";
         "muc_config_restrict";
         "talky_core_muc_affiliations";
+        "talky_core_version";
     };
 
+    talky_core_version = "2.0.0";
     talky_core_muc_affiliation_url = "${buildUrl('http', Domains.api)}/prosody/rooms/affiliation";
 
     muc_config_restricted = {
@@ -115,4 +120,3 @@ Component "${Domains.rooms}" "muc"
         "muc#roomconfig_roomname";
     };
 `);
-

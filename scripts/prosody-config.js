@@ -7,7 +7,10 @@ const Domains = inflateDomains(Config.talky.domains);
 
 console.log(`
 admins = {}
-plugin_paths = { "${__dirname + '/../prosody_modules'}" }
+plugin_paths = {
+    "${__dirname}/../prosody_modules";
+    "/usr/lib/prosody-modules";
+}
 
 daemonize = false
 use_libevent = true

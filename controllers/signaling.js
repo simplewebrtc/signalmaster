@@ -12,7 +12,7 @@ module.exports = {
   description: 'Proxy to Prosody for signaling.',
   tags: ['api'],  
   handler: function (request, reply) {
-    reply('x');
+    reply('Use WebSocket');
   }
 };
 

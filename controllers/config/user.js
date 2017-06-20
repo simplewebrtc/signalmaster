@@ -32,6 +32,7 @@ module.exports = {
         iceServers: ice,
         credential: JWT.sign({
           jid,
+          sessionId: userId,
           registeredUser: true
         }, Config.auth.secret, {
           algorithm: 'HS256',

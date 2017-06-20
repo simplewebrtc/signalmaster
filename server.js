@@ -5,8 +5,7 @@ const Proxy = require('http-proxy');
 
 const inflateDomains = require('./lib/domains');
 const buildUrl = require('./lib/buildUrl');
-const Domains = inflateDomains(Config.talky.domains);
-
+const Domains = inflateDomains(Config.talky.domains); 
 const ProsodyAuth = require('./lib/prosodyAuth');
 
 const Routes = require('./routes');
@@ -77,10 +76,10 @@ server.register([
 
   if (Config.isDev) {
     const ChildProcess = require('child_process');
-    const prosody = ChildProcess.spawn('npm', ['run', 'start-prosody']);
+    const prosody = ChildProcess.spawn('npm', ['run', '-s', 'start-prosody']);
 
     prosody.stdout.on('data', (data) => {
-      server.log(['prosody'], data.toString().trim());
+      console.log(data.toString().trim());
     });
 
     const shutdown = (signal) => () => {

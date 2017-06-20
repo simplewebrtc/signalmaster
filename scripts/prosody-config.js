@@ -87,4 +87,23 @@ VirtualHost "${Domains.bots}"
 
 console.log(`
 Component "${Domains.rooms}" "muc"
+    modules_enabled = {
+        "muc_allowners"; -- Temporary until the API takes over role checks
+        "muc_allhidden";
+        "muc_config_restrict";
+    };
+
+    muc_config_restricted = {
+        "muc#roomconfig_moderatedroom";
+        "muc#roomconfig_whois";
+        "muc#roomconfig_persistentroom";
+        "muc#roomconfig_historylength";
+        "muc#roomconfig_publicroom";
+        "muc#roomconfig_membersonly";
+        "muc#roomconfig_changesubject";
+        "muc#roomconfig_roomdesc";
+        "muc#roomconfig_affiliationnotify";
+        "muc#roomconfig_roomname";
+    };
 `);
+

@@ -42,7 +42,7 @@ local provider = {};
 
 
 function provider.test_password(username, password)
-    log("debug", "Testing password for user %s at host %s with URL %s", username, host, auth_url);
+    log("debug", "Testing password for user %s at host %s with URL %s", username, module.host, auth_url);
     return http_auth(username, password);
 end
 
@@ -69,7 +69,7 @@ function provider.delete_user(username)
 end
 
 function provider.get_sasl_handler()
-    return new_sasl(host, {
+    return new_sasl(module.host, {
         plain_test = function(sasl, username, password, realm)
             return provider.test_password(username, password), true;
         end

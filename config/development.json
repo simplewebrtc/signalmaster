@@ -28,6 +28,9 @@
   },
   "server": {
     "port": 8001, 
-    "host": "localhost"
+    "host": "localhost",
+    "routes": {
+      "cors": true
+    }
   }
 }

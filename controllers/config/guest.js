@@ -43,14 +43,6 @@ module.exports = {
         })
       });
     });
-  },
-  validate: {
-    payload: {
-      clientType: Joi.string(), // browser | mobile
-      os: Joi.string().optional(),
-      browser: Joi.string().optional(),
-      userAgent: Joi.string().optional()
-    }
   }
 };
 

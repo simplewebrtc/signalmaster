@@ -40,6 +40,10 @@ server.register([
     validateFunc: ProsodyAuth('bots')
   });
 
+  server.auth.strategy('prosody-api', 'basic', {
+    validateFunc: ProsodyAuth('api')
+  });
+
   server.auth.strategy('client-token', 'jwt', {
     key: Config.auth.secret,
     validateFunc: (decoded, request, cb) => cb(null, true),

@@ -49,6 +49,8 @@ log = {
     debug = "*console";
     verbose = "*console";
 }
+
+talky_core_api_key = "${Config.auth.secret}"
 `);
 
 if (Config.isDev) {
@@ -88,10 +90,12 @@ VirtualHost "${Domains.bots}"
 console.log(`
 Component "${Domains.rooms}" "muc"
     modules_enabled = {
-        "muc_allowners"; -- Temporary until the API takes over role checks
         "muc_allhidden";
         "muc_config_restrict";
+        "talky_core_muc_affiliations";
     };
+
+    talky_core_muc_affiliation_url = "${buildUrl('http', Domains.api)}/prosody/rooms/affiliation";
 
     muc_config_restricted = {
         "muc#roomconfig_moderatedroom";

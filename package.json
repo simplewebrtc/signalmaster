@@ -32,7 +32,8 @@
     "keyfob": "^1.0.0",
     "knex": "^0.13.0",
     "muckraker": "^3.4.0",
-    "pg": "^6.2.4"
+    "pg": "^6.2.4",
+    "ua-parser-js": "^0.7.12"
   },
   "devDependencies": {
     "nodemon": "^1.11.0"

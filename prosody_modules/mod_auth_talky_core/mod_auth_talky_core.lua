@@ -15,7 +15,7 @@ local base64 = require "util.encodings".base64.encode;
 local auth_url = module:get_option_string("talky_core_auth_url",  "");
 
 local request;
-if string.sub(muc_affiliation_url, 1, string.len('https')) == 'https' then
+if string.sub(auth_url, 1, string.len('https')) == 'https' then
     request = https.request;
 else
     request = http.request;
@@ -24,7 +24,7 @@ end
 
 local function http_auth(username, password)
     local _, code, headers, status = request{
-        url = url,
+        url = auth_url,
         headers = { Authorization = "Basic "..base64(username..":"..password); };
     };
 

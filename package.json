@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon server.js",
+    "start": "nodemon -e js,json,lua server.js",
     "migrate": "knex migrate:latest",
     "seed": "node seed",
     "createdb": "psql -d postgres -c \"CREATE ROLE talky WITH PASSWORD 'password' NOSUPERUSER NOCREATEDB NOCREATEROLE INHERIT LOGIN\" && createdb talky_api -O talky",

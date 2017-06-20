@@ -73,4 +73,31 @@ server.register([
   });
   
   server.route(Routes);
+
+
+  if (Config.isDev) {
+    const ChildProcess = require('child_process');
+    const prosody = ChildProcess.spawn('npm', ['run', 'start-prosody']);
+
+    prosody.stdout.on('data', (data) => {
+      server.log(['prosody'], data.toString().trim());
+    });
+
+    const shutdown = (signal) => () => {
+      prosody.on('close', () => {
+        console.log('');
+        if (signal === 'SIGINT') {
+          process.exit();
+        } else {
+          process.kill(process.pid, signal);
+        }
+      });
+
+      prosody.kill('SIGINT');
+    };
+
+    process.on('SIGINT', shutdown('SIGINT'));
+    process.once('SIGUSR2', shutdown('SIGUSR2'));
+  }
 });
+

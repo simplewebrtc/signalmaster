@@ -1,3 +1,11 @@
+-- Globals required by socket.http
+if rawget(_G, "PROXY") == nil then
+    rawset(_G, "PROXY", false)
+end
+if rawget(_G, "base_parsed") == nil then
+    rawset(_G, "base_parsed", false)
+end
+
 local http = require "socket.http";
 local https = require "ssl.https";
 local json_encode = require "util.json".encode;

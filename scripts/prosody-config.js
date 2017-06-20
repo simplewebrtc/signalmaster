@@ -68,23 +68,20 @@ VirtualHost "${Domains.api}"
 
 console.log(`
 VirtualHost "${Domains.guests}"
-    authentication = "http_async";
-    http_auth_sync = true;
-    http_auth_url = "${buildUrl('http', Domains.api)}/prosody/auth/guest";
+    authentication = "talky_core";
+    talky_core_auth_url = "${buildUrl('http', Domains.api)}/prosody/auth/guest";
 `);
 
 console.log(`
 VirtualHost "${Domains.users}"
-    authentication = "http_async";
-    http_auth_sync = true;
-    http_auth_url = "${buildUrl('http', Domains.api)}/prosody/auth/user";
+    authentication = "talky_core";
+    talky_core_auth_url = "${buildUrl('http', Domains.api)}/prosody/auth/user";
 `);
 
 console.log(`
 VirtualHost "${Domains.bots}"
-    authentication = "http_async";
-    http_auth_sync = true;
-    http_auth_url = "${buildUrl('http', Domains.api)}/prosody/auth/bot";
+    authentication = "talky_core";
+    talky_core_auth_url = "${buildUrl('http', Domains.api)}/prosody/auth/bot";
 `);
 
 console.log(`

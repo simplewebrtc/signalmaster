@@ -23,7 +23,7 @@ module.exports = {
       return reply({
         sessionId: userId,
         userId: `${userId}@${Domains.bots}`,
-        signalingUrl: `${buildUrl('ws', Domains.api, 5280)}/xmpp-websocket`,
+        signalingUrl: `${buildUrl('ws', Domains.api)}/ws-bind`,
         telemetryUrl: `${buildUrl('http', Domains.api)}/telemetry`,
         roomServer: Domains.rooms,
         iceServers: ice,

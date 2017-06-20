@@ -6,6 +6,8 @@ const Controllers = require('keyfob').load({ path: './controllers', fn: require 
 module.exports = [
   { method: 'GET', path: '/', handler: Controllers.home.get },
 
+  { method: '*', path: '/ws-bind', config: Controllers.signaling },
+
   // Public routes for clients
   // ---------------------------------------------------------------------
 

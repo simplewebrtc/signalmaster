@@ -43,6 +43,11 @@ cross_domain_websocket = true
 consider_bosh_secure = true
 consider_websocket_secure = true
 
+http_paths = { 
+    bosh = "/http-bind";
+    websocket = "/ws-bind";
+}
+
 network_default_read_size = 66560
 
 log = {

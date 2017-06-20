@@ -26,6 +26,7 @@
     "hapi": "^16.4.3",
     "hapi-auth-basic": "^4.2.0",
     "hapi-auth-jwt2": "^7.2.4",
+    "http-proxy": "^1.16.2",
     "jsonwebtoken": "^7.4.1",
     "keyfob": "^1.0.0",
     "knex": "^0.13.0",

@@ -17,9 +17,9 @@ module.exports = [
   { method: 'GET', path: '/.well-known/host-meta.json', config: Controllers.hostmeta },
 
   // Client auto-configuration
-  { method: 'GET', path: '/config/user', config: Controllers.config.user },
-  { method: 'GET', path: '/config/guest', config: Controllers.config.guest},
-  { method: 'GET', path: '/config/bot', config: Controllers.config.bot },
+  { method: 'POST', path: '/config/user', config: Controllers.config.user },
+  { method: 'POST', path: '/config/guest', config: Controllers.config.guest},
+  { method: 'POST', path: '/config/bot', config: Controllers.config.bot },
 
   // Fetch ICE servers
   { method: 'GET', path: '/ice-servers', config: Controllers.ice },

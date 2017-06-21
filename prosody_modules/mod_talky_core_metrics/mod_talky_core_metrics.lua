@@ -52,12 +52,18 @@ end
 
 
 module:hook("resource-bind", function (event)
-    post_event("user_online", {});
+    post_event("user_online", {
+        sessionId = event.session.resource;
+        userId = event.session.username.."@"..event.session.host;
+    });
 end);
 
 
 module:hook("resource-unbind", function (event)
-    post_event("user_offline", {});
+    post_event("user_offline", {
+        sessionId = event.session.resource;
+        userId = event.session.username.."@"..event.session.host;
+    });
 end);
 
 

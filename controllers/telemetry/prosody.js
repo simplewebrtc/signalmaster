@@ -8,6 +8,8 @@ module.exports = {
   tags: ['api', 'metrics'],
   handler: function (request, reply) {
 
+    console.log(request.payload);
+
     return reply(request.payload);
   },
   validate: {
@@ -18,4 +20,3 @@ module.exports = {
   },
   auth: 'prosody-api'
 };
-

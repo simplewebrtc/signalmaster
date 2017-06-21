@@ -98,8 +98,9 @@ VirtualHost "${Domains.bots}"
 console.log(`
 Component "${Domains.rooms}" "muc"
     modules_enabled = {
-        "muc_allhidden";
         "muc_config_restrict";
+        "talky_core_muc_room_id";
+        "talky_core_muc_config";
         "talky_core_muc_affiliations";
         "talky_core_version";
         "talky_core_metrics";

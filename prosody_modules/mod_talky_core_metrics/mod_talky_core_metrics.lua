@@ -10,6 +10,7 @@ local http = require "socket.http";
 local https = require "ssl.https";
 local json_encode = require "util.json".encode;
 local jid_split = require "util.jid".split;
+local jid_resource = require "util.jid".resource;
 local hmac_sha1 = require "util.hashes".hmac_sha1;
 local base64 = require "util.encodings".base64.encode;
 local serialize = require "util.serialization".serialize;
@@ -67,13 +68,35 @@ module:hook("resource-unbind", function (event)
 end);
 
 
-module:hook("muc-occupant-joined", function (event)
-    post_event("occupant_joined", {});
+module:hook("muc-occupant-session-new", function (event)
+    local user, domain, sessionId = jid_split(event.jid);
+    post_event("occupant_joined", {
+        roomId = event.room.jid;
+        userId = user.."@"..domain;
+        sessionId = sessionId;
+        inRoomSessionId = jid_resource(event.nick);
+    });
 end);
 
 
 module:hook("muc-occupant-left", function (event)
-    post_event("occupant_left", {});
+    if event.stanza then
+        post_event("occupant_left", {
+            roomId = event.room.jid;
+            userId = event.occupant.bare_jid;
+            sessionId = jid_resource(event.stanza.attr.from);
+            inRoomSessionId = jid_resource(event.nick);
+        });
+    else
+        for real_jid in event.occupant:each_session() do
+            post_event("occupant_left", {
+                roomId = event.room.jid;
+                userId = event.occupant.bare_jid;
+                sessionId = jid_resource(real_jid);
+                inRoomSessionId = jid_resource(event.nick);
+            });
+        end
+    end
 end);
 
 

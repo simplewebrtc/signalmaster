@@ -102,6 +102,7 @@ Component "${Domains.rooms}" "muc"
         "muc_config_restrict";
         "talky_core_muc_affiliations";
         "talky_core_version";
+        "talky_core_metrics";
     };
 
     talky_core_version = "2.0.0";

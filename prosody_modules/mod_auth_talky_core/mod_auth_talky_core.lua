@@ -87,3 +87,6 @@ function provider.get_sasl_handler()
 end
 
 module:provides("auth", provider);
+
+
+module:log("info", "Loaded mod_auth_talky_core for %s", module.host);

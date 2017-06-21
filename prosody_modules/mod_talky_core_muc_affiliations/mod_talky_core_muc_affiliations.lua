@@ -80,3 +80,6 @@ room_mt.get_affiliation = function (room, jid)
 
     return role;
 end
+
+
+module:log("info", "Loaded mod_talky_core_muc_affiliations for %s", module.host);

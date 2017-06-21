@@ -16,3 +16,6 @@ module:hook('iq/host/jabber:iq:version:query', function (event)
         return true;
     end
 end, 10);
+
+
+module:log("info", "Loaded mod_talky_core_version for %s", module.host);

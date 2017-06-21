@@ -13,7 +13,7 @@ module.exports = {
   validate: {
     payload: {
       eventType: Joi.string(),
-      data: Joi.string()
+      data: Joi.object()
     }
   }
 };

@@ -33,6 +33,7 @@ modules_enabled = {
     "posix";
     "bosh";
     "websocket";
+    "talky_core_metrics";
 }
 
 allow_registration = false
@@ -59,6 +60,7 @@ log = {
 }
 
 talky_core_api_key = "${Config.auth.secret}"
+talky_core_telemetry_url = "${buildUrl('http', Domains.api)}/prosody/telemetry"
 `);
 
 if (Config.isDev) {

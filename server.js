@@ -75,7 +75,7 @@ server.register([
 
 
   if (Config.isDev) {
-    const prosody = require('./scripts/prosody-start-docker').startProsody(process);
+    const prosody = require('./scripts/start-prosody').startProsody(process);
     prosody.stdout.pipe(process.stdout); 
   }
 });

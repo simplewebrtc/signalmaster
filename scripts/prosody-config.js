@@ -53,8 +53,6 @@ http_paths = {
 
 network_default_read_size = 66560
 
-interfaces = { "0.0.0.0" }
-
 log = {
     debug = "*console";
     verbose = "*console";

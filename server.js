@@ -23,7 +23,7 @@ wsProxy.on('error', (err) => {
 });
 
 
-server.register([
+module.exports = server.register([
   {
     register: require('good'),
     options: Config.good
@@ -71,6 +71,7 @@ server.register([
     console.log(`Server running at ${server.info.uri}`);
   });
   
+  server.bind({ db })
   server.route(Routes);
 
 
@@ -78,5 +79,6 @@ server.register([
     const prosody = require('./scripts/start-prosody').startProsody(process);
     prosody.stdout.pipe(process.stdout); 
   }
+  return server;
 });
 

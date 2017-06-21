@@ -4,6 +4,7 @@ const Config = require('getconfig');
 const Joi = require('joi');
 const JWT = require('jsonwebtoken');
 const UUID = require('uuid');
+const uaParser = require('ua-parser-js');
 
 const buildUrl = require('../../lib/buildUrl');
 const fetchICE = require('../../lib/fetchIce');
@@ -20,6 +21,7 @@ module.exports = {
 
     const userId = UUID.v4();
     const jid = `${userId}@${Domains.guests}`;
+    const { ua, browser, device, os } = uaParser(request.headers['user-agent'])
 
     return fetchICE().then(ice => {
 
@@ -42,7 +44,18 @@ module.exports = {
           subject: userId
         })
       });
-    });
+    })
+    .then(() => {
+      return this.db.users.insert({
+        sessionid: userId,
+        userid: jid,
+        type: device.type === undefined ? 'desktop' : 'mobile',
+        os: JSON.stringify(os),
+        useragent: ua,
+        browser: JSON.stringify(browser)
+      })
+    })
+    .catch(err => console.log(err));
   }
 };
 

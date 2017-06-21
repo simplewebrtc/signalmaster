@@ -30,10 +30,6 @@ module.exports = {
         credential: 'some-signed-jwt-token'
       });
     });
-  },
-  validate: {
-    payload: {
-    }
   }
 };
 

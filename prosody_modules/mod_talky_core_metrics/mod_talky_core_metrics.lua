@@ -100,13 +100,17 @@ module:hook("muc-occupant-left", function (event)
 end);
 
 
-module:hook("muc-room-created", function (event)
-    post_event("room_created", {});
+module:hook("muc-room-pre-create", function (event)
+    post_event("room_created", {
+        roomId = event.room.jid
+    });
 end);
 
 
 module:hook("muc-room-destroyed", function (event)
-    post_event("room_destroyed", {});
+    post_event("room_destroyed", {
+        roomId = event.room.jid
+    });
 end);
 
 

@@ -15,6 +15,7 @@ module.exports = {
       eventType: Joi.string(),
       data: Joi.object()
     }
-  }
+  },
+  auth: 'prosody-api'
 };
 

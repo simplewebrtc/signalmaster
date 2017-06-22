@@ -12,7 +12,7 @@ exports.up = function(knex, Promise) {
   .then(() => {
     return knex.schema.createTable('rooms', (table) => {
       table.increments();
-      table.string('roomid');
+      table.string('roomid').unique();
       table.string('name');
       table.string('jid');
       table.timestamps(true, true);
@@ -47,9 +47,9 @@ exports.up = function(knex, Promise) {
   .then(() => {
     return knex.schema.table('events', (table) => {
       // Some events will be just about a room, some room/user interaction, some user/user interaction
-      table.integer('room_id').unsigned().references('id').inTable('rooms').onDelete('CASCADE')
-      table.integer('actor_id').unsigned().references('id').inTable('users').onDelete('CASCADE')
-      table.integer('peer_id').unsigned().references('id').inTable('users').onDelete('CASCADE')
+      table.string('room_id').unsigned().references('roomid').inTable('rooms').onDelete('CASCADE')
+      table.string('actor_id').unsigned().references('sessionid').inTable('users').onDelete('CASCADE')
+      table.string('peer_id').unsigned().references('sessionid').inTable('users').onDelete('CASCADE')
     })
   })
   .then(() => {

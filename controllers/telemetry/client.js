@@ -2,16 +2,25 @@
 
 const Joi = require('joi');
 const UAParser = require('ua-parser-js');
-
+const jwt = require('jsonwebtoken');
 
 module.exports = {
   description: 'Ingest metrics from clients',
   tags: ['api', 'metrics'],
   handler: function (request, reply) {
-    const clientInfo = UAParser(request.headers['user-agent'] || 'unknown');
-    console.log(clientInfo);
-     
-    return reply(request.payload);
+    const { eventType, data } = request.payload
+    const dataObject = JSON.parse(data);
+    console.log(request.headers.authorization);
+    const { sessionId } = jwt.decode(request.headers.authorization);
+    const { peerId, roomId } = dataObject
+    this.db.events.insert({
+      type: eventType,
+      peer_id: peerId || null,
+      room_id: roomId || null,
+      actor_id: sessionId
+    })
+    .then(() => reply(request.payload))
+    .catch((err) => console.log(err))
   },
   validate: {
     payload: {

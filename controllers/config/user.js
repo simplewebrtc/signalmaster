@@ -5,7 +5,7 @@ const Joi = require('joi');
 const JWT = require('jsonwebtoken');
 const UUID = require('uuid');
 const uaParser = require('ua-parser-js');
-const base32 = require('base32-crockford-browser');
+const Base32 = require('base32-crockford-browser');
 
 
 const buildUrl = require('../../lib/buildUrl');
@@ -34,7 +34,7 @@ module.exports = {
       const { ua, browser, device, os } = uaParser(request.headers['user-agent']);
 
       const sessionId = UUID.v4();
-      const userId = `${base32.encode(JSON.stringify({
+      const userId = `${Base32.encode(JSON.stringify({
         id: customerData.id,
         scopes: customerData.scopes || []
       }))}@${Domains.users}`;

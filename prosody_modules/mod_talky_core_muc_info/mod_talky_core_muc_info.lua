@@ -82,6 +82,10 @@ local function stamp_info(event)
         return;
     end
 
+    if not occupant then
+        return;
+    end
+
     local userInfo = occupant.talky_core_info or {};
     
     stanza:maptags(function (tag)

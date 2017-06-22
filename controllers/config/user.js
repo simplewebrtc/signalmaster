@@ -61,7 +61,6 @@ module.exports = {
           })
         });
       }).then(() => {
-
         return this.db.users.insert({
           sessionid: sessionId,
           userid: userId,

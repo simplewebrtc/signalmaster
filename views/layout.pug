@@ -1,0 +1,12 @@
+doctype html
+html(lang='en')
+  head
+    meta(charset='utf-8')
+    title Talky.io Dashboard | #{locals.title}
+    link(rel='stylesheet', href='/css/minimal.css')
+  body
+    .container
+      h1 Talky Dashboard
+      block content
+      block footer
+  script(src='/js/main.js')

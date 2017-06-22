@@ -1,0 +1,17 @@
+extends layout
+
+block content
+  div
+    input(type='text' data-text='room-search-input' placeholder='Room Id')
+    button(data-text='room-search-button') Submit
+  div
+    input(type='text' data-text='user-search-input' placeholder='User Id')
+    button(data-text='user-search-button') Submit
+  h1 Recent rooms
+  ul
+    each val in data
+      li
+        h3 #{val.name} 
+        p Room 
+          a(href='/dashboard/rooms/' + val.roomid) #{val.roomid}
+        p #{val.jid} at #{val.created_at}

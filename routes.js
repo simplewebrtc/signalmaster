@@ -6,7 +6,10 @@ const Controllers = require('keyfob').load({ path: './controllers', fn: require 
 module.exports = [
   // Public routes for clients
   // ---------------------------------------------------------------------
-
+  //Dashboard
+  { method: 'GET', path: '/dashboard', config: Controllers.dashboard.home },
+  { method: 'GET', path: '/dashboard/users/{userSessionId}', config: Controllers.dashboard.getOneUser },
+  { method: 'GET', path: '/dashboard/rooms/{roomId}', config: Controllers.dashboard.getOneRoom },
   // Signaling
   { method: '*', path: '/ws-bind', config: Controllers.signaling },
 
@@ -38,7 +41,10 @@ module.exports = [
 
   // Room affiliations
   { method: 'POST', path: '/prosody/rooms/affiliation', config: Controllers.rooms.affiliation },
-  { method: 'POST', path: '/prosody/rooms/user-info', config: Controllers.rooms.userInfo }
+  { method: 'POST', path: '/prosody/rooms/user-info', config: Controllers.rooms.userInfo },
+
+  //Static assets
+  { method: 'GET', path: '/{path*}', config: { handler: { directory: { path: './public', listing: false } }, auth: false } }
 
 ]
 

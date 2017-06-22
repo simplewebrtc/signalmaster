@@ -33,6 +33,12 @@ module.exports = server.register([
   },
   {
     register: require('hapi-auth-jwt2')
+  },
+  {
+    register: require('vision')
+  },
+  {
+    register: require('inert')
   }
 ]).then(() => {
 
@@ -59,6 +65,12 @@ module.exports = server.register([
       algorithms: [ 'HS256' ],
       issuer: Domains.api
     }
+  });
+
+  server.views({
+    engines: { pug: require('pug') },
+    path: `${__dirname}/views`,
+    isCached: !Config.isDev
   });
 
   server.listener.on('upgrade', (req, socket, head) => {

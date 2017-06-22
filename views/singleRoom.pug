@@ -1,0 +1,11 @@
+extends layout
+
+block content
+  h1 Data for room #{resource}
+  ul
+    each val in data
+      li
+        h3 #{val.type} 
+          User
+          a(href='/dashboard/users/' + val.actor_id) #{val.actor_id}
+          at #{val.created_at}

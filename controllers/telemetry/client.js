@@ -10,7 +10,6 @@ module.exports = {
   handler: function (request, reply) {
     const { eventType, data } = request.payload
     const dataObject = JSON.parse(data);
-    console.log(request.headers.authorization);
     const { sessionId } = jwt.decode(request.headers.authorization);
     const { peerId, roomId } = dataObject
     this.db.events.insert({

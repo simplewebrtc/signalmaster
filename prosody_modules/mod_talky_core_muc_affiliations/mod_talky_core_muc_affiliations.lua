@@ -35,10 +35,10 @@ local function fetch_role(room, jid)
     local userpart = tostring(os_time());
     local secret = base64(hmac_sha1(api_key, userpart, false))
 
-    module:log("debug", "Testing room affiliation for user %s in room %s with URL %s", jid, room, muc_affiliation_url);
+    module:log("debug", "Testing room affiliation for user %s in room %s with URL %s", jid, room.jid, muc_affiliation_url);
     local body = json_encode({
         userId = jid;
-        roomId = room.jid or "wrong object";
+        roomId = room:get_talky_core_id();
     });
 
     local response = {};
@@ -80,3 +80,6 @@ room_mt.get_affiliation = function (room, jid)
 
     return role;
 end
+
+
+module:log("info", "Loaded mod_talky_core_muc_affiliations for %s", module.host);

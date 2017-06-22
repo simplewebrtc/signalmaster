@@ -8,13 +8,15 @@ module.exports = {
   tags: ['api', 'metrics'],
   handler: function (request, reply) {
 
+    console.log(request.payload);
+
     return reply(request.payload);
   },
   validate: {
     payload: {
       eventType: Joi.string(),
-      data: Joi.string()
+      data: Joi.object()
     }
-  }
+  },
+  auth: 'prosody-api'
 };
-

@@ -16,13 +16,13 @@ module.exports = {
   tags: ['api'],
   handler: function (request, reply) {
 
-    const userId = UUID.v4();
+    const randomId = UUID.v4();
 
     return fetchICE().then(ice => {
 
       return reply({
-        sessionId: userId,
-        userId: `${userId}@${Domains.bots}`,
+        sessionId: randomId,
+        userId: `${randomId}@${Domains.bots}`,
         signalingUrl: `${buildUrl('ws', Domains.api)}/ws-bind`,
         telemetryUrl: `${buildUrl('http', Domains.api)}/telemetry`,
         roomServer: Domains.rooms,

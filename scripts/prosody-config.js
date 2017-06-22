@@ -33,6 +33,7 @@ modules_enabled = {
     "posix";
     "bosh";
     "websocket";
+    "talky_core_metrics";
 }
 
 allow_registration = false
@@ -59,6 +60,7 @@ log = {
 }
 
 talky_core_api_key = "${Config.auth.secret}"
+talky_core_telemetry_url = "${buildUrl('http', Domains.api)}/prosody/telemetry"
 `);
 
 if (Config.isDev) {
@@ -96,14 +98,19 @@ VirtualHost "${Domains.bots}"
 console.log(`
 Component "${Domains.rooms}" "muc"
     modules_enabled = {
-        "muc_allhidden";
         "muc_config_restrict";
+        "talky_core_muc_room_id";
+        "talky_core_muc_config";
         "talky_core_muc_affiliations";
+        "talky_core_muc_info";
         "talky_core_version";
+        "talky_core_metrics";
     };
 
     talky_core_version = "2.0.0";
     talky_core_muc_affiliation_url = "${buildUrl('http', Domains.api)}/prosody/rooms/affiliation";
+    talky_core_muc_user_info_url = "${buildUrl('http', Domains.api)}/prosody/rooms/user-info";
+
 
     muc_config_restricted = {
         "muc#roomconfig_moderatedroom";

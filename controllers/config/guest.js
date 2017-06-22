@@ -19,22 +19,24 @@ module.exports = {
   tags: ['api'],
   handler: function (request, reply) {
 
-    const userId = UUID.v4();
-    const jid = `${userId}@${Domains.guests}`;
-    const { ua, browser, device, os } = uaParser(request.headers['user-agent'])
+    const { ua, browser, device, os } = uaParser(request.headers['user-agent']);
+
+    const sessionId = UUID.v4();
+    const userId = `${sessionId}@${Domains.guests}`;
+
 
     return fetchICE().then(ice => {
 
       return reply({
-        sessionId: userId,
-        userId: jid,
+        sessionId,
+        userId,
         signalingUrl: `${buildUrl('ws', Domains.api)}/ws-bind`,
         telemetryUrl: `${buildUrl('http', Domains.api)}/telemetry`,
         roomServer: Domains.rooms,
         iceServers: ice,
+        displayName: '',
         credential: JWT.sign({
-          jid,
-          sessionId: userId,
+          sessionId,
           registeredUser: false
         }, Config.auth.secret, {
           algorithm: 'HS256',
@@ -44,18 +46,17 @@ module.exports = {
           subject: userId
         })
       });
-    })
-    .then(() => {
+    }).then(() => {
+
       return this.db.users.insert({
-        sessionid: userId,
-        userid: jid,
+        sessionid: sessionId,
+        userid: userId,
         type: device.type === undefined ? 'desktop' : 'mobile',
         os: JSON.stringify(os),
         useragent: ua,
         browser: JSON.stringify(browser)
       })
-    })
-    .catch(err => console.log(err));
+    }).catch(err => console.log(err));
   }
 };
 

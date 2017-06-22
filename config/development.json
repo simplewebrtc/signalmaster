@@ -2,7 +2,7 @@
   "isDev": true,
   "isDevTLS": false,
   "talky": {
-    "apiKey": "",
+    "apiKey": "customer-api-shared-jwt-password-makethisoneprettysecureok",
 
     "domains": {
       "api": "talky-core-api.local"
@@ -21,7 +21,7 @@
     "database": "talky_api"
   },
   "auth": {
-    "secret": "jwtpasswordmakethisoneprettysecureok",
+    "secret": "internal-use-jwt-password-makethisoneprettysecureok",
     "options": {
       "algorithm": "HS256"
     }

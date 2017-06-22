@@ -18,7 +18,7 @@ local serialize = require "util.serialization".serialize;
 local ltn12 = require("ltn12")
 local os_time = os.time;
 
-local xmlns_talky = "https://talky.io/p/core";
+local xmlns_talky = "https://talky.io/ns/core";
 
 local muc_service = module:depends("muc");
 local room_mt = muc_service.room_mt;
@@ -90,12 +90,16 @@ local function stamp_info(event)
         end
     end);
 
-    stanza:tag("user", {
+    local tag = stanza:tag("user", {
         xmlns = xmlns_talky;
         type = userInfo.userType or "guest";
         sid = userInfo.sessionId;
         rid = room:get_talky_core_id();
-    }):text():up();
+    });
+    
+    if userInfo.customerData then
+        tag:text(json_encode(userInfo.customerData));
+    end
 end
 
 module:hook("muc-occupant-pre-change", stamp_info, 2);

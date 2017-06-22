@@ -13,6 +13,10 @@
       "servers": [
         "http://ice.kestrel.link"
       ]
+    },
+
+    "metrics": {
+      "maskRoomNames": false
     }
   },
   "db": {

@@ -1,5 +1,7 @@
 'use strict';
 
+const Config = require('getconfig');
+const Crypto = require('crypto');
 const Joi = require('joi');
 
 
@@ -8,12 +10,17 @@ module.exports = {
   tags: ['api', 'metrics'],
   handler: function (request, reply) {
     const { eventType, data } = request.payload;
-    const { roomId, jid, name, sessionId, userId } = data;
+    let { roomId, name, sessionId, userId } = data;
+
+    if (name && Config.talky.metrics && Config.talky.metrics.maskRoomNames) {
+      name = Crypto.createHash('sha1').update(name).digest('base64');
+    }
+
     console.log(request.payload);
     if (roomId) {
       this.db.rooms.findOne({ roomid: roomId })
       .then((room) => {
-        if (!room) return this.db.rooms.insert({ name, roomid: roomId, jid })
+        if (!room) return this.db.rooms.insert({ name, roomid: roomId })
         else return room
       })
       .then((room) => {

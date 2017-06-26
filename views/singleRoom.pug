@@ -1,7 +1,9 @@
 extends layout
 
 block content
-  h1 Data for room #{resource}
+  h1 Events in room #{resource}
+  input(type='text' data-text='get-similar-room-difference-input' placeholder='Minute difference')
+  button(data-text='get-similar-room-difference-button') Get Similar Rooms
   ul
     each val in data
       li
@@ -9,3 +11,5 @@ block content
           User
           a(href='/dashboard/users/' + val.actor_id) #{val.actor_id}
           at #{val.created_at}
+
+  script(src='/js/singleRoom.js')

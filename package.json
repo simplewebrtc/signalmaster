@@ -6,6 +6,8 @@
   "scripts": {
     "start": "nodemon -e js,json,lua server.js",
     "migrate": "knex migrate:latest",
+    "rollback": "knex migrate:rollback",
+    "knex": "knex",
     "seed": "node seed",
     "createdb": "psql -d postgres -c \"CREATE ROLE talky WITH PASSWORD 'password' NOSUPERUSER NOCREATEDB NOCREATEROLE INHERIT LOGIN\" && createdb talky_api -O talky",
     "destroydb": "psql -d postgres -c \"DROP DATABASE talky_api\" && psql -d postgres -c \"DROP ROLE talky;\"",
@@ -28,6 +30,7 @@
     "hapi": "^16.4.3",
     "hapi-auth-basic": "^4.2.0",
     "hapi-auth-jwt2": "^7.2.4",
+    "hapi-pagination": "^1.20.0",
     "http-proxy": "^1.16.2",
     "inert": "^4.2.0",
     "jsonwebtoken": "^7.4.1",

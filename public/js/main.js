@@ -1,6 +1,5 @@
 (function() {
-
-  const addListeners = () => {
+  const addHeaderListeners = () => {
     const elementInfo = [
       {button: 'room-search-button', route: 'rooms', input: 'room-search-input'}, 
       {button: 'user-search-button', route: 'users', input: 'user-search-input'}
@@ -16,7 +15,7 @@
 
   return {
     init: function() {
-      addListeners()
+      addHeaderListeners()
     }
   }
 })().init()

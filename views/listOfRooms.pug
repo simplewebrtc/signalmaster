@@ -1,0 +1,16 @@
+extends layout
+
+block content
+  h1 Recent rooms
+  each val in data
+    div
+      h3 Name: #{val.name} 
+      p ID: 
+        a(href='/dashboard/rooms/' + val.roomid) #{val.roomid}
+      p JID: #{val.jid} 
+      p Created at #{val.created_at}
+  div
+    h3 Pages
+    //- each page, index in pages
+    //-   span
+    //-     a(href='dashboard?limit=25&page=' + (index + 1)) #{index + 1}

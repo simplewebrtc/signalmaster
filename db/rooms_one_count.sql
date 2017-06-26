@@ -1,0 +1,1 @@
+select count(*)::integer as count from rooms

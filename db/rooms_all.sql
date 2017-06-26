@@ -1,0 +1,1 @@
+select * from rooms order by created_at limit ${limit} offset ${offset}

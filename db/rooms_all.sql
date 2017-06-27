@@ -1,1 +1,1 @@
-select * from rooms order by created_at limit ${limit} offset ${offset}
+select * from rooms order by created_at desc limit ${limit} offset ${offset}

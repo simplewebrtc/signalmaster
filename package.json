@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon -e js,json,lua server.js",
+    "start": "nodemon -e js,json,lua,pug,css server.js",
     "migrate": "knex migrate:latest",
     "rollback": "knex migrate:rollback",
     "knex": "knex",
@@ -16,12 +16,14 @@
     "prosody-config": "node ./scripts/prosody-config",
     "prosody-config-install-docker": "npm run -s prosody-config > config/prosody.cfg.lua",
     "prosody-config-install-local": "npm run -s prosody-config > /usr/local/etc/prosody/prosody.cfg.lua",
-    "prosody-config-install-etc": "npm run -s prosody-config > /etc/prosody/prosody.cfg.lua"
+    "prosody-config-install-etc": "npm run -s prosody-config > /etc/prosody/prosody.cfg.lua",
+    "dev-license-gen": "node ./scripts/dev-license-gen"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "base32-crockford-browser": "^1.0.0",
+    "boom": "^5.1.0",
     "chance": "^1.0.9",
     "getconfig": "^3.1.0",
     "good": "^7.2.0",
@@ -32,6 +34,7 @@
     "hapi-auth-jwt2": "^7.2.4",
     "hapi-pagination": "^1.20.0",
     "http-proxy": "^1.16.2",
+    "humanize-duration": "^3.10.0",
     "inert": "^4.2.0",
     "jsonwebtoken": "^7.4.1",
     "keyfob": "^1.0.0",
@@ -43,6 +46,8 @@
     "vision": "^4.1.1"
   },
   "devDependencies": {
-    "nodemon": "^1.11.0"
+    "minimist": "^1.2.0",
+    "nodemon": "^1.11.0",
+    "readline-sync": "^1.4.7"
   }
 }

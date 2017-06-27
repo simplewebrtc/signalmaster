@@ -4,6 +4,9 @@ const Controllers = require('keyfob').load({ path: './controllers', fn: require 
 
 
 module.exports = [
+  { method: 'GET', path: '/', config: Controllers.home }, 
+  { method: 'GET', path: '/license', config: Controllers.license }, 
+
   // Public routes for clients
   // ---------------------------------------------------------------------
   //Dashboard

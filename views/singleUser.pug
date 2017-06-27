@@ -1,11 +1,34 @@
-extends layout
+extends layoutDashboard
 
-block content
-  h1 Events by user #{resource}
-  ul
-    each val in data
-      li
-        h3 #{val.type} 
-          In room 
-          a(href='/dashboard/rooms/' + val.room_id) #{val.room_id}
-          at #{val.created_at}
+block dashboardContent
+  h3 User Info
+  table
+    tr
+      th Session ID
+      td #{resource}
+    tr
+      th User ID
+      td #{user.userid}
+    tr
+      th Client Type
+      td #{user.type}
+    tr
+      th User Agent
+      td #{user.useragent}
+    tr
+      th Session Length
+      td #{user.duration}
+
+  h3 Events
+  table
+    thead
+      th Event
+      th Room
+      th Time
+    tbody
+      each val in data
+        tr
+          td #{val.type} 
+          td
+            a(href='/dashboard/rooms/' + val.room_id) #{val.room_id}
+          td #{val.created_at}

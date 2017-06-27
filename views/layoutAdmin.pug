@@ -1,0 +1,25 @@
+doctype html
+html(lang='en')
+  head
+    meta(charset='utf-8')
+    title Talky Core API
+    link(rel='stylesheet', href='/fonts.css')
+    link(rel='stylesheet', href='/styles.css')
+  body
+    .container
+      header.header-has-logo.cf
+        div(style='position:relative')
+          a(href='https://core.talky.io').talky-logo Talky Core
+          h2(style='position: absolute; top: 47px; left: 21px; font-size: 12px; color: #ee0788; font-weight: bold').supersize CORE
+        nav(role='navigation').pull-right.top-nav.top-nav-light
+          input(id='menu-toggle', type='checkbox').menu-toggle
+          label(for='menu-toggle').pull-right Menu
+          ul.list-unstyled.list-inline.cf
+            li
+              a(href='/') Home
+            li
+              a(href='/license') License
+            li
+              a(href='/dashboard') Monitoring Dashboard
+      .page-core
+        block content

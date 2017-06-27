@@ -7,6 +7,7 @@ const inflateDomains = require('./lib/domains');
 const buildUrl = require('./lib/buildUrl');
 const Domains = inflateDomains(Config.talky.domains); 
 const ProsodyAuth = require('./lib/prosodyAuth');
+const ResetDB = require('./lib/resetDB');
 
 const Routes = require('./routes');
 
@@ -40,7 +41,9 @@ module.exports = server.register([
   {
     register: require('inert')
   }
-]).then(() => {
+])
+.then(ResetDB(db))
+.then(() => {
 
   server.auth.strategy('prosody-guests', 'basic', {
     validateFunc: ProsodyAuth('guests')
@@ -93,4 +96,16 @@ module.exports = server.register([
   }
   return server;
 });
+
+/*
+process.on('unhandledException', function () {
+  console.log(arguments);
+  process.exit();
+});
+
+process.on('unhandledRejection', function () {
+  console.log(arguments);
+  process.exit();
+});
+*/
 

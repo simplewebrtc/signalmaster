@@ -2,6 +2,8 @@
   "isDev": true,
   "isDevTLS": false,
   "talky": {
+    "license": { "roomLimit": 5, "userLimit": 5, "expiresIn": "30d" },
+  
     "apiKey": "customer-api-shared-jwt-password-makethisoneprettysecureok",
 
     "domains": {
@@ -16,7 +18,7 @@
     },
 
     "metrics": {
-      "maskRoomNames": false
+      "maskRoomNames": true
     }
   },
   "db": {

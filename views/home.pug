@@ -1,0 +1,36 @@
+extends layoutAdmin
+
+block content
+  section.hero
+    h3 Talky Core API Server
+    h2.supersize #{domains.api}
+  section.content-narrower
+    table
+      tbody
+        tr
+          th(colspan='2') API Domain
+          td #{domains.api}
+        tr
+          td
+          th Users
+          td #{domains.users}
+        tr
+          td
+          th Guests
+          td #{domains.guests}
+        tr
+          td
+          th Bots
+          td #{domains.bots}
+        tr
+          td
+          th Rooms
+          td #{domains.rooms}
+        for server, i in iceServers
+          tr
+            if i === 0
+              th(colspan='2') ICE Server
+            else
+              td(colspan='2')
+            td
+              a(href=server) #{server}

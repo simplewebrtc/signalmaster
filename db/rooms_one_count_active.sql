@@ -1,0 +1,1 @@
+select count(*)::integer as count from rooms where rooms.ended_at is null

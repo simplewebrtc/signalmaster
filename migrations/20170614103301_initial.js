@@ -3,7 +3,7 @@ exports.up = function(knex, Promise) {
     table.increments();
     table.enum('type', ['mobile', 'desktop']);
     table.string('sessionid').unique();
-    table.string('userid').unique();
+    table.string('userid');
     table.string('os');
     table.string('browser');
     table.string('useragent')
@@ -49,9 +49,9 @@ exports.up = function(knex, Promise) {
   .then(() => {
     return knex.schema.table('events', (table) => {
       // Some events will be just about a room, some room/user interaction, some user/user interaction
-      table.string('room_id').unsigned().references('roomid').inTable('rooms').onDelete('CASCADE')
-      table.string('actor_id').unsigned().references('sessionid').inTable('users').onDelete('CASCADE')
-      table.string('peer_id').unsigned().references('sessionid').inTable('users').onDelete('CASCADE')
+      table.string('room_id').references('roomid').inTable('rooms').onDelete('CASCADE')
+      table.string('actor_id').references('sessionid').inTable('users').onDelete('CASCADE')
+      table.string('peer_id').references('sessionid').inTable('users').onDelete('CASCADE')
     })
   })
   .then(() => {

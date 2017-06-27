@@ -1,16 +1,29 @@
-extends layout
+extends layoutDashboard
 
-block content
-  h1 Recent rooms
-  each val in data
+block dashboardContent
+  section.content-narrower
+    table
+      tr
+        th Active Rooms
+        td #{activeRoomCount}
+      tr
+        th Active Users
+        td #{activeUserCount}
+
+  section
+    h1 Recent rooms
+    table
+      thead
+        tr
+          th Name
+          th Duration
+      each val in data
+        tr
+          td
+            a(href='/dashboard/rooms/' + val.roomid) #{val.name}
+          td #{val.duration}
     div
-      h3 Name: #{val.name} 
-      p ID: 
-        a(href='/dashboard/rooms/' + val.roomid) #{val.roomid}
-      p JID: #{val.jid} 
-      p Created at #{val.created_at}
-  div
-    h3 Pages
-    //- each page, index in pages
-    //-   span
-    //-     a(href='dashboard?limit=25&page=' + (index + 1)) #{index + 1}
+      h3 Pages
+      //- each page, index in pages
+      //-   span
+      //-     a(href='dashboard?limit=25&page=' + (index + 1)) #{index + 1}

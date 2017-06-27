@@ -1,0 +1,1 @@
+update users set ended_at = ${ts}::timestamp with time zone where ended_at is null;

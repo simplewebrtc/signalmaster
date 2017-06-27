@@ -1,0 +1,1 @@
+select * from users where ended_at is null;

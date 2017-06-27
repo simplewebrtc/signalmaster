@@ -1,15 +1,55 @@
-extends layout
+extends layoutDashboard
 
-block content
-  h1 Events in room #{resource}
-  input(type='text' data-text='get-similar-room-difference-input' placeholder='Minute difference')
-  button(data-text='get-similar-room-difference-button') Get Similar Rooms
-  ul
-    each val in data
-      li
-        h3 #{val.type} 
-          User
-          a(href='/dashboard/users/' + val.actor_id) #{val.actor_id}
-          at #{val.created_at}
+block dashboardContent
+  h3 Room Info
+  table
+    tr
+      th Room ID
+      td #{resource}
+    tr
+      th Room Name
+      td #{room.name}
+    tr
+      th Duration
+      td #{room.duration}
+    tr
+      th Largest Room Size
+      td #{activeUsers}
+    tr
+      th Total Occupants Joined
+      td #{totalUsers}
 
-  script(src='/js/singleRoom.js')
+  if similarPrev || similarNext
+    h3 Related Rooms
+    p This room's name was reused in a short period of time. You may need to check these related rooms for more event logs:
+    table
+      tr
+        th
+        th Time Gap
+        th Duration
+      if similarPrev
+        tr
+          th
+            a(href='/dashboard/rooms/' + similarPrev.roomid) Previous instance
+          td #{similarPrev.delta}
+          td #{similarPrev.duration}
+      if similarNext
+        tr
+          th
+            a(href='/dashboard/rooms/' + similarNext.roomid) Next instance
+          td #{similarNext.delta}
+          td #{similarNext.duration}
+  
+  h3 Events
+  table
+    thead
+      th Event
+      th User
+      th Time
+    tbody
+      each val in data
+        tr
+          td #{val.type} 
+          td
+            a(href='/dashboard/users/' + val.actor_id) #{val.actor_id}
+          td #{val.created_at}

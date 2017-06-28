@@ -14,6 +14,14 @@ module.exports = {
     const count = await this.db.rooms.count(params)
     const activeCount = await this.db.rooms.count_active();
     const userCount = await this.db.users.count_active();
+    const roomDayCount = await this.db.rooms.count_period({
+      ts: new Date(),
+      interval: '1 day'
+    });
+    const roomMonthCount = await this.db.rooms.count_period({
+      ts: new Date(),
+      interval: '30 days'
+    });
 
     request.totalCount = count.count;
     
@@ -31,7 +39,9 @@ module.exports = {
       pages: pagesArr,
       data: rooms,
       activeRoomCount: activeCount.count,
-      activeUserCount: userCount.count
+      activeUserCount: userCount.count,
+      prevDayRoomCount: roomDayCount.count,
+      prevMonthRoomCount: roomMonthCount.count
     });
   },
   validate: {

@@ -46,7 +46,7 @@ module.exports = {
 
     let customerData = {};
     try {
-      customerData = extractCustomerData(request.payload.token);
+      customerData = await extractCustomerData(request.payload.token);
     } catch (err) {
       return reply(Boom.badRequest('Could not parse user data'));
     }

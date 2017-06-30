@@ -19,7 +19,7 @@ module.exports = {
       actor_id: sessionId
     })
     .then(() => reply(request.payload))
-    .catch((err) => console.log(err))
+    .catch((err) => reply(err))
   },
   validate: {
     payload: {

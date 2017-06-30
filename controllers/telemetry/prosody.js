@@ -20,9 +20,7 @@ module.exports = {
       let room = await this.db.rooms.findOne({ roomid: roomId });
       console.log(roomId, room);
       if (!room) {
-        console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>> New room!')
         room = await this.db.rooms.insert({ name, roomid: roomId, jid });
-        console.log(room);
       }
 
       if(eventType === 'room_destroyed') {
@@ -36,7 +34,6 @@ module.exports = {
   
       return reply();
     } else {
-      console.log(eventType, 'eveneteeeeeeeeeeeeeeeee');
       if (eventType === 'user_offline') {
         //Record user ended column
         const user = await this.db.users.findOne({ sessionid: sessionId });
@@ -54,7 +51,7 @@ module.exports = {
         const user = await this.db.users.findOne({
           sessionid: sessionId
         });
-
+        
         if (user) {
           await this.db.users.updateOne(user, {
             created_at: new Date(),

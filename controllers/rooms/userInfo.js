@@ -33,6 +33,7 @@ module.exports = {
 
       default: {
         userInfo.userType = 'guest';
+        userInfo.customerData = { id: 'anon' };
       }
     }
 

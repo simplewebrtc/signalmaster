@@ -35,6 +35,31 @@ else
 end
 
 
+local function get_talky_core_info(room, occupant_nick)
+    if not room._data.talky_core_info then
+        return {};
+    end
+    return room._data.talky_core_info[occupant_nick] or {};
+end
+
+local function set_talky_core_info(room, occupant_nick, info)
+    if not info then
+        return false;
+    end 
+
+    if not room._data.talky_core_info then
+        room._data.talky_core_info = {};
+    end
+
+    room._data.talky_core_info[occupant_nick] = info;
+
+    return true;
+end
+
+room_mt.get_talky_core_info = get_talky_core_info;
+room_mt.set_talky_core_info = set_talky_core_info;
+
+
 local function fetch_info(room, userId, sessionId)
     local userpart = tostring(os_time());
     local secret = base64(hmac_sha1(api_key, userpart, false))
@@ -61,54 +86,53 @@ local function fetch_info(room, userId, sessionId)
 
     local data = table.concat(response);
 
-    module:log("debug", data);
+    module:log("debug", "Received user data %s", data);
 
     return json_decode(data);
 end
 
 
-
-module:hook("muc-occupant-pre-join", function (event)
-    local data = fetch_info(event.room, event.occupant.bare_jid, jid_resource(event.stanza.attr.from));
-
-    event.occupant.talky_core_info = data;
-end, 5);
-
-
 local function stamp_info(event)
-    local room, origin, occupant, stanza = event.room, event.origin, event.occupant, event.stanza
+    local room, origin, stanza = event.room, event.origin, event.stanza;
 
     if stanza.attr.type == "unavailable" then
         return;
     end
 
+    occupant = room:get_occupant_by_real_jid(stanza.attr.from) or event.occupant;
     if not occupant then
         return;
     end
+    local user_info = room:get_talky_core_info(occupant.nick);
 
-    local userInfo = occupant.talky_core_info or {};
-    
     stanza:maptags(function (tag)
         if not ((tag.name == "user") and tag.attr.xmlns == xmlns_talky) then
             return tag;
         end
     end);
-
     local tag = stanza:tag("user", {
         xmlns = xmlns_talky;
-        type = userInfo.userType or "guest";
-        sid = userInfo.sessionId;
+        type = user_info.userType or "guest";
+        sid = user_info.sessionId;
         rid = room:get_talky_core_id();
     });
-    
-    if userInfo.customerData then
-        tag:text(json_encode(userInfo.customerData));
+    if user_info.customerData then
+        tag:text(json_encode(user_info.customerData));
     end
+    event.stanza = tag:up();
 end
 
-module:hook("muc-occupant-pre-change", stamp_info, 2);
-module:hook("muc-occupant-pre-join", stamp_info, 2);
 
+module:hook("muc-occupant-pre-join", function (event)
+    local data = fetch_info(event.room, event.occupant.bare_jid, jid_resource(event.stanza.attr.from));
+    event.room:set_talky_core_info(event.occupant.nick, data);
+
+    stamp_info(event);
+end);
+
+module:hook("muc-occupant-pre-change", function (event)
+    stamp_info(event);
+end);
 
 
 module:log("info", "Loaded mod_talky_core_muc_user_info for %s", module.host);

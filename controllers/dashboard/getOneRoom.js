@@ -28,17 +28,18 @@ module.exports = {
       if (!roomData) {
         continue;
       }
-
+      
       roomData.duration = Duration((roomData.ended_at || new Date()).getTime() - roomData.created_at.getTime());
 
       if (roomData === room) {
         continue;
       }
-
-      if (roomData.ended_at.getTime() < room.created_at.getTime()) {
-        roomData.delta = Duration(room.created_at.getTime() - roomData.ended_at.getTime());
-      } else if (roomData.created_at.getTime() > room.ended_at.getTime()) {
-        roomData.delta = Duration(roomData.created_at.getTime() - room.ended_at.getTime());
+      if(roomData.ended_at) {
+        if (roomData.ended_at.getTime() < room.created_at.getTime()) {
+          roomData.delta = Duration(room.created_at.getTime() - roomData.ended_at.getTime());
+        } else if (roomData.created_at.getTime() > room.ended_at.getTime()) {
+          roomData.delta = Duration(roomData.created_at.getTime() - room.ended_at.getTime());
+        }
       }
     }
 
@@ -52,7 +53,7 @@ module.exports = {
         activeUsers = Math.max(users.size, activeUsers);
       }
     }
-
+    
     return reply.view('singleRoom', {
       resource: roomId,
       room,

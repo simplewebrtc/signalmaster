@@ -2,8 +2,21 @@ const Config = require('getConfig');
 const Muckracker = require('muckraker');
 const Crypto = require('crypto');
 const Server = require('../server');
+const JWT = require('jsonwebtoken');
 
-const setupUser = (server) => server.inject({ method: 'POST', url: '/config/guest', payload: {} }).then((r) => r.result)
+const db = new Muckracker({ connection: Config.db })
+
+const setupUser = (server, role = 'guest') => {
+  if (role === 'guest') return server.inject({ method: 'POST', url: '/config/guest', payload: {} }).then((r) => r.result)
+  if (role === 'user') {
+    const token = JWT.sign({ id: 4, scopes: ['mod']}, Config.talky.apiKey, {
+      algorithm: 'HS256',
+      expiresIn: '1 day'
+    })
+    return server.inject({ method: 'POST', url: '/config/user', payload: { token } }).then((r) => r.result)
+  }
+  if (role === 'bot') return server.inject({ method: 'POST', url: '/config/bot', payload: {} }).then((r) => r.result)
+}
 
 const createProsodyAuthHeader = (username) => {
   const password = Crypto.createHmac('sha1', Buffer.from(Config.auth.secret)).update(username).digest('base64')
@@ -21,9 +34,12 @@ const createRoom = (server, roomInfo) => server.inject({
       authorization: createProsodyAuthHeader('testUser')
     }
   })
+  .then(() => {
+    return db.rooms.findOne({ roomid: roomInfo.roomId })
+  })
 
 module.exports = {
-  db: new Muckracker({ connection: Config.db }),
+  db,
   setupUser,
   createRoom,
   createProsodyAuthHeader

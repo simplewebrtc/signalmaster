@@ -18,7 +18,6 @@ module.exports = {
 
     if (roomId) {
       let room = await this.db.rooms.findOne({ roomid: roomId });
-      console.log(roomId, room);
       if (!room) {
         room = await this.db.rooms.insert({ name, roomid: roomId, jid });
       }

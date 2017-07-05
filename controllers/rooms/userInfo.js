@@ -19,7 +19,7 @@ module.exports = {
     let userInfo = {
       sessionId: request.payload.sessionId
     };
-
+    
     switch (domain) {
       case Domains.users: {
         userInfo.userType = 'registered';
@@ -29,6 +29,7 @@ module.exports = {
 
       case Domains.bots: {
         userInfo.userType = 'bot';
+        break;
       }
 
       default: {

@@ -12,7 +12,7 @@
     "/* maxClients */": "/* maximum number of clients per room. 0 = no limit */",
     "maxClients": 0
   },
-  "iceController": "./iceServer",
+  "iceController": "./iceServers",
   "stunservers": [
     {
       "url": "stun:stun.l.google.com:19302"

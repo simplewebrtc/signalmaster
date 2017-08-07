@@ -38,7 +38,7 @@ module.exports = {
     try {
       ice = await fetchICE();
     } catch (err) {
-      console.error(err, 'Could not fetch ICE servers');   
+      console.error(err, 'Could not fetch ICE servers');
     }
 
     const { ua, browser, device, os } = uaParser(request.headers['user-agent']);

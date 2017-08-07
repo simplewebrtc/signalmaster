@@ -5,7 +5,7 @@ const Proxy = require('http-proxy');
 
 const inflateDomains = require('./lib/domains');
 const buildUrl = require('./lib/buildUrl');
-const Domains = inflateDomains(Config.talky.domains); 
+const Domains = inflateDomains(Config.talky.domains);
 const ProsodyAuth = require('./lib/prosodyAuth');
 const ResetDB = require('./lib/resetDB');
 
@@ -90,7 +90,7 @@ module.exports = server.register([
   server.route(Routes);
 
 
-  if (Config.isDev) {
+  if (Config.isDev && !Config.noProsody) {
     const prosody = require('./scripts/start-prosody').startProsody(process);
     prosody.stdout.pipe(process.stdout); 
   }

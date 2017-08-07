@@ -1,5 +1,10 @@
 # api.talky.io
 
+##
+
+Lance please document installing prosody trunk aka nightly here
+http://prosody.im/download/package_repository
+
 ## Getting started
 Make sure that postgres and psql are installed on your machine
 
@@ -11,12 +16,38 @@ I think it's safe for us to just work out of the [initial migrations]('./migrati
 
 If you want to destroy the DB and start over just run `npm run destroydb`
 
-## Setting up Prosody locally
+##
 
-1. `npm run prosody-config-install-docker`
-2. `npm run start-prosody`
+Install lua 5.2 (flesh this out)
 
-In development mode, `npm start` will start Prosody along with the HTTP API. 
+https://github.com/prosody/prosody-docker/blob/master/Dockerfile
+
+## Setting up Prosody locally - OS/X and Windows
+
+```sh
+$ npm run prosody-config-install-docker
+$ npm run start
+```
+
+
+## Setting up Prosody locally - Linux
+
+```sh
+$ npm run prosody-config-generate
+$ sudo mv ./prosody.cfg.lua /etc/prosody/
+$ sudo chown root:root /etc/prosody/prosody.cfg.lua
+$ sudo chmod -x /etc/prosody/prosody.cfg.lua
+$ npm run start
+```
+
+## Setting up the db
+
+```sh
+$ npm run createdb
+$ npm run migrate
+```
+
+In development mode, `npm start` will start Prosody along with the HTTP API.
 
 ## Schema
 
@@ -65,5 +96,3 @@ In development mode, `npm start` will start Prosody along with the HTTP API.
 - `video_resumed`
 - `audio_paused`
 - `audio_resumed`
-
-

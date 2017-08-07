@@ -9,9 +9,8 @@ module.exports = {
   tags: ['api', 'metrics'],
   handler: function (request, reply) {
     const { eventType, data } = request.payload
-    const dataObject = JSON.parse(data);
     const { sessionId } = jwt.decode(request.headers.authorization);
-    const { peerId, roomId } = dataObject
+    const { peerId, roomId } = data;
     this.db.events.insert({
       type: eventType,
       peer_id: peerId || null,
@@ -24,7 +23,10 @@ module.exports = {
   validate: {
     payload: {
       eventType: Joi.string(),
-      data: Joi.string()
+      data: Joi.object({
+        peerId: Joi.string(),
+        roomId: Joi.string()
+      })
     }
   },
   auth: 'client-token'

@@ -24,7 +24,7 @@ module.exports = {
     });
 
     request.totalCount = count.count;
-    
+
     const rooms = await this.db.rooms.all(params);
     const pagesArr = new Array(Math.ceil(request.totalCount / limit)).fill(0);
 

@@ -4,8 +4,8 @@ const Controllers = require('keyfob').load({ path: './controllers', fn: require 
 
 
 module.exports = [
-  { method: 'GET', path: '/', config: Controllers.home }, 
-  { method: 'GET', path: '/license', config: Controllers.license }, 
+  { method: 'GET', path: '/', config: Controllers.home },
+  { method: 'GET', path: '/license', config: Controllers.license },
 
   // Public routes for clients
   // ---------------------------------------------------------------------
@@ -31,9 +31,9 @@ module.exports = [
   { method: 'POST', path: '/telemetry', config: Controllers.telemetry.client },
 
 
-  // Internal routes for Prosody 
+  // Internal routes for Prosody
   // ---------------------------------------------------------------------
- 
+
   // Telemetry
   { method: 'POST', path: '/prosody/telemetry', config: Controllers.telemetry.prosody },
 

@@ -4,7 +4,6 @@ const Config = require('getconfig');
 const Crypto = require('crypto');
 const Joi = require('joi');
 
-
 module.exports = {
   description: 'Ingest metrics from Prosody',
   tags: ['api', 'metrics'],

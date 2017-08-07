@@ -7,6 +7,7 @@ const UUID = require('uuid');
 const Boom = require('boom');
 const uaParser = require('ua-parser-js');
 const Base32 = require('base32-crockford-browser');
+const Schema = require('../../lib/schema');
 
 
 const buildUrl = require('../../lib/buildUrl');
@@ -21,7 +22,7 @@ const Domains = inflateDomains(TalkyCoreConfig.domains);
 
 module.exports = {
   description: 'Auto-configure a registered user client session',
-  tags: ['api'],
+  tags: ['api', 'config'],
   handler: async function (request, reply) {
 
     let license = {};
@@ -37,12 +38,7 @@ module.exports = {
       return reply(Boom.forbidden('Talky Core active user limit reached'));
     }
 
-    let ice = [];
-    try {
-      ice = await fetchICE();
-    } catch (err) {
-      console.error('Could not fetch ICE servers');   
-    }
+    const ice = await fetchICE(request);
 
     let customerData = {};
     try {
@@ -59,42 +55,49 @@ module.exports = {
       scopes: customerData.scopes || []
     }))}@${Domains.users}`;
 
-    try {
-      await this.db.users.insert({
-        sessionid: sessionId,
-        userid: userId,
-        type: device.type === undefined ? 'desktop' : 'mobile',
-        os: JSON.stringify(os),
-        useragent: ua,
-        browser: JSON.stringify(browser)
-      });
-    } catch (err) {
-      console.log(err);
-    }
+      try {
+        await this.db.users.insert({
+          sessionid: sessionId,
+          userid: userId,
+          type: device.type === undefined ? 'desktop' : 'mobile',
+          os: JSON.stringify(os),
+          useragent: ua,
+          browser: JSON.stringify(browser)
+        });
+      } catch (err) {
+        request.log(['error', 'users'], err);
+      }
 
-    return reply({
-      sessionId,
-      userId,
-      signalingUrl: `${buildUrl('ws', Domains.api)}/ws-bind`,
-      telemetryUrl: `${buildUrl('http', Domains.api)}/telemetry`,
-      roomServer: Domains.rooms,
-      iceServers: ice,
-      displayName: customerData.displayName || '',
-      credential: JWT.sign({
+      const result = {
         sessionId,
-        registeredUser: true
-      }, Config.auth.secret, {
-        algorithm: 'HS256',
-        expiresIn: '1 day',
-        issuer: Domains.api,
-        audience: Domains.guests,
-        subject: userId
-      })
-    });
-  },
-  validate: {
-    payload: {
-      token: Joi.string()
+        userId,
+        signalingUrl: `${buildUrl('ws', Domains.api)}/ws-bind`,
+        telemetryUrl: `${buildUrl('http', Domains.api)}/telemetry`,
+        roomServer: Domains.rooms,
+        iceServers: ice,
+        displayName: customerData.displayName || '',
+        credential: JWT.sign({
+          sessionId,
+          registeredUser: true
+        }, Config.auth.secret, {
+          algorithm: 'HS256',
+          expiresIn: '1 day',
+          issuer: Domains.api,
+          audience: Domains.guests,
+          subject: userId
+        })
+      }
+
+      return reply(result);
+    },
+    response: {
+      status: {
+        200: Schema.user
+      }
+    },
+    validate: {
+      payload: {
+        token: Joi.string().description('JWT encoded user object').label('UserToken')
+      }
     }
-  }
-};
+  };

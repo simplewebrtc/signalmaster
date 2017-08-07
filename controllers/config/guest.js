@@ -6,6 +6,7 @@ const JWT = require('jsonwebtoken');
 const UUID = require('uuid');
 const Boom = require('boom');
 const uaParser = require('ua-parser-js');
+const Schema = require('../../lib/schema');
 
 const buildUrl = require('../../lib/buildUrl');
 const fetchICE = require('../../lib/fetchIce');
@@ -18,7 +19,7 @@ const Domains = inflateDomains(TalkyCoreConfig.domains);
 
 module.exports = {
   description: 'Auto-configure a registered user client session',
-  tags: ['api'],
+  tags: ['api', 'config'],
   handler: async function (request, reply) {
 
     let license = {};
@@ -56,10 +57,10 @@ module.exports = {
         browser: JSON.stringify(browser)
       });
     } catch (err) {
-      console.log(err);
+      request.log(['error', 'users', 'guest'], err);
     }
 
-    return reply({
+    const result = {
       sessionId,
       userId,
       signalingUrl: `${buildUrl('ws', Domains.api)}/ws-bind`,
@@ -77,6 +78,13 @@ module.exports = {
         audience: Domains.guests,
         subject: userId
       })
-    });
+    };
+
+    return reply(result);
+  },
+  response: {
+    status: {
+      200: Schema.guest
+    }
   }
 };

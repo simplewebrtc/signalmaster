@@ -9,8 +9,8 @@ const Domains = inflateDomains(Config.talky.domains);
 
 
 module.exports = {
-  description: 'API Homepage',
-  tags: [],
+  description: 'Talky License information',
+  tags: ['web'],
   handler: function async (request, reply) {
     checkLicense().then(license => {
       reply.view('license', {

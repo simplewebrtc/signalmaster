@@ -5,7 +5,7 @@ const Duration = require('humanize-duration');
 
 module.exports = {
   description: 'Dashboard',
-  tags: ['api', 'metrics'],
+  tags: ['web', 'metrics'],
   handler: async function (request, reply) {
     const params = Object.assign({}, request.query);
     const limit = params.limit || 25;

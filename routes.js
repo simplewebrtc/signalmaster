@@ -4,36 +4,34 @@ const Controllers = require('keyfob').load({ path: './controllers', fn: require 
 
 
 module.exports = [
-  { method: 'GET', path: '/', config: Controllers.home }, 
-  { method: 'GET', path: '/license', config: Controllers.license }, 
-
-  // Public routes for clients
-  // ---------------------------------------------------------------------
-  //Dashboard
+  // Public web routes for clients
+  { method: 'GET', path: '/', config: Controllers.home },
+  { method: 'GET', path: '/license', config: Controllers.license },
   { method: 'GET', path: '/dashboard', config: Controllers.dashboard.home },
   { method: 'GET', path: '/dashboard/users/{userSessionId}', config: Controllers.dashboard.getOneUser },
   { method: 'GET', path: '/dashboard/rooms/{roomId}', config: Controllers.dashboard.getOneRoom },
+
   // Signaling
-  { method: '*', path: '/ws-bind', config: Controllers.signaling },
+  { method: 'GET', path: '/ws-bind', config: Controllers.signaling },
 
   // Alternate connection discovery method for XMPP clients
   { method: 'GET', path: '/.well-known/host-meta.json', config: Controllers.hostmeta },
+
+  // Fetch ICE servers
+  { method: 'GET', path: '/ice-servers', config: Controllers.ice },
 
   // Client auto-configuration
   { method: 'POST', path: '/config/user', config: Controllers.config.user },
   { method: 'POST', path: '/config/guest', config: Controllers.config.guest},
   { method: 'POST', path: '/config/bot', config: Controllers.config.bot },
 
-  // Fetch ICE servers
-  { method: 'GET', path: '/ice-servers', config: Controllers.ice },
-
   // Telemetry
   { method: 'POST', path: '/telemetry', config: Controllers.telemetry.client },
 
 
-  // Internal routes for Prosody 
+  // Internal routes for Prosody
   // ---------------------------------------------------------------------
- 
+
   // Telemetry
   { method: 'POST', path: '/prosody/telemetry', config: Controllers.telemetry.prosody },
 
@@ -48,6 +46,4 @@ module.exports = [
 
   //Static assets
   { method: 'GET', path: '/{path*}', config: { handler: { directory: { path: './public', listing: false } }, auth: false } }
-
 ]
-

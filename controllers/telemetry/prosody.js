@@ -4,7 +4,6 @@ const Config = require('getconfig');
 const Crypto = require('crypto');
 const Joi = require('joi');
 
-
 module.exports = {
   description: 'Ingest metrics from Prosody',
   tags: ['api', 'metrics'],
@@ -30,7 +29,7 @@ module.exports = {
         //Record event
         await this.db.events.insert({ type: eventType, room_id: room.roomid, actor_id: sessionId });
       }
-  
+
       return reply();
     } else {
       if (eventType === 'user_offline') {
@@ -50,7 +49,7 @@ module.exports = {
         const user = await this.db.users.findOne({
           sessionid: sessionId
         });
-        
+
         if (user) {
           await this.db.users.updateOne(user, {
             created_at: new Date(),
@@ -77,7 +76,13 @@ module.exports = {
   validate: {
     payload: {
       eventType: Joi.string(),
-      data: Joi.object()
+      data: Joi.object({
+        roomId: Joi.string(),
+        name: Joi.string(),
+        sessionId: Joi.string(),
+        userId: Joi.string(),
+        jid: Joi.string()
+      }).unknown()
     }
   },
   auth: 'prosody-api'

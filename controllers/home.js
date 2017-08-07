@@ -9,7 +9,7 @@ const Domains = inflateDomains(Config.talky.domains);
 
 module.exports = {
   description: 'API Homepage',
-  tags: [],
+  tags: ['web'],
   handler: function (request, reply) {
     reply.view('home', { domains: Domains, iceServers: Config.talky.ice.servers });
   }

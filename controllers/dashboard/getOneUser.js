@@ -5,7 +5,7 @@ const Duration = require('humanize-duration');
 
 module.exports = {
   description: 'Dashboard',
-  tags: ['api', 'metrics'],
+  tags: ['web', 'metrics'],
   handler: async function (request, reply) {
     const { userSessionId } = request.params;
     let user = {};
@@ -13,7 +13,7 @@ module.exports = {
     try {
       user = await this.db.users.findOne({ sessionid: userSessionId });
     } catch (err) {
-      console.log(err);
+      request.log(['error', 'getOneUser'], err);
     }
     const events = await this.db.events.find({ actor_id: userSessionId });
 

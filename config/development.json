@@ -3,11 +3,11 @@
   "isDevTLS": false,
   "talky": {
     "license": { "roomLimit": 5, "userLimit": 5, "expiresIn": "30d" },
-  
+
     "apiKey": "customer-api-shared-jwt-password-makethisoneprettysecureok",
 
     "domains": {
-      "api": "talky-core-api.local"
+      "api": "localhost"
     },
 
     "ice": {
@@ -33,7 +33,7 @@
     }
   },
   "server": {
-    "port": 8001, 
+    "port": 8001,
     "host": "localhost",
     "routes": {
       "cors": true

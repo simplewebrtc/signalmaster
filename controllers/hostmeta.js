@@ -1,6 +1,7 @@
 'use strict';
 
 const Config = require('getconfig');
+const Schema = require('../lib/schema');
 
 const buildUrl = require('../lib/buildUrl');
 const inflateDomains = require('../lib/domains');
@@ -12,12 +13,18 @@ module.exports = {
   tags: ['api', 'ice'],
   handler: function (request, reply) {
 
-    return reply({
+    const result = {
       links: [{
         rel: 'urn:xmpp:alt-connections:websocket',
         href: `${buildUrl('ws', Domains.api)}/ws-bind`
       }]
-    }).type('application/json');
+    };
+
+    return reply(result).type('application/json');
+  },
+  response: {
+    status: {
+      200: Schema.hostmeta
+    }
   }
 };
-

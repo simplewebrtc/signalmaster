@@ -1,57 +1,36 @@
 exports.up = function(knex, Promise) {
   return knex.schema.createTable('users', function (table) {
-    table.increments();
-    table.enum('type', ['mobile', 'desktop']);
-    table.string('sessionid').unique();
-    table.string('userid');
-    table.string('os');
-    table.string('browser');
-    table.string('useragent')
-    table.timestamps(true, true);
+    table.bigIncrements();
+    table.text('type');
+    table.text('sessionid').unique();
+    table.text('userid');
+    table.text('os');
+    table.text('browser');
+    table.text('useragent')
+    table.timestamps();
   })
   .then(() => {
     return knex.schema.createTable('rooms', (table) => {
-      table.increments();
-      table.string('roomid').unique();
-      table.string('name');
-      table.string('jid');
-      table.timestamps(true, true);
+      table.bigIncrements();
+      table.text('roomid').unique();
+      table.text('name');
+      table.text('jid');
+      table.timestamps();
     })
   })
   .then(() => {
     return knex.schema.createTable('events', (table) => {
-      table.increments();
-      table.enum('type', [
-        'user_online',
-        'user_offline',
-        'room_created',
-        'room_destroyed',
-        'room_locked',
-        'room_unlocked',
-        'occupant_joined',
-        'occupant_left',
-        'message_sent',
-        'screencapture_started',
-        'screencapture_ended',
-        'rtt_enabled',
-        'rtt_disabled',
-        'p2p_session_started',
-        'p2p_session_ended',
-        'p2p_session_stats',
-        'video_paused',
-        'video_resumed',
-        'audio_paused',
-        'audio_resumed'
-      ]);
-      table.timestamps(true, true);
+      table.bigIncrements();
+      table.text('type');
+      table.timestamps();
     })
   })
   .then(() => {
     return knex.schema.table('events', (table) => {
       // Some events will be just about a room, some room/user interaction, some user/user interaction
-      table.string('room_id').references('roomid').inTable('rooms').onDelete('CASCADE')
-      table.string('actor_id').references('sessionid').inTable('users').onDelete('CASCADE')
-      table.string('peer_id').references('sessionid').inTable('users').onDelete('CASCADE')
+      table.text('room_id').references('roomid').inTable('rooms').onDelete('CASCADE')
+      table.text('actor_id').references('sessionid').inTable('users').onDelete('CASCADE')
+      table.text('peer_id').references('sessionid').inTable('users').onDelete('CASCADE')
     })
   })
   .then(() => {

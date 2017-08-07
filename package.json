@@ -1,14 +1,13 @@
 {
   "name": "api.talky.io",
   "version": "1.0.0",
-  "description": "",
+  "description": "Talky Metrics API",
   "main": "server.js",
   "scripts": {
     "start": "nodemon -e js,json,lua,pug,css server.js",
     "migrate": "knex migrate:latest",
     "rollback": "knex migrate:rollback",
     "knex": "knex",
-    "seed": "node seed",
     "createdb": "psql -d postgres -c \"CREATE ROLE talky WITH PASSWORD 'password' NOSUPERUSER NOCREATEDB NOCREATEROLE INHERIT LOGIN\" && createdb talky_api -O talky",
     "destroydb": "psql -d postgres -c \"DROP DATABASE talky_api\" && psql -d postgres -c \"DROP ROLE talky;\"",
     "test": "lab -t 100 -v -e development",
@@ -17,6 +16,7 @@
     "prosody-config-install-docker": "npm run -s prosody-config > config/prosody.cfg.lua",
     "prosody-config-install-local": "npm run -s prosody-config > /usr/local/etc/prosody/prosody.cfg.lua",
     "prosody-config-install-etc": "npm run -s prosody-config > /etc/prosody/prosody.cfg.lua",
+    "prosody-config-generate": "npm run -s prosody-config > ./prosody.cfg.lua",
     "dev-license-gen": "node ./scripts/dev-license-gen"
   },
   "author": "",
@@ -34,6 +34,7 @@
     "hapi-auth-basic": "^4.2.0",
     "hapi-auth-jwt2": "^7.2.4",
     "hapi-pagination": "^1.20.0",
+    "hapi-swagger": "^7.7.0",
     "http-proxy": "^1.16.2",
     "humanize-duration": "^3.10.0",
     "inert": "^4.2.0",

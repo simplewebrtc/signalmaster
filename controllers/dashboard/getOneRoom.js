@@ -5,7 +5,7 @@ const Duration = require('humanize-duration');
 
 module.exports = {
   description: 'Dashboard',
-  tags: ['api', 'metrics'],
+  tags: ['web', 'metrics'],
   handler: async function (request, reply) {
     const { roomId } = request.params
 
@@ -28,7 +28,7 @@ module.exports = {
       if (!roomData) {
         continue;
       }
-      
+
       roomData.duration = Duration((roomData.ended_at || new Date()).getTime() - roomData.created_at.getTime());
 
       if (roomData === room) {
@@ -53,7 +53,7 @@ module.exports = {
         activeUsers = Math.max(users.size, activeUsers);
       }
     }
-    
+
     return reply.view('singleRoom', {
       resource: roomId,
       room,

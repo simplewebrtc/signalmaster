@@ -5,7 +5,7 @@ const Duration = require('humanize-duration');
 
 module.exports = {
   description: 'Dashboard',
-  tags: ['api', 'metrics'],
+  tags: ['web', 'metrics'],
   handler: async function (request, reply) {
     const params = Object.assign({}, request.query);
     const limit = params.limit || 25;
@@ -24,7 +24,7 @@ module.exports = {
     });
 
     request.totalCount = count.count;
-    
+
     const rooms = await this.db.rooms.all(params);
     const pagesArr = new Array(Math.ceil(request.totalCount / limit)).fill(0);
 

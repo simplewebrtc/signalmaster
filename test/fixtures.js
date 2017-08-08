@@ -44,7 +44,7 @@ exports.token = function (unsigned, attrs) {
 exports.room = function (attrs) {
 
   const defaults = {
-    roomid: Faker.lorem.word(),
+    roomId: Faker.lorem.word(),
     name: Faker.lorem.words().split(' ').join('-'),
     jid: Faker.internet.email()
   };

@@ -1,0 +1,34 @@
+{
+  "isDevTLS": false,
+  "talky": {
+    "license": { "roomLimit": 5, "userLimit": 5, "expiresIn": "30d" },
+    "apiKey": "testkey",
+    "domains": {
+      "api": "localhost"
+    },
+    "ice": {
+      "secret": "foo",
+      "servers": [
+        "http://ice-test.talky.io"
+      ]
+    },
+    "metrics": {
+      "maskRoomNames": true
+    }
+  },
+  "db": {
+    "user": "talky",
+    "password": "password",
+    "database": "talky_api"
+  },
+  "auth": {
+    "secret": "internal-use-jwt-password-makethisoneprettysecureok-testing",
+    "options": {
+      "algorithm": "HS256"
+    }
+  },
+  "good": {
+    "reporters": {
+    }
+  }
+}

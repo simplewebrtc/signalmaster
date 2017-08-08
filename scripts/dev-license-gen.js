@@ -1,7 +1,5 @@
 const JWT = require('jsonwebtoken');
 
-
-
 const DEV_PRIV_KEY = `
 -----BEGIN RSA PRIVATE KEY-----
 MIIJJwIBAAKCAgEA0WDsLKzNXKnti04N2wmgEkaUAgF/0IANp5tm01MeP46EdQkh
@@ -96,11 +94,11 @@ if (require.main === module) {
   const Readline = require('readline-sync');
   const ParseArgs = require('minimist');
   const opts = ParseArgs(process.argv.slice(2));
-  
+
   const roomLimit = opts['max-rooms'] || parseInt(Readline.question('Max number of active rooms: '), 10) || undefined;
   const userLimit = opts['max-users'] || parseInt(Readline.question('Max number of online users: '), 10) || undefined;
   const roomUserLimit = opts['max-room-size'] || parseInt(Readline.question('Max number of users per room: '), 10) || undefined;
-  
+
   let expiresIn = opts['expires-in'] || Readline.question('Expires in (30 days, 1 year, etc): ') || 'never';
   if (expiresIn === 'never') {
     expiresIn = undefined;
@@ -112,11 +110,11 @@ if (require.main === module) {
     roomUserLimit,
     expiresIn
   });
-  
+
   process.stderr.write('\nGenerating Talky Core API Dev License\n');
   process.stderr.write('=====================================\n');
   process.stderr.write(JSON.stringify(JWT.decode(token), null, 2) + '\n\n');
-  
+
   console.log(token);
 }
 

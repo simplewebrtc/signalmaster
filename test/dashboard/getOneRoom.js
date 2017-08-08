@@ -1,4 +1,5 @@
 const Lab = require('lab');
+const Code = require('code');
 const JWT = require('jsonwebtoken');
 const Config = require('getconfig')
 const Crypto = require('crypto');
@@ -11,18 +12,21 @@ const Base32 = require('base32-crockford-browser');
 const lab = exports.lab = Lab.script();
 
 const { describe, it, before, after, afterEach } = lab
-const { expect } = Lab;
+const { expect } = Code;
 
-describe('Get One Room Route', () => {
+describe('GET /dashboard/rooms/{roomId}', () => {
+
   let server, user, room;
-  const createRoomInfo = { roomId: 'randomRoomId', name: 'test-room', jid: `test-room@talky.io.tests` }
-  const otherRoomInfo = { roomId: 'otherRoomId', name: 'test-room', jid: `test-room@talky.io.tests` }
+  const room = Fixtures.room();
+  const otherRoom = Fixtures.room({ jid: room });
+  //const createRoomInfo = { roomId: 'randomRoomId', name: 'test-room', jid: `test-room@talky.io.tests` }
+  //const otherRoomInfo = { roomId: 'otherRoomId', name: 'test-room', jid: `test-room@talky.io.tests` }
   
   const wait = ms => new Promise(resolve => setTimeout(resolve, ms))
 
   before(async() => {
     server = await Server
-    room = await createRoom(server, createRoomInfo)
+    room = await createRoom(server, room)
   });
 
   after(async () => {

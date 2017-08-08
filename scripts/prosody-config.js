@@ -63,7 +63,7 @@ talky_core_api_key = "${Config.auth.secret}"
 talky_core_telemetry_url = "${buildUrl('http', Domains.api)}/prosody/telemetry"
 `);
 
-if (Config.isDev) {
+if (Config.getconfig.env !== 'production') {
     console.log(`
 modules_disabled = {
     "tls";

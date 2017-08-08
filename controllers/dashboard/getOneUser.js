@@ -1,7 +1,7 @@
 'use strict';
 
 const Duration = require('humanize-duration');
-
+const Boom = require('boom');
 
 module.exports = {
   description: 'Dashboard',
@@ -14,6 +14,10 @@ module.exports = {
       user = await this.db.users.findOne({ sessionid: userSessionId });
     } catch (err) {
       request.log(['error', 'getOneUser'], err);
+    }
+
+    if (!user) {
+      throw Boom.notFound();
     }
     const events = await this.db.events.find({ actor_id: userSessionId });
 

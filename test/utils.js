@@ -1,10 +1,7 @@
 const Config = require('getConfig');
-const Muckracker = require('muckraker');
 const Crypto = require('crypto');
 const Server = require('../server');
 const JWT = require('jsonwebtoken');
-
-const db = new Muckracker({ connection: Config.db })
 
 const setupUser = (server, role = 'guest') => {
   if (role === 'guest') return server.inject({ method: 'POST', url: '/config/guest', payload: {} }).then((r) => r.result)
@@ -39,7 +36,6 @@ const createRoom = (server, roomInfo) => server.inject({
   })
 
 module.exports = {
-  db,
   setupUser,
   createRoom,
   createProsodyAuthHeader

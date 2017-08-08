@@ -9,7 +9,6 @@ const Domains = inflateDomains(Config.talky.domains);
 const ProsodyAuth = require('./lib/prosodyAuth');
 const ResetDB = require('./lib/resetDB');
 
-const Routes = require('./routes');
 const Pkg = require('./package.json');
 
 
@@ -17,14 +16,32 @@ const server = new Hapi.Server();
 const db = new Muckraker({ connection: Config.db });
 server.connection(Config.server);
 
+//$lab:coverage:off$
+process.on('sigterm', () => {
 
-const wsPort = Config.isDev ? (Config.isDevTLS ? 5281: 5280): 5281;
+  server.log(['info', 'shutdown'], 'graceful shutdown');
+  //TODO resetDb here
+  server.stop({ timeout: 15000 }).then(() => {
+
+    return process.exit(0);
+  });
+});
+
+server.on('request-error', (err, m) => {
+
+  console.log(m.stack);
+});
+
+const wsPort = Config.getconfig.isDev ? (Config.isDevTLS ? 5281: 5280): 5281;
 const wsProxy = Proxy.createProxyServer({ target: `${buildUrl('ws', Domains.api, wsPort)}` });
 wsProxy.on('error', (err) => {
   server.log(err, 'Prosody not responding');
 });
 
-module.exports = server.register([
+//$lab:coverage:on$
+
+exports.db = db;
+exports.Server = server.register([
   {
     register: require('good'),
     options: Config.good
@@ -90,31 +107,48 @@ module.exports = server.register([
     server.views({
       engines: { pug: require('pug') },
       path: `${__dirname}/views`,
-      isCached: !Config.isDev
+      isCached: !Config.getconfig.isDev
     });
 
     server.listener.on('upgrade', (req, socket, head) => {
       wsProxy.ws(req, socket, head);
     });
 
-    server.start((err) => {
-      if (err) throw err;
-
-      server.log(['info'], `Server running at ${server.info.uri}`);
-    });
-
     server.bind({ db })
-    server.route(Routes);
 
-
-    if (Config.isDev && !Config.noProsody) {
+    if (Config.getconfig.isDev && !Config.noProsody) {
       const prosody = require('./scripts/start-prosody').startProsody(process);
       prosody.stdout.pipe(process.stdout);
     }
-    return server;
+    server.route(require('./routes'));
+  }).then(() => {
+
+    // coverage disabled because module.parent is always defined in tests
+    // $lab:coverage:off$
+    if (module.parent) {
+      return server.initialize().then(() => {
+
+        return server;
+      });
+    }
+
+    return server.start().then(() => {
+
+      server.connections.forEach((connection) => {
+
+        server.log(['info', 'startup'], `${connection.info.uri} ${connection.settings.labels}`);
+      });
+    });
+    // $lab:coverage:on$
+  }).catch((err) => {
+
+    // coverage disabled due to difficulty in faking a throw
+    // $lab:coverage:off$
+    console.error(err.stack || err);
+    process.exit(1);
+    // $lab:coverage:on$
   });
 
-/*
 process.on('unhandledException', function () {
   console.log(arguments);
   process.exit();
@@ -124,5 +158,3 @@ process.on('unhandledRejection', function () {
   console.log(arguments);
   process.exit();
 });
-*/
-

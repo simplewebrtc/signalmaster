@@ -64,7 +64,7 @@ module.exports = {
     const result = {
       sessionId,
       userId,
-      signalingUrl: `${buildUrl('ws', Domains.api)}/ws-bind`,
+      signalingUrl: TalkyCoreConfig.overrideGuestSignalingUrl || `${buildUrl('ws', Domains.api)}/ws-bind`,
       telemetryUrl: `${buildUrl('http', Domains.api)}/telemetry`,
       roomServer: Domains.rooms,
       iceServers: ice,

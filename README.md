@@ -89,7 +89,7 @@ I think it's safe for us to just work out of the [initial migrations]('./migrati
 
     The Prosody config file is not regenerated automatically, so this step will need to be run any time you change the service configuration.
 
-## 3. Generate Certificates
+### 3. Generate Certificates
 
 To run the API with HTTPS (needed for local testing clients), run:
 
@@ -109,7 +109,7 @@ Common Name (e.g. server FQDN or YOUR name) []:localhost:8001
 Email Address []:
 ```
 
-## 3. Start the Service
+### 3. Start the Service
 
 The API server (along with Prosody when not in production mode), can be started with:
 
@@ -119,6 +119,24 @@ $ npm start
 
 If HTTPS is used, you will need to load the API home page in your browser to approve using the generated certificate.
 
+## Using Production Talky Prosody Service
+
+*Interim: Until we change the domains used by Talky.io*
+
+For now, running local clients against the production Talky.io service can be done by setting the `domains` and `overrideGuestSignalingUrl` fields of the config:
+
+```json
+{
+  "talky": {
+    "domains": {
+      "api": "localhost",
+      "rooms": "talky.io",
+      "guests": "anon.talky.me"
+    },
+    "overrideGuestSignalingUrl: "wss://anon.talky.me/xmpp-websocket"
+  }
+}
+```
 
 ## Schema
 

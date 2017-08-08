@@ -133,7 +133,7 @@ For now, running local clients against the production Talky.io service can be do
       "rooms": "talky.io",
       "guests": "anon.talky.me"
     },
-    "overrideGuestSignalingUrl: "wss://anon.talky.me/xmpp-websocket"
+    "overrideGuestSignalingUrl": "wss://anon.talky.me/xmpp-websocket"
   }
 }
 ```

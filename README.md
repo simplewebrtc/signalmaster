@@ -1,53 +1,142 @@
-# api.talky.io
-
-##
-
-Lance please document installing prosody trunk aka nightly here
-http://prosody.im/download/package_repository
+# Talky Core API
 
 ## Getting started
-Make sure that postgres and psql are installed on your machine
 
-1. Create the database `npm run createdb`
-2. Run the migration `npm run migrate`
-3. Seed the DB `npm run seed`
+### 1. Set up Postgres
+
+Make sure that `postgres` and `psql` are installed on your machine
+
+1. Create the database:
+
+    ```sh
+    $ npm run createdb
+    ```
+
+2. Run the migrations:
+
+    ```sh
+    $ npm run migrate
+    ```
+
+Generating data can be done by starting the Talky.io app locally and creating/ending some rooms.
+
+If you need to destroy the DB and start over just run `npm run destroydb`.
 
 I think it's safe for us to just work out of the [initial migrations]('./migrations/20170614103301_initial.js') file for now as we get the schema's correct.  To roll back and re-migrate you can run `knex migrate:rollback && npm run migrate`
 
-If you want to destroy the DB and start over just run `npm run destroydb`
 
-##
+### 2. Set up Prosody
 
-Install lua 5.2 (flesh this out)
+#### OS X
 
-https://github.com/prosody/prosody-docker/blob/master/Dockerfile
+1. Install Prosody using Homebrew:
 
-## Setting up Prosody locally - OS/X and Windows
+    ```sh
+    $ brew tap legastero/homebrew-prosody
+    $ brew install --HEAD prosody
+    ```
+
+2. Configure Prosody:
+
+    ```sh
+    $ npm run prosody-config-install-local
+    ```
+    
+    The Prosody config file is not regenerated automatically, so this step will need to be run any time you change the service configuration.
+
+#### Linux (Debian based)
+
+1. Install Prosody dependencies:
+
+    ```sh
+    apt-get install -y --no-install-recommends \
+        libidn11 \
+        liblua5.1-expat0 \
+        libssl1.0.0 \
+        lua-bitop \
+        lua-dbi-mysql \
+        lua-dbi-postgresql \
+        lua-dbi-sqlite3 \
+        lua-event \
+        lua-expat \
+        lua-filesystem \
+        lua-sec \
+        lua-socket \
+        lua-zlib \
+        lua5.1 \
+        openssl \
+        ca-certificates
+    ```
+
+2. Add Prosody repository:
+
+    Follow the instructions at http://prosody.im/download/package_repository
+
+3. Install Prosody trunk:
+
+    ```sh
+    $ apt-get install prosody-trunk
+    ```
+
+4. Configure Prosody:
+
+    ```sh
+    $ npm run prosody-config-generate
+    $ sudo mv ./prosody.cfg.lua /etc/prosody/
+    $ sudo chown root:root /etc/prosody/prosody.cfg.lua
+    $ sudo chmod -x /etc/prosody/prosody.cfg.lua
+    ```
+
+    The Prosody config file is not regenerated automatically, so this step will need to be run any time you change the service configuration.
+
+### 3. Generate Certificates
+
+To run the API with HTTPS (needed for local testing clients), run:
 
 ```sh
-$ npm run prosody-config-install-docker
-$ npm run start
+$ npm run certgen
 ```
 
-
-## Setting up Prosody locally - Linux
+You will be prompted to fill in information for the certificate. The `Common Name` setting MUST be set to the domain/port you are using:
 
 ```sh
-$ npm run prosody-config-generate
-$ sudo mv ./prosody.cfg.lua /etc/prosody/
-$ sudo chown root:root /etc/prosody/prosody.cfg.lua
-$ sudo chmod -x /etc/prosody/prosody.cfg.lua
-$ npm run start
+Country Name (2 letter code) [AU]:US
+State or Province Name (full name) [Some-State]:WA 
+Locality Name (eg, city) []:
+Organization Name (eg, company) [Internet Widgits Pty Ltd]:
+Organizational Unit Name (eg, section) []:
+Common Name (e.g. server FQDN or YOUR name) []:localhost:8001
+Email Address []:
 ```
 
-## Setting up the db
+### 3. Start the Service
+
+The API server (along with Prosody when not in production mode), can be started with:
 
 ```sh
-$ npm run createdb
-$ npm run migrate
+$ npm start
 ```
 
-In development mode, `npm start` will start Prosody along with the HTTP API.
+If HTTPS is used, you will need to load the API home page in your browser to approve using the generated certificate.
+
+## Using Production Talky Prosody Service
+
+*Interim: Until we change the domains used by Talky.io*
+
+For now, running local clients against the production Talky.io service can be done by setting the `domains` and `overrideGuestSignalingUrl` fields of the config:
+
+```json
+{
+  "talky": {
+    "domains": {
+      "api": "localhost",
+      "rooms": "talky.io",
+      "guests": "anon.talky.me"
+    },
+    "overrideGuestSignalingUrl": "wss://anon.talky.me/xmpp-websocket"
+  }
+}
+```
 
 ## Schema
 

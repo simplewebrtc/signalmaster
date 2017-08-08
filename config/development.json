@@ -6,8 +6,12 @@
     "apiKey": "customer-api-shared-jwt-password-makethisoneprettysecureok",
 
     "domains": {
-      "api": "localhost"
+      "api": "localhost",
+      "rooms": "talky.io",
+      "guests": "anon.talky.me"
     },
+
+    "overrideGuestSignalingUrl": "wss://anon.talky.me/xmpp-websocket",
 
     "ice": {
       "secret": "foo",

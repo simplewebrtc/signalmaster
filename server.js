@@ -2,6 +2,7 @@ const Hapi = require('hapi');
 const Muckraker = require('muckraker');
 const Config = require('getconfig');
 const Proxy = require('http-proxy');
+const FS = require('fs');
 
 const inflateDomains = require('./lib/domains');
 const buildUrl = require('./lib/buildUrl');
@@ -11,6 +12,13 @@ const ResetDB = require('./lib/resetDB');
 
 const Pkg = require('./package.json');
 
+if (Config.getconfig.env !== 'production') {
+  if (FS.existsSync('config/key.pem') && FS.existsSync('config/cert.pem')) {
+    const key = FS.readFileSync('config/key.pem');
+    const cert = FS.readFileSync('config/cert.pem');
+    Config.server.tls = { key, cert };
+  }
+}
 
 const server = new Hapi.Server();
 const db = new Muckraker({ connection: Config.db });

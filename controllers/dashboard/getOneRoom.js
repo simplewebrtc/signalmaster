@@ -1,7 +1,7 @@
 'use strict';
 
 const Duration = require('humanize-duration');
-
+const Boom = require('boom');
 
 module.exports = {
   description: 'Dashboard',
@@ -10,6 +10,10 @@ module.exports = {
     const { roomId } = request.params
 
     const room = await this.db.rooms.findOne({ roomid: roomId });
+
+    if (!room) {
+      throw Boom.notFound();
+    }
     const events = await this.db.events.find({ room_id: roomId });
     const similarPrev = (await this.db.rooms.get_similar_prev({
       name: room.name,

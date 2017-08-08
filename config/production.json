@@ -18,5 +18,11 @@
       }, "stdout"
       ]
     }
+  },
+  "db": {
+    "host": "$POSTGRES_HOST",
+    "user": "talky",
+    "password": "password",
+    "database": "talky_api"
   }
 }

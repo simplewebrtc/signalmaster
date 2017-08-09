@@ -4,11 +4,11 @@ block dashboardContent
   h3 User Info
   table
     tr
-      th Session ID
+      th User ID
       td #{resource}
     tr
-      th User ID
-      td #{user.userid}
+      th User JID
+      td #{user.jid}
     tr
       th Client Type
       td #{user.type}
@@ -28,7 +28,7 @@ block dashboardContent
     tbody
       each val in data
         tr
-          td #{val.type} 
+          td #{val.type}
           td
             a(href='/dashboard/rooms/' + val.room_id) #{val.room_id}
           td #{val.created_at}

@@ -50,62 +50,6 @@
     //]);
   //})
 
-  //it('should add an event', () => {
-    //return createTelemetryPost(
-      //server,
-      //'message_sent',
-      //{ sessionId: user.sessionId },
-      //createProsodyAuthHeader('newUser')
-    //)
-    //.then(() => db.events.findOne({ type: 'message_sent', actor_id: user.sessionId }))
-    //.then((e) => expect(e).to.not.be.null())
-    //.then(() => db.events.destroy({ type: 'message_sent', actor_id: user.sessionId }))
-  //});
-
-  //it('should create a room if one hasnt been created - prosody', () => {
-    //const roomId = 'newRoomId';
-    //return db.rooms.findOne({ roomid: roomId })
-    //.then((r) => {
-      //return expect(r).to.equal(null)
-    //})
-    //.then(() => {
-      //return createTelemetryPost(
-        //server,
-        //'room_created',
-        //{ roomId, name: 'test-room', jid: 'test-room@talky.io.tests' },
-        //createProsodyAuthHeader('newUser')
-      //)
-    //})
-    //.then((res) => {
-      //return db.rooms.findOne({ roomid: roomId })
-    //})
-    //.then((room) => {
-      //expect(room.roomid).to.equal(roomId)
-      //return db.rooms.destroy({ roomid: roomId })
-    //})
-  //});
-
-  //it('should update ended_at if event is `room_destroyed`', () => {
-    //return db.rooms.findOne({ roomid: createRoomInfo.roomId })
-    //.then((room) => {
-      //return expect(room.ended_at).to.be.null()
-    //})
-    //.then(() => {
-      //return createTelemetryPost(
-        //server,
-        //'room_destroyed',
-        //createRoomInfo,
-        //createProsodyAuthHeader('newUser')
-      //)
-    //})
-    //.then(() => {
-      //return db.rooms.findOne({ roomid: createRoomInfo.roomId })
-    //})
-    //.then((room) => {
-      //expect(room.ended_at).to.not.be.null()
-    //})
-  //})
-
   //it('should update ended_at if event is `user_offline`', () => {
     //return db.users.findOne({ sessionid: user.sessionId })
     //.then((user) => {

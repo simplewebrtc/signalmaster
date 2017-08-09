@@ -1,3 +1,4 @@
+'use strict'
 
 exports.up = function(knex, Promise) {
   return knex.schema.table('rooms', (table) => {

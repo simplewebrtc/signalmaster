@@ -39,7 +39,7 @@ block dashboardContent
             a(href='/dashboard/rooms/' + similarNext.roomid) Next instance
           td #{similarNext.delta}
           td #{similarNext.duration}
-  
+
   h3 Events
   table
     thead
@@ -49,7 +49,7 @@ block dashboardContent
     tbody
       each val in data
         tr
-          td #{val.type} 
+          td #{val.type}
           td
             a(href='/dashboard/users/' + val.actor_id) #{val.actor_id}
           td #{val.created_at}

@@ -87,7 +87,7 @@ module.exports = {
         user_id: Joi.string(),
         name: Joi.string(),
         jid: Joi.string()
-      }).unknown().label('Room')
+      }).unknown()
     }
   },
   auth: 'prosody-api'

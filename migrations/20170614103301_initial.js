@@ -1,3 +1,5 @@
+'use strict';
+
 exports.up = function(knex, Promise) {
   return knex.raw('CREATE SEQUENCE users_seq')
   .then(() => {

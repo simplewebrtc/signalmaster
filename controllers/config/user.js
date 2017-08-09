@@ -5,18 +5,18 @@ const Joi = require('joi');
 const JWT = require('jsonwebtoken');
 const UUID = require('uuid');
 const Boom = require('boom');
-const uaParser = require('ua-parser-js');
+const UAParser = require('ua-parser-js');
 const Base32 = require('base32-crockford-browser');
 const Schema = require('../../lib/schema');
 
-const buildUrl = require('../../lib/buildUrl');
-const fetchICE = require('../../lib/fetchIce');
-const inflateDomains = require('../../lib/domains');
-const checkLicense = require('../../lib/licensing');
-const extractCustomerData = require('../../lib/customerData');
+const BuildUrl = require('../../lib/build_url');
+const FetchICE = require('../../lib/fetch_ice');
+const InflateDomains = require('../../lib/domains');
+const CheckLicense = require('../../lib/licensing');
+const ExtractCustomerData = require('../../lib/customer_data');
 
 const TalkyCoreConfig = require('getconfig').talky;
-const Domains = inflateDomains(TalkyCoreConfig.domains);
+const Domains = InflateDomains(TalkyCoreConfig.domains);
 
 
 module.exports = {
@@ -26,8 +26,9 @@ module.exports = {
 
     let license = {};
     try {
-      license = await checkLicense();
-    } catch (err) {
+      license = await CheckLicense();
+    }
+    catch (err) {
       return reply(err);
     }
 
@@ -37,16 +38,17 @@ module.exports = {
       return reply(Boom.forbidden('Talky Core active user limit reached'));
     }
 
-    const ice = await fetchICE(request);
+    const ice = await FetchICE(request);
 
     let customerData = {};
     try {
-      customerData = await extractCustomerData(request.payload.token);
-    } catch (err) {
+      customerData = await ExtractCustomerData(request.payload.token);
+    }
+    catch (err) {
       return reply(Boom.badRequest('Could not parse user data'));
     }
 
-    const { ua, browser, device, os } = uaParser(request.headers['user-agent']);
+    const { ua, browser, device, os } = UAParser(request.headers['user-agent']);
 
     const id = UUID.v4();
     const jid = `${Base32.encode(JSON.stringify({
@@ -54,49 +56,50 @@ module.exports = {
       scopes: customerData.scopes || []
     }))}@${Domains.users}`;
 
-      try {
-        await this.db.users.insert({
-          id,
-          jid,
-          type: device.type === undefined ? 'desktop' : 'mobile',
-          os: JSON.stringify(os),
-          useragent: ua,
-          browser: JSON.stringify(browser)
-        });
-      } catch (err) {
-        request.log(['error', 'users'], err);
-      }
-
-      const result = {
+    try {
+      await this.db.users.insert({
         id,
         jid,
-        signalingUrl: `${buildUrl('ws', Domains.api)}/ws-bind`,
-        telemetryUrl: `${buildUrl('http', Domains.api)}/telemetry`,
-        roomServer: Domains.rooms,
-        iceServers: ice,
-        displayName: customerData.displayName || '',
-        credential: JWT.sign({
-          id,
-          registeredUser: true
-        }, Config.auth.secret, {
-          algorithm: 'HS256',
-          expiresIn: '1 day',
-          issuer: Domains.api,
-          audience: Domains.guests,
-          subject: jid
-        })
-      }
-
-      return reply(result);
-    },
-    response: {
-      status: {
-        200: Schema.user
-      }
-    },
-    validate: {
-      payload: {
-        token: Joi.string().description('JWT encoded user object').label('UserToken')
-      }
+        type: device.type === undefined ? 'desktop' : 'mobile',
+        os: JSON.stringify(os),
+        useragent: ua,
+        browser: JSON.stringify(browser)
+      });
     }
-  };
+    catch (err) {
+      request.log(['error', 'users'], err);
+    }
+
+    const result = {
+      id,
+      jid,
+      signalingUrl: `${BuildUrl('ws', Domains.api)}/ws-bind`,
+      telemetryUrl: `${BuildUrl('http', Domains.api)}/telemetry`,
+      roomServer: Domains.rooms,
+      iceServers: ice,
+      displayName: customerData.displayName || '',
+      credential: JWT.sign({
+        id,
+        registeredUser: true
+      }, Config.auth.secret, {
+        algorithm: 'HS256',
+        expiresIn: '1 day',
+        issuer: Domains.api,
+        audience: Domains.guests,
+        subject: jid
+      })
+    };
+
+    return reply(result);
+  },
+  response: {
+    status: {
+      200: Schema.user
+    }
+  },
+  validate: {
+    payload: {
+      token: Joi.string().description('JWT encoded user object').label('UserToken')
+    }
+  }
+};

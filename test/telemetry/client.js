@@ -4,12 +4,12 @@ const Lab = require('lab');
 const Code = require('code');
 const Fixtures = require('../fixtures');
 const { db, Server } = Fixtures;
-const cheerio = require('cheerio');
+const Cheerio = require('cheerio');
 const Crypto = require('crypto');
 
 const lab = exports.lab = Lab.script();
 
-const { describe, it, before, after, afterEach } = lab
+const { describe, it, before, after } = lab;
 const { expect } = Code;
 
 describe('POST /telemetry', () => {
@@ -17,13 +17,13 @@ describe('POST /telemetry', () => {
   let server;
   const user = Fixtures.user();
 
-  before(async() => {
+  before(async () => {
 
     server = await Server;
     await db.users.insert(user);
   });
 
-  after(async() => {
+  after(async () => {
 
     await db.users.destroy({ id: user.id });
   });
@@ -62,7 +62,7 @@ describe('POST /telemetry', () => {
             id: newRoom.id
           }
         };
-        return server.inject({ method: 'POST', url: '/telemetry', payload: clientPayload, credentials: user })
+        return server.inject({ method: 'POST', url: '/telemetry', payload: clientPayload, credentials: user });
       }).then((res) => {
 
         expect(res.statusCode).to.equal(200);
@@ -73,12 +73,13 @@ describe('POST /telemetry', () => {
         return res.result;
       }).then((result) => {
 
-        const $ = cheerio.load(result);
-        const roomInfo = $('td').map(function() {
-          return $(this).text().trim()
+        const $ = Cheerio.load(result);
+        const roomInfo = $('td').map(function () {
+
+          return $(this).text().trim();
         }).get();
-        expect(roomInfo).to.include(newRoom.id) // Resource
-        expect(roomInfo).to.include(Crypto.createHash('sha1').update(newRoom.name).digest('base64')) // Name
+        expect(roomInfo).to.include(newRoom.id); // Resource
+        expect(roomInfo).to.include(Crypto.createHash('sha1').update(newRoom.name).digest('base64')); // Name
         expect(roomInfo).to.include('video_paused');
         return db.rooms.destroy({ id: newRoom.id });
       });

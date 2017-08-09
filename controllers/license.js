@@ -2,22 +2,24 @@
 
 const Config = require('getconfig');
 
-const inflateDomains = require('../lib/domains');
-const checkLicense = require('../lib/licensing');
+const InflateDomains = require('../lib/domains');
+const CheckLicense = require('../lib/licensing');
 
-const Domains = inflateDomains(Config.talky.domains);
-
+const Domains = InflateDomains(Config.talky.domains);
 
 module.exports = {
   description: 'Talky License information',
   tags: ['web'],
-  handler: function async (request, reply) {
-    checkLicense().then(license => {
+  handler: function (request, reply) {
+
+    return CheckLicense().then((license) => {
+
       reply.view('license', {
         apiDomain: Domains.api,
         license
       });
-    }).catch(err => {
+    }).catch((err) => {
+
       reply.view('license', {
         apiDomain: Domains.api,
         licenseError: err.message

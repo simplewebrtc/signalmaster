@@ -1,3 +1,4 @@
+'use strict';
 const JWT = require('jsonwebtoken');
 
 const DEV_PRIV_KEY = `
@@ -76,10 +77,11 @@ exports.DEV_ISSUER = 'licenses-dev.talky.io';
 exports.DEV_PUBLIC_KEY = DEV_PUB_KEY.trim();
 
 exports.createLicense = function (opts) {
+
   const token = JWT.sign({
     roomLimit: opts.roomLimit,
     userLimit: opts.userLimit,
-    roomUserLimit: opts.roomUserLimit,
+    roomUserLimit: opts.roomUserLimit
   }, DEV_PRIV_KEY.trim(), {
     issuer: exports.DEV_ISSUER,
     algorithm: 'RS256',
@@ -87,7 +89,7 @@ exports.createLicense = function (opts) {
   });
 
   return token;
-}
+};
 
 
 if (require.main === module) {
@@ -113,7 +115,7 @@ if (require.main === module) {
 
   process.stderr.write('\nGenerating Talky Core API Dev License\n');
   process.stderr.write('=====================================\n');
-  process.stderr.write(JSON.stringify(JWT.decode(token), null, 2) + '\n\n');
+  process.stderr.write(`${JSON.stringify(JWT.decode(token), null, 2)  }\n\n`);
 
   console.log(token);
 }

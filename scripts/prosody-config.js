@@ -1,9 +1,10 @@
+'use strict';
+
 const Config = require('getconfig');
 
-const inflateDomains = require('../lib/domains');
-const buildUrl = require('../lib/buildUrl');
-const Domains = inflateDomains(Config.talky.domains);
-
+const InflateDomains = require('../lib/domains');
+const BuildUrl = require('../lib/build_url');
+const Domains = InflateDomains(Config.talky.domains);
 
 console.log(`
 admins = {}
@@ -60,15 +61,15 @@ log = {
 }
 
 talky_core_api_key = "${Config.auth.secret}"
-talky_core_telemetry_url = "${buildUrl('http', Domains.api)}/prosody/telemetry"
+talky_core_telemetry_url = "${BuildUrl('http', Domains.api)}/prosody/telemetry"
 `);
 
 if (Config.getconfig.env !== 'production') {
-    console.log(`
+  console.log(`
 modules_disabled = {
     "tls";
 }
-`)
+`);
 }
 
 
@@ -80,19 +81,19 @@ console.log(`
 VirtualHost "${Domains.guests}"
     authentication = "talky_core";
     talky_core_auth_allow_anonymous = true;
-    talky_core_auth_url = "${buildUrl('http', Domains.api)}/prosody/auth/guest";
+    talky_core_auth_url = "${BuildUrl('http', Domains.api)}/prosody/auth/guest";
 `);
 
 console.log(`
 VirtualHost "${Domains.users}"
     authentication = "talky_core";
-    talky_core_auth_url = "${buildUrl('http', Domains.api)}/prosody/auth/user";
+    talky_core_auth_url = "${BuildUrl('http', Domains.api)}/prosody/auth/user";
 `);
 
 console.log(`
 VirtualHost "${Domains.bots}"
     authentication = "talky_core";
-    talky_core_auth_url = "${buildUrl('http', Domains.api)}/prosody/auth/bot";
+    talky_core_auth_url = "${BuildUrl('http', Domains.api)}/prosody/auth/bot";
 `);
 
 console.log(`
@@ -108,8 +109,8 @@ Component "${Domains.rooms}" "muc"
     };
 
     talky_core_version = "2.0.0";
-    talky_core_muc_affiliation_url = "${buildUrl('http', Domains.api)}/prosody/rooms/affiliation";
-    talky_core_muc_user_info_url = "${buildUrl('http', Domains.api)}/prosody/rooms/user-info";
+    talky_core_muc_affiliation_url = "${BuildUrl('http', Domains.api)}/prosody/rooms/affiliation";
+    talky_core_muc_user_info_url = "${BuildUrl('http', Domains.api)}/prosody/rooms/user-info";
 
 
     muc_config_restricted = {

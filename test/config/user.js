@@ -10,13 +10,14 @@ const Base32 = require('base32-crockford-browser');
 
 const lab = exports.lab = Lab.script();
 
-const { describe, it, before, after, afterEach } = lab
+const { describe, it, before } = lab;
 const { expect } = Code;
 
 describe('POST /config/user', () => {
+
   let server;
 
-  before(async() => {
+  before(async () => {
 
     server = await Server;
   });
@@ -35,19 +36,20 @@ describe('POST /config/user', () => {
 
     return server.inject({ method: 'POST', url: '/config/user', payload: { token } })
       .then((res) => {
+
         expect(res.statusCode).to.equal(200);
         return res.result;
       }).then((result) => {
 
         registeredUser = result;
         const jid = registeredUser.jid;
-        const decodedJid = JSON.parse(Base32.decode(jid.split('@')[0]))
+        const decodedJid = JSON.parse(Base32.decode(jid.split('@')[0]));
 
         expect(registeredUser.iceServers).to.part.include(iceServers);
         expect(registeredUser.iceServers).to.part.include(iceServers);
         expect(registeredUser.iceServers[0]).to.include(['username', 'password']);
-        expect(decodedJid.id).to.equal(user.id)
-        expect(decodedJid.scopes).to.equal(user.scopes)
+        expect(decodedJid.id).to.equal(user.id);
+        expect(decodedJid.scopes).to.equal(user.scopes);
         return server.inject({ method: 'GET', url: `/dashboard/users/${registeredUser.id}` });
       }).then((res) => {
 
@@ -63,7 +65,7 @@ describe('POST /config/user', () => {
           authorization: Fixtures.prosodyAuthHeader('testUser')
         };
 
-        return server.inject({ method: 'POST', url: '/prosody/rooms/user-info', payload, headers })
+        return server.inject({ method: 'POST', url: '/prosody/rooms/user-info', payload, headers });
       }).then((res) => {
 
         expect(res.statusCode).to.equal(200);
@@ -73,5 +75,5 @@ describe('POST /config/user', () => {
         expect(result).to.include({ userType: 'registered', id: registeredUser.id });
         return db.users.destroy({ id: registeredUser.id });
       });
-  })
+  });
 });

@@ -1,6 +1,6 @@
 'use strict';
 
-const fetchICE = require('../lib/fetchIce');
+const FetchICE = require('../lib/fetch_ice');
 const Schema = require('../lib/schema');
 
 module.exports = {
@@ -8,7 +8,7 @@ module.exports = {
   tags: ['api', 'ice'],
   handler: function (request, reply) {
 
-    return reply(fetchICE(request));
+    return reply(FetchICE(request));
   },
   response: {
     status: {

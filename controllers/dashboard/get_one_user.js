@@ -7,12 +7,14 @@ module.exports = {
   description: 'Dashboard',
   tags: ['web', 'metrics'],
   handler: async function (request, reply) {
+
     const { id } = request.params;
     let user = {};
 
     try {
       user = await this.db.users.findOne({ id });
-    } catch (err) {
+    }
+    catch (err) {
       request.log(['error', 'getOneUser'], err);
     }
 

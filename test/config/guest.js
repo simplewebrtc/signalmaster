@@ -9,13 +9,14 @@ const Config = require('getconfig');
 
 const lab = exports.lab = Lab.script();
 
-const { describe, it, before, after, afterEach } = lab
+const { describe, it, before } = lab;
 const { expect } = Code;
 
 describe('Guest account', () => {
+
   let server;
 
-  before(async() => {
+  before(async () => {
 
     server = await Server;
   });
@@ -26,11 +27,12 @@ describe('Guest account', () => {
     const iceServers = Fixtures.iceServers();
 
     Nock(Config.talky.ice.servers[0])
-    .get('/ice-servers.json')
-    .reply(200, iceServers);
+      .get('/ice-servers.json')
+      .reply(200, iceServers);
 
     return server.inject({ method: 'POST', url: '/config/guest', payload: {} })
       .then((res) => {
+
         expect(res.statusCode).to.equal(200);
         return res.result;
       }).then((result) => {
@@ -53,7 +55,7 @@ describe('Guest account', () => {
           authorization: Fixtures.prosodyAuthHeader('testUser')
         };
 
-        return server.inject({ method: 'POST', url: '/prosody/rooms/user-info', payload, headers })
+        return server.inject({ method: 'POST', url: '/prosody/rooms/user-info', payload, headers });
       }).then((res) => {
 
         expect(res.statusCode).to.equal(200);
@@ -63,5 +65,5 @@ describe('Guest account', () => {
         expect(result).to.include({ userType: 'guest', id: guestUser.id });
         return db.users.destroy({ id: guestUser.id });
       });
-  })
+  });
 });

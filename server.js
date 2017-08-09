@@ -1,14 +1,16 @@
+'use strict';
+
 const Hapi = require('hapi');
 const Muckraker = require('muckraker');
 const Config = require('getconfig');
 const Proxy = require('http-proxy');
 const FS = require('fs');
 
-const inflateDomains = require('./lib/domains');
-const buildUrl = require('./lib/buildUrl');
-const Domains = inflateDomains(Config.talky.domains);
-const ProsodyAuth = require('./lib/prosodyAuth');
-const ResetDB = require('./lib/resetDB');
+const InflateDomains = require('./lib/domains');
+const BuildUrl = require('./lib/build_url');
+const Domains = InflateDomains(Config.talky.domains);
+const ProsodyAuth = require('./lib/prosody_auth');
+const ResetDB = require('./lib/reset_db');
 
 const Pkg = require('./package.json');
 
@@ -30,7 +32,7 @@ process.on('sigterm', async () => {
   server.log(['info', 'shutdown'], 'graceful shutdown');
 
   await server.stop({ timeout: 15000 });
-  await ResetDB(db, 'system_stop')
+  await ResetDB(db, 'system_stop');
 
   process.exit(0);
 });
@@ -40,9 +42,10 @@ server.on('request-error', (err, m) => {
   console.log(m.stack);
 });
 
-const wsPort = Config.getconfig.isDev ? (Config.isDevTLS ? 5281: 5280): 5281;
-const wsProxy = Proxy.createProxyServer({ target: `${buildUrl('ws', Domains.api, wsPort)}` });
+const wsPort = Config.getconfig.isDev ? (Config.isDevTLS ? 5281 : 5280) : 5281;
+const wsProxy = Proxy.createProxyServer({ target: `${BuildUrl('ws', Domains.api, wsPort)}` });
 wsProxy.on('error', (err) => {
+
   server.log(err, 'Prosody not responding');
 });
 
@@ -86,7 +89,7 @@ exports.Server = server.register([
 ])
   .then(() => {
 
-    return ResetDB(db, 'system_start')
+    return ResetDB(db, 'system_start');
   })
   .then(() => {
 
@@ -110,7 +113,7 @@ exports.Server = server.register([
       key: Config.auth.secret,
       validateFunc: (decoded, request, cb) => cb(null, true),
       verifyOptions: {
-        algorithms: [ 'HS256' ],
+        algorithms: ['HS256'],
         issuer: Domains.api
       }
     });
@@ -122,10 +125,11 @@ exports.Server = server.register([
     });
 
     server.listener.on('upgrade', (req, socket, head) => {
+
       wsProxy.ws(req, socket, head);
     });
 
-    server.bind({ db })
+    server.bind({ db });
 
     if (Config.getconfig.isDev && !Config.noProsody) {
       const prosody = require('./scripts/start-prosody').startProsody(process);
@@ -161,11 +165,13 @@ exports.Server = server.register([
   });
 
 process.on('unhandledException', function () {
+
   console.log(arguments);
   process.exit();
 });
 
 process.on('unhandledRejection', function () {
+
   console.log(arguments);
   process.exit();
 });

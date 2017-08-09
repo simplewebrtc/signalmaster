@@ -22,7 +22,7 @@ module.exports = [
 
   // Client auto-configuration
   { method: 'POST', path: '/config/user', config: Controllers.config.user },
-  { method: 'POST', path: '/config/guest', config: Controllers.config.guest},
+  { method: 'POST', path: '/config/guest', config: Controllers.config.guest },
   { method: 'POST', path: '/config/bot', config: Controllers.config.bot },
 
   // Telemetry
@@ -46,4 +46,4 @@ module.exports = [
 
   //Static assets
   { method: 'GET', path: '/{path*}', config: { handler: { directory: { path: './public', listing: false } }, auth: false } }
-]
+];

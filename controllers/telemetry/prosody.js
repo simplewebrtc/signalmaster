@@ -8,8 +8,10 @@ module.exports = {
   description: 'Ingest metrics from Prosody',
   tags: ['api', 'metrics'],
   handler: async function (request, reply) {
+
     const { eventType, data } = request.payload;
-    let { id, name, user_id, jid } = data;
+    const { id, user_id, jid } = data;
+    let { name } = data;
 
     if (name && Config.talky.metrics && Config.talky.metrics.maskRoomNames) {
       name = Crypto.createHash('sha1').update(name).digest('base64');
@@ -27,57 +29,52 @@ module.exports = {
         room = await this.db.rooms.insert({ name, id, jid });
       }
 
-      if(eventType === 'room_destroyed') {
+      if (eventType === 'room_destroyed') {
         //Record room ended column
-        await this.db.rooms.updateOne(room, { ended_at: new Date()});
+        await this.db.rooms.updateOne(room, { ended_at: new Date() });
         await this.db.events.insert({ type: eventType, room_id: room.id, actor_id: user_id });
-      } else {
+      }
+      else {
         //Record event
         await this.db.events.insert({ type: eventType, room_id: room.id, actor_id: user_id });
       }
 
       return reply();
-    } else {
-      if (eventType === 'user_offline') {
-        //Record user ended column
-        const user = await this.db.users.findOne({ id: user_id });
-        await this.db.users.updateOne(user, {
-          ended_at: new Date()
-        });
-        const insertedData = await this.db.events.insert({
-          type: eventType,
-          room_id: null,
-          actor_id: user_id
-        });
-        return reply();
-      } else if (eventType === 'user_online') {
-        // Clear out existing user ended column if session reconnected
-        const user = await this.db.users.findOne({
-          user_id
-        });
-
-        if (user) {
-          await this.db.users.updateOne(user, {
-            created_at: new Date(),
-            ended_at: null
-          });
-        }
-
-        const insertedData = await this.db.events.insert({
-          type: eventType,
-          room_id: null,
-          actor_id: user_id
-        });
-        return reply();
-      } else {
-        const insertedData = await this.db.events.insert({
-          type: eventType,
-          room_id: null,
-          actor_id: user_id
-        });
-        return reply();
-      }
     }
+    if (eventType === 'user_offline') {
+      //Record user ended column
+      await this.db.users.updateOne(user, {
+        ended_at: new Date()
+      });
+      await this.db.events.insert({
+        type: eventType,
+        room_id: null,
+        actor_id: user_id
+      });
+      return reply();
+    }
+    else if (eventType === 'user_online') {
+      // Clear out existing user ended column if session reconnected
+      await this.db.users.updateOne(user, {
+        created_at: new Date(),
+        ended_at: null
+      });
+
+      await this.db.events.insert({
+        type: eventType,
+        room_id: null,
+        actor_id: user_id
+      });
+      return reply();
+    }
+    await this.db.events.insert({
+      type: eventType,
+      room_id: null,
+      actor_id: user_id
+    });
+    return reply();
+
+
   },
   validate: {
     payload: {

@@ -1,16 +1,14 @@
 'use strict';
 
-const Joi = require('joi');
 const UUID = require('uuid');
 const Schema = require('../../lib/schema');
 
-const buildUrl = require('../../lib/buildUrl');
-const fetchICE = require('../../lib/fetchIce');
-const inflateDomains = require('../../lib/domains');
+const BuildUrl = require('../../lib/build_url');
+const FetchICE = require('../../lib/fetch_ice');
+const InflateDomains = require('../../lib/domains');
 
 const TalkyCoreConfig = require('getconfig').talky;
-const Domains = inflateDomains(TalkyCoreConfig.domains);
-
+const Domains = InflateDomains(TalkyCoreConfig.domains);
 
 module.exports = {
   description: 'Auto-configure a bot client session',
@@ -19,13 +17,13 @@ module.exports = {
 
     const randomId = UUID.v4();
 
-    const ice = await fetchICE(request);
+    const ice = await FetchICE(request);
 
     const result =  {
       id: randomId,
       jid: `${randomId}@${Domains.bots}`,
-      signalingUrl: `${buildUrl('ws', Domains.api)}/ws-bind`,
-      telemetryUrl: `${buildUrl('http', Domains.api)}/telemetry`,
+      signalingUrl: `${BuildUrl('ws', Domains.api)}/ws-bind`,
+      telemetryUrl: `${BuildUrl('http', Domains.api)}/telemetry`,
       roomServer: Domains.rooms,
       iceServers: ice,
       credential: 'some-signed-jwt-token'//TODO

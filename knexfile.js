@@ -1,16 +1,18 @@
+'use strict';
+
 // Update with your config settings.
-const config = require('getconfig');
+const Config = require('getconfig');
 
 module.exports = {
 
   development: {
     client: 'postgresql',
-    connection: config.db
+    connection: Config.db
   },
 
   staging: {
     client: 'postgresql',
-    connection: config.db,
+    connection: Config.db,
     pool: {
       min: 2,
       max: 10
@@ -22,7 +24,7 @@ module.exports = {
 
   production: {
     client: 'postgresql',
-    connection: config.db,
+    connection: Config.db,
     pool: {
       min: 2,
       max: 10

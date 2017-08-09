@@ -1,20 +1,19 @@
 'use strict';
 
 const Config = require('getconfig');
-const Joi = require('joi');
 const JWT = require('jsonwebtoken');
 const UUID = require('uuid');
 const Boom = require('boom');
-const uaParser = require('ua-parser-js');
+const UAParser = require('ua-parser-js');
 const Schema = require('../../lib/schema');
 
-const buildUrl = require('../../lib/buildUrl');
-const fetchICE = require('../../lib/fetchIce');
-const inflateDomains = require('../../lib/domains');
-const checkLicense = require('../../lib/licensing');
+const BuildUrl = require('../../lib/build_url');
+const FetchICE = require('../../lib/fetch_ice');
+const InflateDomains = require('../../lib/domains');
+const CheckLicense = require('../../lib/licensing');
 
 const TalkyCoreConfig = require('getconfig').talky;
-const Domains = inflateDomains(TalkyCoreConfig.domains);
+const Domains = InflateDomains(TalkyCoreConfig.domains);
 
 
 module.exports = {
@@ -24,8 +23,9 @@ module.exports = {
 
     let license = {};
     try {
-      license = await checkLicense();
-    } catch (err) {
+      license = await CheckLicense();
+    }
+    catch (err) {
       return reply(err);
     }
 
@@ -37,13 +37,14 @@ module.exports = {
 
     let ice = [];
     try {
-      ice = await fetchICE(request);
-    } catch (err) {
+      ice = await FetchICE(request);
+    }
+    catch (err) {
       request.log(['error'], 'Could not fetch ICE servers');
       request.log(['error'], err);
     }
 
-    const { ua, browser, device, os } = uaParser(request.headers['user-agent']);
+    const { ua, browser, device, os } = UAParser(request.headers['user-agent']);
 
     const id = UUID.v4();
     const jid = `${id}@${Domains.guests}`;
@@ -57,15 +58,16 @@ module.exports = {
         useragent: ua,
         browser: JSON.stringify(browser)
       });
-    } catch (err) {
+    }
+    catch (err) {
       request.log(['error', 'users', 'guest'], err);
     }
 
     const result = {
       id,
       jid,
-      signalingUrl: TalkyCoreConfig.overrideGuestSignalingUrl || `${buildUrl('ws', Domains.api)}/ws-bind`,
-      telemetryUrl: `${buildUrl('http', Domains.api)}/telemetry`,
+      signalingUrl: TalkyCoreConfig.overrideGuestSignalingUrl || `${BuildUrl('ws', Domains.api)}/ws-bind`,
+      telemetryUrl: `${BuildUrl('http', Domains.api)}/telemetry`,
       roomServer: Domains.rooms,
       iceServers: ice,
       displayName: '',

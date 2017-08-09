@@ -3,10 +3,9 @@
 const Config = require('getconfig');
 const Schema = require('../lib/schema');
 
-const buildUrl = require('../lib/buildUrl');
-const inflateDomains = require('../lib/domains');
-const Domains = inflateDomains(Config.talky.domains);
-
+const BuildUrl = require('../lib/build_url');
+const InflateDomains = require('../lib/domains');
+const Domains = InflateDomains(Config.talky.domains);
 
 module.exports = {
   description: 'XMPP alternate connection type discovery',
@@ -16,7 +15,7 @@ module.exports = {
     const result = {
       links: [{
         rel: 'urn:xmpp:alt-connections:websocket',
-        href: `${buildUrl('ws', Domains.api)}/ws-bind`
+        href: `${BuildUrl('ws', Domains.api)}/ws-bind`
       }]
     };
 

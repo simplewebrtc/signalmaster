@@ -4,10 +4,10 @@ const Config = require('getconfig');
 const Joi = require('joi');
 const Base32 = require('base32-crockford-browser');
 
-const JID = require('../../lib/jid')
-const inflateDomains = require('../../lib/domains');
+const JID = require('../../lib/jid');
+const InflateDomains = require('../../lib/domains');
 
-const Domains = inflateDomains(Config.talky.domains);
+const Domains = InflateDomains(Config.talky.domains);
 
 
 module.exports = {
@@ -16,7 +16,7 @@ module.exports = {
   handler: function (request, reply) {
 
     const domain = JID.domain(request.payload.jid);
-    let userInfo = {
+    const userInfo = {
       id: request.payload.user_id
     };
 

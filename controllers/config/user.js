@@ -9,7 +9,6 @@ const uaParser = require('ua-parser-js');
 const Base32 = require('base32-crockford-browser');
 const Schema = require('../../lib/schema');
 
-
 const buildUrl = require('../../lib/buildUrl');
 const fetchICE = require('../../lib/fetchIce');
 const inflateDomains = require('../../lib/domains');
@@ -49,16 +48,16 @@ module.exports = {
 
     const { ua, browser, device, os } = uaParser(request.headers['user-agent']);
 
-    const sessionId = UUID.v4();
-    const userId = `${Base32.encode(JSON.stringify({
+    const id = UUID.v4();
+    const jid = `${Base32.encode(JSON.stringify({
       id: customerData.id,
       scopes: customerData.scopes || []
     }))}@${Domains.users}`;
 
       try {
         await this.db.users.insert({
-          sessionid: sessionId,
-          userid: userId,
+          id,
+          jid,
           type: device.type === undefined ? 'desktop' : 'mobile',
           os: JSON.stringify(os),
           useragent: ua,
@@ -69,22 +68,22 @@ module.exports = {
       }
 
       const result = {
-        sessionId,
-        userId,
+        id,
+        jid,
         signalingUrl: `${buildUrl('ws', Domains.api)}/ws-bind`,
         telemetryUrl: `${buildUrl('http', Domains.api)}/telemetry`,
         roomServer: Domains.rooms,
         iceServers: ice,
         displayName: customerData.displayName || '',
         credential: JWT.sign({
-          sessionId,
+          id,
           registeredUser: true
         }, Config.auth.secret, {
           algorithm: 'HS256',
           expiresIn: '1 day',
           issuer: Domains.api,
           audience: Domains.guests,
-          subject: userId
+          subject: jid
         })
       }
 

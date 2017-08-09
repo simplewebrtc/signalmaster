@@ -27,7 +27,7 @@ describe('POST /config/guest', () => {
     .get('/ice-servers.json')
     .reply(200, iceServers);
 
-    let userId;
+    let jid;
 
     return server.inject({ method: 'POST', url: '/config/guest', payload: {} })
       .then((res) => {
@@ -35,15 +35,15 @@ describe('POST /config/guest', () => {
         return res.result;
       }).then((result) => {
 
-        const sessionId = result.sessionId;
-        userId = result.userId;
+        const id = result.id;
+        jid = result.jid;
         expect(result.iceServers).to.part.include(iceServers);
         expect(result.iceServers[0]).to.include(['username', 'password']);
-        return server.inject({ method: 'GET', url: `/dashboard/users/${sessionId}` });
+        return server.inject({ method: 'GET', url: `/dashboard/users/${id}` });
       }).then((res) => {
 
         expect(res.statusCode).to.equal(200);
-        return db.users.destroy({ userid: userId });
+        return db.users.destroy({ userid: jid });
       });
   })
 });

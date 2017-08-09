@@ -7,14 +7,15 @@ module.exports = {
   description: 'Dashboard',
   tags: ['web', 'metrics'],
   handler: async function (request, reply) {
-    const { roomId } = request.params
+    const { id } = request.params
 
-    const room = await this.db.rooms.findOne({ roomid: roomId });
+    const room = await this.db.rooms.findOne({ id });
 
     if (!room) {
       throw Boom.notFound();
     }
-    const events = await this.db.events.find({ room_id: roomId });
+
+    const events = await this.db.events.find({ room_id: id });
     const similarPrev = (await this.db.rooms.get_similar_prev({
       name: room.name,
       interval: 5,
@@ -59,7 +60,7 @@ module.exports = {
     }
 
     return reply.view('singleRoom', {
-      resource: roomId,
+      resource: id,
       room,
       similarPrev,
       similarNext,

@@ -31,7 +31,7 @@ describe('POST /config/user', () => {
       .get('/ice-servers.json')
       .reply(200, iceServers);
 
-    let userId;
+    let jid;
 
     return server.inject({ method: 'POST', url: '/config/user', payload: { token } })
       .then((res) => {
@@ -39,20 +39,20 @@ describe('POST /config/user', () => {
         return res.result;
       }).then((result) => {
 
-        const sessionId = result.sessionId;
-        userId = result.userId;
-        const decodedUserId = JSON.parse(Base32.decode(userId.split('@')[0]))
+        const id = result.id;
+        jid = result.jid;
+        const decodedJid = JSON.parse(Base32.decode(jid.split('@')[0]))
 
         expect(result.iceServers).to.part.include(iceServers);
         expect(result.iceServers).to.part.include(iceServers);
         expect(result.iceServers[0]).to.include(['username', 'password']);
-        expect(decodedUserId.id).to.equal(user.id)
-        expect(decodedUserId.scopes).to.equal(user.scopes)
-        return server.inject({ method: 'GET', url: `/dashboard/users/${sessionId}` });
+        expect(decodedJid.id).to.equal(user.id)
+        expect(decodedJid.scopes).to.equal(user.scopes)
+        return server.inject({ method: 'GET', url: `/dashboard/users/${id}` });
       }).then((res) => {
 
         expect(res.statusCode).to.equal(200);
-        return db.users.destroy({ userid: userId });
+        return db.users.destroy({ jid });
       });
   })
 });

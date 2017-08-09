@@ -22,7 +22,8 @@ exports.iceServers = function () {
 exports.user = function (attrs) {
 
   const defaults = {
-    id: Faker.random.number(),
+    id: Faker.lorem.word(),
+    jid: Faker.internet.email(),
     scopes: ['mod']
   };
 
@@ -44,7 +45,7 @@ exports.token = function (unsigned, attrs) {
 exports.room = function (attrs) {
 
   const defaults = {
-    roomId: Faker.lorem.word(),
+    id: Faker.lorem.word(),
     name: Faker.lorem.words().split(' ').join('-'),
     jid: Faker.internet.email()
   };

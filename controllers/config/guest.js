@@ -45,13 +45,13 @@ module.exports = {
 
     const { ua, browser, device, os } = uaParser(request.headers['user-agent']);
 
-    const sessionId = UUID.v4();
-    const userId = `${sessionId}@${Domains.guests}`;
+    const id = UUID.v4();
+    const jid = `${id}@${Domains.guests}`;
 
     try {
       await this.db.users.insert({
-        sessionid: sessionId,
-        userid: userId,
+        id,
+        jid,
         type: device.type === undefined ? 'desktop' : 'mobile',
         os: JSON.stringify(os),
         useragent: ua,
@@ -62,22 +62,22 @@ module.exports = {
     }
 
     const result = {
-      sessionId,
-      userId,
+      id,
+      jid,
       signalingUrl: TalkyCoreConfig.overrideGuestSignalingUrl || `${buildUrl('ws', Domains.api)}/ws-bind`,
       telemetryUrl: `${buildUrl('http', Domains.api)}/telemetry`,
       roomServer: Domains.rooms,
       iceServers: ice,
       displayName: '',
       credential: JWT.sign({
-        sessionId,
+        id,
         registeredUser: false
       }, Config.auth.secret, {
         algorithm: 'HS256',
         expiresIn: '1 day',
         issuer: Domains.api,
         audience: Domains.guests,
-        subject: userId
+        subject: jid
       })
     };
 

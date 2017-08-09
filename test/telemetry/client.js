@@ -15,17 +15,17 @@ const { expect } = Code;
 describe('POST /telemetry', () => {
 
   let server;
-  const user = Fixtures.user();
+  const session = Fixtures.session();
 
   before(async () => {
 
     server = await Server;
-    await db.users.insert(user);
+    await db.sessions.insert(session);
   });
 
   after(async () => {
 
-    await db.users.destroy({ id: user.id });
+    await db.sessions.destroy({ id: session.id });
   });
 
   it('unauthorized', () => {
@@ -58,11 +58,9 @@ describe('POST /telemetry', () => {
         expect(res.statusCode).to.equal(200);
         const clientPayload = {
           eventType: 'video_paused',
-          data: {
-            id: newRoom.id
-          }
+          roomId: newRoom.id
         };
-        return server.inject({ method: 'POST', url: '/telemetry', payload: clientPayload, credentials: user });
+        return server.inject({ method: 'POST', url: '/telemetry', payload: clientPayload, credentials: session });
       }).then((res) => {
 
         expect(res.statusCode).to.equal(200);

@@ -8,7 +8,7 @@ module.exports = [
   { method: 'GET', path: '/', config: Controllers.home },
   { method: 'GET', path: '/license', config: Controllers.license },
   { method: 'GET', path: '/dashboard', config: Controllers.dashboard.home },
-  { method: 'GET', path: '/dashboard/users/{id}', config: Controllers.dashboard.get_one_user },
+  { method: 'GET', path: '/dashboard/sessions/{id}', config: Controllers.dashboard.get_one_session },
   { method: 'GET', path: '/dashboard/rooms/{id}', config: Controllers.dashboard.get_one_room },
 
   // Signaling

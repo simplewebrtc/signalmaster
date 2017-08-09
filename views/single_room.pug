@@ -14,10 +14,10 @@ block dashboardContent
       td #{room.duration}
     tr
       th Largest Room Size
-      td #{activeUsers}
+      td #{activeSessions}
     tr
       th Total Occupants Joined
-      td #{totalUsers}
+      td #{totalSessions}
 
   if similarPrev || similarNext
     h3 Related Rooms
@@ -44,12 +44,12 @@ block dashboardContent
   table
     thead
       th Event
-      th User
+      th Session
       th Time
     tbody
       each val in data
         tr
           td #{val.type}
           td
-            a(href='/dashboard/users/' + val.actor_id) #{val.actor_id}
+            a(href='/dashboard/sessions/' + val.actor_id) #{val.actor_id}
           td #{val.created_at}

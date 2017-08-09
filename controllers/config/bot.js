@@ -21,7 +21,7 @@ module.exports = {
 
     const result =  {
       id: randomId,
-      jid: `${randomId}@${Domains.bots}`,
+      userId: `${randomId}@${Domains.bots}`,
       signalingUrl: `${BuildUrl('ws', Domains.api)}/ws-bind`,
       telemetryUrl: `${BuildUrl('http', Domains.api)}/telemetry`,
       roomServer: Domains.rooms,

@@ -9,23 +9,23 @@ module.exports = {
   handler: async function (request, reply) {
 
     const { id } = request.params;
-    let user = {};
+    let session = {};
 
     try {
-      user = await this.db.users.findOne({ id });
+      session = await this.db.sessions.findOne({ id });
     }
     catch (err) {
-      request.log(['error', 'getOneUser'], err);
+      request.log(['error', 'getOneSession'], err);
     }
 
-    if (!user) {
+    if (!session) {
       throw Boom.notFound();
     }
 
-    user.duration = Duration((user.ended_at || new Date(Date.now())).getTime() - user.created_at.getTime());
+    session.duration = Duration((session.ended_at || new Date(Date.now())).getTime() - session.created_at.getTime());
 
     const events = await this.db.events.find({ actor_id: id });
 
-    return reply.view('single_user', { user, resource: id, data: events });
+    return reply.view('single_session', { session, data: events });
   }
 };

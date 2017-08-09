@@ -48,8 +48,8 @@ describe('Bot account', () => {
         const newRoom = Fixtures.room();
         const payload = {
           room_id: newRoom.id,
-          jid: botUser.jid,
-          user_id: botUser.id
+          user_id: botUser.userId,
+          session_id: botUser.id
         };
         const headers = {
           authorization: Fixtures.prosodyAuthHeader('testUser')
@@ -63,8 +63,8 @@ describe('Bot account', () => {
       }).then((result) => {
 
         expect(result).to.include({ userType: 'bot', id: botUser.id });
-        return db.users.destroy({ id: botUser.id });
+        return db.sessions.destroy({ id: botUser.id });
       });
-    return db.users.destroy({ id: botUser.id });
+    return db.sessions.destroy({ id: botUser.id });
   });
 });

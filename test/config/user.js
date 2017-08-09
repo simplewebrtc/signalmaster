@@ -25,8 +25,8 @@ describe('POST /config/user', () => {
   it('Should return proper data for user route and log it ', () => {
 
     const iceServers = Fixtures.iceServers();
-    const user = Fixtures.user();
-    const token = Fixtures.token(user);
+    const session = Fixtures.session();
+    const token = Fixtures.token(session);
 
     Nock(Config.talky.ice.servers[0])
       .get('/ice-servers.json')
@@ -42,15 +42,15 @@ describe('POST /config/user', () => {
       }).then((result) => {
 
         registeredUser = result;
-        const jid = registeredUser.jid;
-        const decodedJid = JSON.parse(Base32.decode(jid.split('@')[0]));
+        const user_id = registeredUser.userId;
+        const decodedJid = JSON.parse(Base32.decode(user_id.split('@')[0]));
 
         expect(registeredUser.iceServers).to.part.include(iceServers);
         expect(registeredUser.iceServers).to.part.include(iceServers);
         expect(registeredUser.iceServers[0]).to.include(['username', 'password']);
-        expect(decodedJid.id).to.equal(user.id);
-        expect(decodedJid.scopes).to.equal(user.scopes);
-        return server.inject({ method: 'GET', url: `/dashboard/users/${registeredUser.id}` });
+        expect(decodedJid.id).to.equal(session.id);
+        expect(decodedJid.scopes).to.equal(session.scopes);
+        return server.inject({ method: 'GET', url: `/dashboard/sessions/${registeredUser.id}` });
       }).then((res) => {
 
         expect(res.statusCode).to.equal(200);
@@ -58,8 +58,8 @@ describe('POST /config/user', () => {
         const newRoom = Fixtures.room();
         const payload = {
           room_id: newRoom.id,
-          jid: registeredUser.jid,
-          user_id: registeredUser.id
+          user_id: registeredUser.userId,
+          session_id: registeredUser.id
         };
         const headers = {
           authorization: Fixtures.prosodyAuthHeader('testUser')
@@ -73,7 +73,7 @@ describe('POST /config/user', () => {
       }).then((result) => {
 
         expect(result).to.include({ userType: 'registered', id: registeredUser.id });
-        return db.users.destroy({ id: registeredUser.id });
+        return db.sessions.destroy({ id: registeredUser.id });
       });
   });
 });

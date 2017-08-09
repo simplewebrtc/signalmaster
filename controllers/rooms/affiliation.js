@@ -15,7 +15,7 @@ module.exports = {
   auth: 'prosody-api',
   validate: {
     payload: {
-      id: Joi.string(),
+      room_id: Joi.string(),
       user_id: Joi.string()
     }
   }

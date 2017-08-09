@@ -40,7 +40,7 @@ describe('Guest account', () => {
         guestUser = result;
         expect(guestUser.iceServers).to.part.include(iceServers);
         expect(guestUser.iceServers[0]).to.include(['username', 'password']);
-        return server.inject({ method: 'GET', url: `/dashboard/users/${guestUser.id}` });
+        return server.inject({ method: 'GET', url: `/dashboard/sessions/${guestUser.id}` });
       }).then((res) => {
 
         expect(res.statusCode).to.equal(200);
@@ -48,8 +48,8 @@ describe('Guest account', () => {
         const newRoom = Fixtures.room();
         const payload = {
           room_id: newRoom.id,
-          jid: guestUser.jid,
-          user_id: guestUser.id
+          user_id: guestUser.userId,
+          session_id: guestUser.id
         };
         const headers = {
           authorization: Fixtures.prosodyAuthHeader('testUser')
@@ -63,7 +63,7 @@ describe('Guest account', () => {
       }).then((result) => {
 
         expect(result).to.include({ userType: 'guest', id: guestUser.id });
-        return db.users.destroy({ id: guestUser.id });
+        return db.sessions.destroy({ id: guestUser.id });
       });
   });
 });

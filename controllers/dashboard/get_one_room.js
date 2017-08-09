@@ -50,14 +50,14 @@ module.exports = {
       }
     }
 
-    let totalUsers = 0;
-    let activeUsers = 0;
-    const users = new Set();
+    let totalSessions = 0;
+    let activeSessions = 0;
+    const sessions = new Set();
     for (const event of events) {
       if (event.type === 'occupant_joined') {
-        totalUsers += 1;
-        users.add(event.actor_id);
-        activeUsers = Math.max(users.size, activeUsers);
+        totalSessions += 1;
+        sessions.add(event.actor_id);
+        activeSessions = Math.max(sessions.size, activeSessions);
       }
     }
 
@@ -66,8 +66,8 @@ module.exports = {
       room,
       similarPrev,
       similarNext,
-      totalUsers,
-      activeUsers,
+      totalSessions,
+      activeSessions,
       data: events
     });
   }

@@ -15,17 +15,17 @@ const { expect } = Code;
 describe('POST /prosody/telemetry', () => {
 
   let server;
-  const user = Fixtures.user();
+  const session = Fixtures.session();
 
   before(async () => {
 
     server = await Server;
-    await db.users.insert(user);
+    await db.sessions.insert(session);
   });
 
   after(async () => {
 
-    await db.users.destroy({ id: user.id });
+    await db.sessions.destroy({ id: session.id });
   });
 
   describe('room_created', () => {
@@ -118,7 +118,7 @@ describe('POST /prosody/telemetry', () => {
       const payload = {
         eventType: 'message_sent',
         data: {
-          user_id: user.id
+          session_id: session.id
         }
       };
       const headers = {
@@ -129,7 +129,7 @@ describe('POST /prosody/telemetry', () => {
         .then((res) => {
 
           expect(res.statusCode).to.equal(200);
-          return server.inject({ method: 'GET', url: `/dashboard/users/${user.id}` });
+          return server.inject({ method: 'GET', url: `/dashboard/sessions/${session.id}` });
         }).then((res) => {
 
           expect(res.statusCode).to.equal(200);
@@ -141,8 +141,8 @@ describe('POST /prosody/telemetry', () => {
 
             return $(this).text().trim();
           }).get();
-          expect(userInfo).to.include(user.id);
-          expect(userInfo).to.include(user.jid);
+          expect(userInfo).to.include(session.id);
+          expect(userInfo).to.include(session.user_id);
           expect(userInfo).to.include('message_sent');
         });
     });
@@ -156,7 +156,7 @@ describe('POST /prosody/telemetry', () => {
       const payload = {
         eventType: 'user_online',
         data: {
-          user_id: user.id
+          session_id: session.id
         }
       };
       const headers = {
@@ -167,7 +167,7 @@ describe('POST /prosody/telemetry', () => {
         .then((res) => {
 
           expect(res.statusCode).to.equal(200);
-          return server.inject({ method: 'GET', url: `/dashboard/users/${user.id}` });
+          return server.inject({ method: 'GET', url: `/dashboard/sessions/${session.id}` });
         }).then((res) => {
 
           expect(res.statusCode).to.equal(200);
@@ -179,8 +179,8 @@ describe('POST /prosody/telemetry', () => {
 
             return $(this).text().trim();
           }).get();
-          expect(userInfo).to.include(user.id);
-          expect(userInfo).to.include(user.jid);
+          expect(userInfo).to.include(session.id);
+          expect(userInfo).to.include(session.user_id);
           //TODO it should update ended_at but where is that reflected in the dashboard?
           expect(userInfo).to.include('user_online');
         });
@@ -193,7 +193,7 @@ describe('POST /prosody/telemetry', () => {
       const payload = {
         eventType: 'user_offline',
         data: {
-          user_id: user.id
+          session_id: session.id
         }
       };
       const headers = {
@@ -204,7 +204,7 @@ describe('POST /prosody/telemetry', () => {
         .then((res) => {
 
           expect(res.statusCode).to.equal(200);
-          return server.inject({ method: 'GET', url: `/dashboard/users/${user.id}` });
+          return server.inject({ method: 'GET', url: `/dashboard/sessions/${session.id}` });
         }).then((res) => {
 
           expect(res.statusCode).to.equal(200);
@@ -216,8 +216,8 @@ describe('POST /prosody/telemetry', () => {
 
             return $(this).text().trim();
           }).get();
-          expect(userInfo).to.include(user.id);
-          expect(userInfo).to.include(user.jid);
+          expect(userInfo).to.include(session.id);
+          expect(userInfo).to.include(session.user_id);
           //TODO it should update ended_at but where is that reflected in the dashboard?
           expect(userInfo).to.include('user_offline');
         });

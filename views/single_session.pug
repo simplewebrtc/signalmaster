@@ -1,23 +1,23 @@
 extends layout_dashboard
 
 block dashboardContent
-  h3 User Info
+  h3 Session Info
   table
     tr
-      th User ID
-      td #{resource}
+      th Session ID
+      td #{session.id}
     tr
-      th User JID
-      td #{user.jid}
+      th User ID
+      td #{session.user_id}
     tr
       th Client Type
-      td #{user.type}
+      td #{session.type}
     tr
       th User Agent
-      td #{user.useragent}
+      td #{session.useragent}
     tr
       th Session Length
-      td #{user.duration}
+      td #{session.duration}
 
   h3 Events
   table

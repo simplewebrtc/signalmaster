@@ -19,11 +19,11 @@ exports.iceServers = function () {
   return result;
 };
 
-exports.user = function (attrs) {
+exports.session = function (attrs) {
 
   const defaults = {
     id: Faker.lorem.word(),
-    jid: Faker.internet.email(),
+    user_id: Faker.internet.email(),
     scopes: ['mod']
   };
 

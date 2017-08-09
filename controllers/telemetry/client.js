@@ -8,14 +8,13 @@ module.exports = {
   tags: ['api', 'metrics'],
   handler: function (request, reply) {
 
-    const { eventType, data } = request.payload;
-    const user = request.auth.credentials;
-    const { peerId, id } = data;
+    const { eventType, peerId, roomId } = request.payload;
+    const session = request.auth.credentials;
     this.db.events.insert({
       type: eventType,
       peer_id: peerId || null,
-      room_id: id || null,
-      actor_id: user.id
+      room_id: roomId || null,
+      actor_id: session.id
     })
       .then(() => reply(request.payload))
       .catch((err) => reply(err));
@@ -23,10 +22,9 @@ module.exports = {
   validate: {
     payload: {
       eventType: Schema.eventTypes,
-      data: Joi.object({
-        peerId: Joi.string(),
-        id: Joi.string()
-      })
+      peerId: Joi.string(),
+      roomId: Joi.string(),
+      data: Joi.object()
     }
   },
   auth: 'client-token'

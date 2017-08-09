@@ -13,17 +13,17 @@ const { expect } = Code;
 describe('POST /prosody/rooms/affiliation', () => {
 
   let server;
-  const user = Fixtures.user();
+  const session = Fixtures.session();
 
   before(async () => {
 
     server = await Server;
-    await db.users.insert(user);
+    await db.sessions.insert(session);
   });
 
   after(async () => {
 
-    await db.users.destroy({ id: user.id });
+    await db.sessions.destroy({ id: session.id });
   });
 
   it('returns "owner"', () => {
@@ -43,8 +43,8 @@ describe('POST /prosody/rooms/affiliation', () => {
         expect(res.statusCode).to.equal(200);
 
         const affiliationPayload = {
-          id: newRoom.id,
-          user_id: user.id
+          room_id: newRoom.id,
+          user_id: session.userId
         };
 
         return server.inject({ method: 'post', url: '/prosody/rooms/affiliation', payload: affiliationPayload, headers });
@@ -64,7 +64,7 @@ describe('POST /prosody/rooms/affiliation', () => {
     const newRoom = Fixtures.room();
     const payload = {
       id: newRoom.id,
-      user_id: user.id
+      session_id: session.id
     };
     return server.inject({ method: 'post', url: '/prosody/rooms/affiliation', payload })
       .then((res) => {

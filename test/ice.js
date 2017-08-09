@@ -30,8 +30,8 @@ describe('GET /ice-servers', () => {
 
   it('works', () => {
 
-    const user = Fixtures.user();
-    return server.inject({ method: 'GET', url: '/ice-servers', credentials: user })
+    const session = Fixtures.session();
+    return server.inject({ method: 'GET', url: '/ice-servers', credentials: session })
       .then((res) => {
 
         expect(res.statusCode).to.equal(200);

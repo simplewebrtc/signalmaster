@@ -51,15 +51,15 @@ module.exports = {
     const { ua, browser, device, os } = UAParser(request.headers['user-agent']);
 
     const id = UUID.v4();
-    const jid = `${Base32.encode(JSON.stringify({
+    const user_id = `${Base32.encode(JSON.stringify({
       id: customerData.id,
       scopes: customerData.scopes || []
     }))}@${Domains.users}`;
 
     try {
-      await this.db.users.insert({
+      await this.db.sessions.insert({
         id,
-        jid,
+        user_id,
         type: device.type === undefined ? 'desktop' : 'mobile',
         os: JSON.stringify(os),
         useragent: ua,
@@ -72,7 +72,7 @@ module.exports = {
 
     const result = {
       id,
-      jid,
+      userId: user_id,
       signalingUrl: `${BuildUrl('ws', Domains.api)}/ws-bind`,
       telemetryUrl: `${BuildUrl('http', Domains.api)}/telemetry`,
       roomServer: Domains.rooms,
@@ -86,7 +86,7 @@ module.exports = {
         expiresIn: '1 day',
         issuer: Domains.api,
         audience: Domains.guests,
-        subject: jid
+        subject: user_id
       })
     };
 

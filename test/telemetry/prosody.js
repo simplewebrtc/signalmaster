@@ -101,7 +101,6 @@ describe('POST /prosody/telemetry', () => {
           }).get();
           expect(roomInfo).to.include(newRoom.id) // Resource
           expect(roomInfo).to.include(Crypto.createHash('sha1').update(newRoom.name).digest('base64')) // Name
-          expect(roomInfo).to.include('room_created');
           expect(roomInfo).to.include('room_destroyed') // Destroy event
           //TODO it should update ended_at but where is that reflected in the dashboard?
           return db.rooms.destroy({ id: newRoom.id });

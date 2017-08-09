@@ -1,1 +1,1 @@
-update users set ended_at = ${ts}::timestamp with time zone where ended_at is null;
+UPDATE users set ended_at = now() WHERE ended_at IS NULL;

@@ -1,1 +1,1 @@
-update rooms set ended_at = ${ts}::timestamp with time zone where ended_at is null;
+UPDATE rooms set ended_at = now() WHERE ended_at IS NULL;

@@ -25,14 +25,14 @@ const db = new Muckraker({ connection: Config.db });
 server.connection(Config.server);
 
 //$lab:coverage:off$
-process.on('sigterm', () => {
+process.on('sigterm', async () => {
 
   server.log(['info', 'shutdown'], 'graceful shutdown');
-  //TODO resetDb here
-  server.stop({ timeout: 15000 }).then(() => {
 
-    return process.exit(0);
-  });
+  await server.stop({ timeout: 15000 });
+  await ResetDB(db, 'system_stop')
+
+  process.exit(0);
 });
 
 server.on('request-error', (err, m) => {
@@ -84,7 +84,10 @@ exports.Server = server.register([
     }
   }
 ])
-  .then(ResetDB(db))
+  .then(() => {
+
+    return ResetDB(db, 'system_start')
+  })
   .then(() => {
 
     server.auth.strategy('prosody-guests', 'basic', {

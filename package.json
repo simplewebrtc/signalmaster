@@ -7,10 +7,11 @@
     "start": "nodemon -e js,json,lua,pug,css server.js",
     "migrate": "knex migrate:latest",
     "rollback": "knex migrate:rollback",
+    "lint": "eslint .",
     "knex": "knex",
     "createdb": "psql -d postgres -c \"CREATE ROLE talky WITH PASSWORD 'password' NOSUPERUSER NOCREATEDB NOCREATEROLE INHERIT LOGIN\" && createdb talky_api -O talky",
     "destroydb": "psql -d postgres -c \"DROP DATABASE talky_api\" && psql -d postgres -c \"DROP ROLE talky;\"",
-    "test": "lab -L -v -e test",
+    "test": "lab -a code -L -v -e test",
     "start-prosody": "node ./scripts/start-prosody",
     "prosody-config": "node ./scripts/prosody-config",
     "prosody-config-install-docker": "npm run -s prosody-config > config/prosody.cfg.lua",
@@ -50,12 +51,18 @@
     "chance": "^1.0.9",
     "cheerio": "^1.0.0-rc.2",
     "code": "^4.1.0",
+    "eslint": "^4.4.1",
     "eslint-config-andyet": "^2.1.0",
     "faker": "^4.1.0",
+    "git-validate": "^2.2.2",
     "lab": "^14.1.0",
     "minimist": "^1.2.0",
     "nock": "^9.0.14",
     "nodemon": "^1.11.0",
     "readline-sync": "^1.4.7"
-  }
+  },
+  "pre-commit": [
+    "lint",
+    "test"
+  ]
 }

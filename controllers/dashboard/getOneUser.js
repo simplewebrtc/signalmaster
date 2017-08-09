@@ -7,11 +7,11 @@ module.exports = {
   description: 'Dashboard',
   tags: ['web', 'metrics'],
   handler: async function (request, reply) {
-    const { userSessionId } = request.params;
+    const { id } = request.params;
     let user = {};
 
     try {
-      user = await this.db.users.findOne({ sessionid: userSessionId });
+      user = await this.db.users.findOne({ id });
     } catch (err) {
       request.log(['error', 'getOneUser'], err);
     }
@@ -19,10 +19,10 @@ module.exports = {
     if (!user) {
       throw Boom.notFound();
     }
-    const events = await this.db.events.find({ actor_id: userSessionId });
+    const events = await this.db.events.find({ actor_id: id });
 
     user.duration = Duration((user.ended_at || new Date(Date.now())).getTime() - user.created_at.getTime());
 
-    return reply.view('singleUser', { user, resource: userSessionId, data: events });
+    return reply.view('singleUser', { user, resource: id, data: events });
   }
 };

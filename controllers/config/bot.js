@@ -22,8 +22,8 @@ module.exports = {
     const ice = await fetchICE(request);
 
     const result =  {
-      sessionId: randomId,
-      userId: `${randomId}@${Domains.bots}`,
+      id: randomId,
+      jid: `${randomId}@${Domains.bots}`,
       signalingUrl: `${buildUrl('ws', Domains.api)}/ws-bind`,
       telemetryUrl: `${buildUrl('http', Domains.api)}/telemetry`,
       roomServer: Domains.rooms,

@@ -15,10 +15,17 @@ const { expect } = Code;
 describe('POST /prosody/telemetry', () => {
 
   let server;
+  const user = Fixtures.user();
 
   before(async() => {
 
     server = await Server;
+    await db.users.insert(user);
+  });
+
+  after(async() => {
+
+    await db.users.destroy({ id: user.id });
   });
 
   describe('room_created', () => {
@@ -37,7 +44,7 @@ describe('POST /prosody/telemetry', () => {
         .then((res) => {
 
           expect(res.statusCode).to.equal(200);
-          return server.inject({ method: 'GET', url: `/dashboard/rooms/${room.roomId}`})
+          return server.inject({ method: 'GET', url: `/dashboard/rooms/${room.id}`})
         }).then((res) => {
 
           expect(res.statusCode).to.equal(200);
@@ -48,10 +55,10 @@ describe('POST /prosody/telemetry', () => {
           const roomInfo = $('td').map(function() {
             return $(this).text().trim()
           }).get();
-          expect(roomInfo).to.include(room.roomId) // Resource
+          expect(roomInfo).to.include(room.id) // Resource
           expect(roomInfo).to.include(Crypto.createHash('sha1').update(room.name).digest('base64')) // Name
           expect(roomInfo).to.include('room_created') // Creation event
-          return db.rooms.destroy({ roomid: room.roomId });
+          return db.rooms.destroy({ id: room.id });
         });
     });
   });

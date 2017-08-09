@@ -8,8 +8,8 @@ module.exports = [
   { method: 'GET', path: '/', config: Controllers.home },
   { method: 'GET', path: '/license', config: Controllers.license },
   { method: 'GET', path: '/dashboard', config: Controllers.dashboard.home },
-  { method: 'GET', path: '/dashboard/users/{userSessionId}', config: Controllers.dashboard.getOneUser },
-  { method: 'GET', path: '/dashboard/rooms/{roomId}', config: Controllers.dashboard.getOneRoom },
+  { method: 'GET', path: '/dashboard/users/{id}', config: Controllers.dashboard.getOneUser },
+  { method: 'GET', path: '/dashboard/rooms/{id}', config: Controllers.dashboard.getOneRoom },
 
   // Signaling
   { method: 'GET', path: '/ws-bind', config: Controllers.signaling },

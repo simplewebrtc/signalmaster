@@ -15,15 +15,15 @@ module.exports = {
   tags: ['api', 'prosody'],
   handler: function (request, reply) {
 
-    const domain = JID.domain(request.payload.userId);
+    const domain = JID.domain(request.payload.jid);
     let userInfo = {
-      sessionId: request.payload.sessionId
+      id: request.payload.user_id
     };
-    
+
     switch (domain) {
       case Domains.users: {
         userInfo.userType = 'registered';
-        userInfo.customerData = JSON.parse(Base32.decode(JID.local(request.payload.userId)));
+        userInfo.customerData = JSON.parse(Base32.decode(JID.local(request.payload.jid)));
         break;
       }
 
@@ -43,9 +43,9 @@ module.exports = {
   auth: 'prosody-api',
   validate: {
     payload: {
-      roomId: Joi.string(),
-      userId: Joi.string(),
-      sessionId: Joi.string()
+      room_id: Joi.string(),
+      jid: Joi.string(),
+      user_id: Joi.string()
     }
   }
 };

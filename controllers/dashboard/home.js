@@ -35,7 +35,7 @@ module.exports = {
       room.duration = Duration(end - start);
     }
 
-    return reply.view('listOfRooms', {
+    return reply.view('list_of_rooms', {
       pages: pagesArr,
       data: rooms,
       activeRoomCount: activeCount.count,

@@ -24,6 +24,6 @@ module.exports = {
 
     const events = await this.db.events.find({ actor_id: id });
 
-    return reply.view('singleUser', { user, resource: id, data: events });
+    return reply.view('single_user', { user, resource: id, data: events });
   }
 };

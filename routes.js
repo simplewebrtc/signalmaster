@@ -8,8 +8,8 @@ module.exports = [
   { method: 'GET', path: '/', config: Controllers.home },
   { method: 'GET', path: '/license', config: Controllers.license },
   { method: 'GET', path: '/dashboard', config: Controllers.dashboard.home },
-  { method: 'GET', path: '/dashboard/users/{id}', config: Controllers.dashboard.getOneUser },
-  { method: 'GET', path: '/dashboard/rooms/{id}', config: Controllers.dashboard.getOneRoom },
+  { method: 'GET', path: '/dashboard/users/{id}', config: Controllers.dashboard.get_one_user },
+  { method: 'GET', path: '/dashboard/rooms/{id}', config: Controllers.dashboard.get_one_room },
 
   // Signaling
   { method: 'GET', path: '/ws-bind', config: Controllers.signaling },
@@ -42,7 +42,7 @@ module.exports = [
 
   // Room affiliations
   { method: 'POST', path: '/prosody/rooms/affiliation', config: Controllers.rooms.affiliation },
-  { method: 'POST', path: '/prosody/rooms/user-info', config: Controllers.rooms.userInfo },
+  { method: 'POST', path: '/prosody/rooms/user-info', config: Controllers.rooms.user_info },
 
   //Static assets
   { method: 'GET', path: '/{path*}', config: { handler: { directory: { path: './public', listing: false } }, auth: false } }

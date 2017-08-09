@@ -59,7 +59,7 @@ module.exports = {
       }
     }
 
-    return reply.view('singleRoom', {
+    return reply.view('single_room', {
       resource: id,
       room,
       similarPrev,

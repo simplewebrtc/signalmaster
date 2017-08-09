@@ -19,9 +19,10 @@ module.exports = {
     if (!user) {
       throw Boom.notFound();
     }
-    const events = await this.db.events.find({ actor_id: id });
 
     user.duration = Duration((user.ended_at || new Date(Date.now())).getTime() - user.created_at.getTime());
+
+    const events = await this.db.events.find({ actor_id: id });
 
     return reply.view('singleUser', { user, resource: id, data: events });
   }

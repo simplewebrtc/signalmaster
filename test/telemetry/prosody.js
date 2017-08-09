@@ -57,51 +57,15 @@ describe('POST /prosody/telemetry', () => {
           }).get();
           expect(roomInfo).to.include(newRoom.id) // Resource
           expect(roomInfo).to.include(Crypto.createHash('sha1').update(newRoom.name).digest('base64')) // Name
-          expect(roomInfo).to.include('room_created') // Creation event
+          expect(roomInfo).to.include('room_created');
           return db.rooms.destroy({ id: newRoom.id });
-        });
-    });
-  });
-
-  describe('message_sent', () => {
-
-    it('adds an event', () => {
-
-      const payload = {
-        eventType: 'message_sent',
-        data: {
-          user_id: user.id
-        }
-      }
-      const headers = {
-        authorization: Fixtures.prosodyAuthHeader('testUser')
-      };
-
-      return server.inject({ method: 'POST', url: '/prosody/telemetry', payload, headers })
-        .then((res) => {
-
-          expect(res.statusCode).to.equal(200);
-          return server.inject({ method: 'GET', url: `/dashboard/users/${user.id}`})
-        }).then((res) => {
-
-          expect(res.statusCode).to.equal(200);
-          return res.result;
-        }).then((result) => {
-
-          const $ = cheerio.load(result);
-          const eventInfo = $('td').map(function() {
-            return $(this).text().trim()
-          }).get();
-          expect(eventInfo).to.include(user.id)
-          expect(eventInfo).to.include(user.jid)
-          expect(eventInfo).to.include('message_sent') // Creation event
         });
     });
   });
 
   describe('room_destroyed', () => {
 
-    it('updates ended_at', () => {
+    it('logs properly in dashboard', () => {
 
       const newRoom = Fixtures.room();
       const createPayload = {
@@ -137,10 +101,120 @@ describe('POST /prosody/telemetry', () => {
           }).get();
           expect(roomInfo).to.include(newRoom.id) // Resource
           expect(roomInfo).to.include(Crypto.createHash('sha1').update(newRoom.name).digest('base64')) // Name
-          expect(roomInfo).to.include('room_created') // Creation event
+          expect(roomInfo).to.include('room_created');
           expect(roomInfo).to.include('room_destroyed') // Destroy event
           //TODO it should update ended_at but where is that reflected in the dashboard?
           return db.rooms.destroy({ id: newRoom.id });
+        });
+    });
+  });
+
+  describe('message_sent', () => {
+
+    it('adds an event', () => {
+
+      const payload = {
+        eventType: 'message_sent',
+        data: {
+          user_id: user.id
+        }
+      }
+      const headers = {
+        authorization: Fixtures.prosodyAuthHeader('testUser')
+      };
+
+      return server.inject({ method: 'POST', url: '/prosody/telemetry', payload, headers })
+        .then((res) => {
+
+          expect(res.statusCode).to.equal(200);
+          return server.inject({ method: 'GET', url: `/dashboard/users/${user.id}`})
+        }).then((res) => {
+
+          expect(res.statusCode).to.equal(200);
+          return res.result;
+        }).then((result) => {
+
+          const $ = cheerio.load(result);
+          const userInfo = $('td').map(function() {
+            return $(this).text().trim()
+          }).get();
+          expect(userInfo).to.include(user.id)
+          expect(userInfo).to.include(user.jid)
+          expect(userInfo).to.include('message_sent');
+        });
+    });
+  });
+
+
+  describe('user_online', () => {
+
+    it('adds an event', () => {
+
+      const payload = {
+        eventType: 'user_online',
+        data: {
+          user_id: user.id
+        }
+      }
+      const headers = {
+        authorization: Fixtures.prosodyAuthHeader('testUser')
+      };
+
+      return server.inject({ method: 'POST', url: '/prosody/telemetry', payload, headers })
+        .then((res) => {
+
+          expect(res.statusCode).to.equal(200);
+          return server.inject({ method: 'GET', url: `/dashboard/users/${user.id}`})
+        }).then((res) => {
+
+          expect(res.statusCode).to.equal(200);
+          return res.result;
+        }).then((result) => {
+
+          const $ = cheerio.load(result);
+          const userInfo = $('td').map(function() {
+            return $(this).text().trim()
+          }).get();
+          expect(userInfo).to.include(user.id)
+          expect(userInfo).to.include(user.jid)
+          //TODO it should update ended_at but where is that reflected in the dashboard?
+          expect(userInfo).to.include('user_online');
+        });
+    });
+  });
+  describe('user_offline', () => {
+
+    it('adds an event', () => {
+
+      const payload = {
+        eventType: 'user_offline',
+        data: {
+          user_id: user.id
+        }
+      }
+      const headers = {
+        authorization: Fixtures.prosodyAuthHeader('testUser')
+      };
+
+      return server.inject({ method: 'POST', url: '/prosody/telemetry', payload, headers })
+        .then((res) => {
+
+          expect(res.statusCode).to.equal(200);
+          return server.inject({ method: 'GET', url: `/dashboard/users/${user.id}`})
+        }).then((res) => {
+
+          expect(res.statusCode).to.equal(200);
+          return res.result;
+        }).then((result) => {
+
+          const $ = cheerio.load(result);
+          const userInfo = $('td').map(function() {
+            return $(this).text().trim()
+          }).get();
+          expect(userInfo).to.include(user.id)
+          expect(userInfo).to.include(user.jid)
+          //TODO it should update ended_at but where is that reflected in the dashboard?
+          expect(userInfo).to.include('user_offline');
         });
     });
   });

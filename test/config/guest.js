@@ -12,7 +12,7 @@ const lab = exports.lab = Lab.script();
 const { describe, it, before, after, afterEach } = lab
 const { expect } = Code;
 
-describe('POST /config/guest', () => {
+describe('Guest account', () => {
   let server;
 
   before(async() => {
@@ -20,14 +20,14 @@ describe('POST /config/guest', () => {
     server = await Server;
   });
 
-  it('Should return proper data for guest route and log it', () => {
+  it('created and exists', () => {
 
+    let guestUser;
     const iceServers = Fixtures.iceServers();
+
     Nock(Config.talky.ice.servers[0])
     .get('/ice-servers.json')
     .reply(200, iceServers);
-
-    let jid;
 
     return server.inject({ method: 'POST', url: '/config/guest', payload: {} })
       .then((res) => {
@@ -35,15 +35,33 @@ describe('POST /config/guest', () => {
         return res.result;
       }).then((result) => {
 
-        const id = result.id;
-        jid = result.jid;
-        expect(result.iceServers).to.part.include(iceServers);
-        expect(result.iceServers[0]).to.include(['username', 'password']);
-        return server.inject({ method: 'GET', url: `/dashboard/users/${id}` });
+        guestUser = result;
+        expect(guestUser.iceServers).to.part.include(iceServers);
+        expect(guestUser.iceServers[0]).to.include(['username', 'password']);
+        return server.inject({ method: 'GET', url: `/dashboard/users/${guestUser.id}` });
       }).then((res) => {
 
         expect(res.statusCode).to.equal(200);
-        return db.users.destroy({ userid: jid });
+
+        const newRoom = Fixtures.room();
+        const payload = {
+          room_id: newRoom.id,
+          jid: guestUser.jid,
+          user_id: guestUser.id
+        };
+        const headers = {
+          authorization: Fixtures.prosodyAuthHeader('testUser')
+        };
+
+        return server.inject({ method: 'POST', url: '/prosody/rooms/user-info', payload, headers })
+      }).then((res) => {
+
+        expect(res.statusCode).to.equal(200);
+        return res.result;
+      }).then((result) => {
+
+        expect(result).to.include({ userType: 'guest', id: guestUser.id });
+        return db.users.destroy({ id: guestUser.id });
       });
   })
 });

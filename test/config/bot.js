@@ -13,7 +13,7 @@ const lab = exports.lab = Lab.script();
 const { describe, it, before, after, afterEach } = lab
 const { expect } = Code;
 
-describe('POST /config/bot', () => {
+describe('Bot account', () => {
 
   let server;
 
@@ -22,14 +22,15 @@ describe('POST /config/bot', () => {
     server = await Server;
   });
 
-  it('Should return proper data for bot route and log it ', () => {
+  it('created and exists', () => {
 
+    let botUser;
     const iceServers = Fixtures.iceServers();
-    Nock(Config.talky.ice.servers[0])
-    .get('/ice-servers.json')
-    .reply(200, iceServers);
+    const newRoom = Fixtures.room();
 
-    let jid;
+    Nock(Config.talky.ice.servers[0])
+      .get('/ice-servers.json')
+      .reply(200, iceServers);
 
     return server.inject({ method: 'POST', url: '/config/bot', payload: {} })
       .then((res) => {
@@ -37,15 +38,35 @@ describe('POST /config/bot', () => {
         return res.result;
       }).then((result) => {
 
-        const id = result.id;
-        jid = result.jid;
-        expect(result.iceServers).to.part.include(iceServers);
-        expect(result.iceServers[0]).to.include(['username', 'password']);
-        return server.inject({ method: 'GET', url: `/dashboard/users/${id}` });
+        botUser = result;
+        const id = botUser.id;
+        expect(botUser.iceServers).to.part.include(iceServers);
+        expect(botUser.iceServers[0]).to.include(['username', 'password']);
+        return server.inject({ method: 'GET', url: `/dashboard/users/${botUser.id}` });
       }).then((res) => {
 
         expect(res.statusCode).to.equal(404);
-        return db.users.destroy({ jid });
+
+        const newRoom = Fixtures.room();
+        const payload = {
+          room_id: newRoom.id,
+          jid: botUser.jid,
+          user_id: botUser.id
+        };
+        const headers = {
+          authorization: Fixtures.prosodyAuthHeader('testUser')
+        };
+
+        return server.inject({ method: 'POST', url: '/prosody/rooms/user-info', payload, headers })
+      }).then((res) => {
+
+        expect(res.statusCode).to.equal(200);
+        return res.result;
+      }).then((result) => {
+
+        expect(result).to.include({ userType: 'bot', id: botUser.id });
+        return db.users.destroy({ id: botUser.id });
       });
-  })
+    return db.users.destroy({ id: botUser.id });
+  });
 });

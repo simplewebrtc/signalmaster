@@ -31,7 +31,7 @@ describe('POST /config/user', () => {
       .get('/ice-servers.json')
       .reply(200, iceServers);
 
-    let jid;
+    let registeredUser;
 
     return server.inject({ method: 'POST', url: '/config/user', payload: { token } })
       .then((res) => {
@@ -39,20 +39,39 @@ describe('POST /config/user', () => {
         return res.result;
       }).then((result) => {
 
-        const id = result.id;
-        jid = result.jid;
+        registeredUser = result;
+        const jid = registeredUser.jid;
         const decodedJid = JSON.parse(Base32.decode(jid.split('@')[0]))
 
-        expect(result.iceServers).to.part.include(iceServers);
-        expect(result.iceServers).to.part.include(iceServers);
-        expect(result.iceServers[0]).to.include(['username', 'password']);
+        expect(registeredUser.iceServers).to.part.include(iceServers);
+        expect(registeredUser.iceServers).to.part.include(iceServers);
+        expect(registeredUser.iceServers[0]).to.include(['username', 'password']);
         expect(decodedJid.id).to.equal(user.id)
         expect(decodedJid.scopes).to.equal(user.scopes)
-        return server.inject({ method: 'GET', url: `/dashboard/users/${id}` });
+        return server.inject({ method: 'GET', url: `/dashboard/users/${registeredUser.id}` });
       }).then((res) => {
 
         expect(res.statusCode).to.equal(200);
-        return db.users.destroy({ jid });
+
+        const newRoom = Fixtures.room();
+        const payload = {
+          room_id: newRoom.id,
+          jid: registeredUser.jid,
+          user_id: registeredUser.id
+        };
+        const headers = {
+          authorization: Fixtures.prosodyAuthHeader('testUser')
+        };
+
+        return server.inject({ method: 'POST', url: '/prosody/rooms/user-info', payload, headers })
+      }).then((res) => {
+
+        expect(res.statusCode).to.equal(200);
+        return res.result;
+      }).then((result) => {
+
+        expect(result).to.include({ userType: 'registered', id: registeredUser.id });
+        return db.users.destroy({ id: registeredUser.id });
       });
   })
 });

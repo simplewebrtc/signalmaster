@@ -42,10 +42,10 @@ module.exports = {
   },
   auth: 'prosody-api',
   validate: {
-    payload: {
-      room_id: Joi.string(),
-      jid: Joi.string(),
-      user_id: Joi.string()
-    }
+    payload: Joi.object({
+      room_id: Joi.string().required(),
+      jid: Joi.string().required(),
+      user_id: Joi.string().required()
+    })
   }
 };

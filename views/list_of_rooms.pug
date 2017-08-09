@@ -26,7 +26,7 @@ block dashboardContent
       each val in data
         tr
           td
-            a(href='/dashboard/rooms/' + val.roomid) #{val.name}
+            a(href='/dashboard/rooms/' + val.id) #{val.name}
           td #{val.duration}
     div
       h3 Pages

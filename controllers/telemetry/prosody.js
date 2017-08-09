@@ -10,7 +10,7 @@ module.exports = {
   handler: async function (request, reply) {
 
     const { eventType, data } = request.payload;
-    const { session_id, id, user_id } = data;
+    const { session_id, room_id, user_id } = data;
     let { name } = data;
 
     if (name && Config.talky.metrics && Config.talky.metrics.maskRoomNames) {
@@ -23,20 +23,20 @@ module.exports = {
       //TODO edge case to handle
     }
 
-    if (id) {
-      let room = await this.db.rooms.findOne({ id });
+    if (room_id) {
+      let room = await this.db.rooms.findOne({ room_id });
       if (!room) {
-        room = await this.db.rooms.insert({ name, id, user_id });
+        room = await this.db.rooms.insert({ name, id: room_id, jid: data.jid });
       }
 
       if (eventType === 'room_destroyed') {
         //Record room ended column
         await this.db.rooms.updateOne(room, { ended_at: new Date() });
-        await this.db.events.insert({ type: eventType, room_id: room.id, actor_id: user_id });
+        await this.db.events.insert({ type: eventType, room_id: room.id, actor_id: session_id });
       }
       else {
         //Record event
-        await this.db.events.insert({ type: eventType, room_id: room.id, actor_id: user_id });
+        await this.db.events.insert({ type: eventType, room_id: room.id, actor_id: session_id });
       }
 
       return reply();
@@ -80,9 +80,10 @@ module.exports = {
     payload: {
       eventType: Joi.string(),
       data: Joi.object({
-        id: Joi.string(),
+        room_id: Joi.string(),
         session_id: Joi.string(),
         user_id: Joi.string(),
+        jid: Joi.string(),
         name: Joi.string()
       }).unknown()
     }

@@ -54,27 +54,27 @@ end
 
 module:hook("resource-bind", function (event)
     post_event("user_online", {
-        sessionId = event.session.resource;
-        userId = event.session.username.."@"..event.session.host;
+        session_id = event.session.resource;
+        user_id = event.session.username.."@"..event.session.host;
     });
 end);
 
 
 module:hook("resource-unbind", function (event)
     post_event("user_offline", {
-        sessionId = event.session.resource;
-        userId = event.session.username.."@"..event.session.host;
+        session_id = event.session.resource;
+        user_id = event.session.username.."@"..event.session.host;
     });
 end);
 
 
 module:hook("muc-occupant-session-new", function (event)
-    local user, domain, sessionId = jid_split(event.jid);
+    local user, domain, session_id = jid_split(event.jid);
     post_event("occupant_joined", {
-        roomId = event.room:get_talky_core_id();
-        userId = user.."@"..domain;
-        sessionId = sessionId;
-        inRoomSessionId = jid_resource(event.nick);
+        room_id = event.room:get_talky_core_id();
+        user_id = user.."@"..domain;
+        session_id = session_id;
+        in_room_session_id = jid_resource(event.nick);
     });
 end);
 
@@ -82,18 +82,18 @@ end);
 module:hook("muc-occupant-left", function (event)
     if event.stanza then
         post_event("occupant_left", {
-            roomId = event.room:get_talky_core_id();
-            userId = event.occupant.bare_jid;
-            sessionId = jid_resource(event.stanza.attr.from);
-            inRoomSessionId = jid_resource(event.nick);
+            room_id = event.room:get_talky_core_id();
+            user_id = event.occupant.bare_jid;
+            session_id = jid_resource(event.stanza.attr.from);
+            in_room_session_id = jid_resource(event.nick);
         });
     else
         for real_jid in event.occupant:each_session() do
             post_event("occupant_left", {
-                roomId = event.room:get_talky_core_id();
-                userId = event.occupant.bare_jid;
-                sessionId = jid_resource(real_jid);
-                inRoomSessionId = jid_resource(event.nick);
+                room_id = event.room:get_talky_core_id();
+                user_id = event.occupant.bare_jid;
+                session_id = jid_resource(real_jid);
+                in_room_session_id = jid_resource(event.nick);
             });
         end
     end
@@ -103,7 +103,7 @@ end);
 module:hook("muc-room-pre-create", function (event)
     local roomName = jid_split(event.room.jid);
     post_event("room_created", {
-        roomId = event.room:get_talky_core_id();
+        room_id = event.room:get_talky_core_id();
         name = roomName;
         jid = event.room.jid;
     });
@@ -113,7 +113,7 @@ end);
 module:hook("muc-room-destroyed", function (event)
     local roomName = jid_split(event.room.jid);
     post_event("room_destroyed", {
-        roomId = event.room:get_talky_core_id();
+        room_id = event.room:get_talky_core_id();
         name = roomName;
         jid = event.room.jid;
     });

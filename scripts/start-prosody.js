@@ -47,8 +47,8 @@ exports.startProsody = function (parentProcess) {
       prosody.kill('SIGINT');
     };
 
-    parentProcess.on('SIGINT', shutdown('SIGINT'));
-    parentProcess.once('SIGUSR2', shutdown('SIGUSR2'));
+    parentProcess.on('SIGINT', () => shutdown('SIGINT'));
+    parentProcess.once('SIGUSR2', () => shutdown('SIGUSR2'));
   }
 
   return prosody;

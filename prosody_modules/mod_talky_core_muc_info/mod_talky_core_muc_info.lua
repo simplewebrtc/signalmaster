@@ -60,15 +60,15 @@ room_mt.get_talky_core_info = get_talky_core_info;
 room_mt.set_talky_core_info = set_talky_core_info;
 
 
-local function fetch_info(room, userId, sessionId)
+local function fetch_info(room, user_id, session_id)
     local userpart = tostring(os_time());
     local secret = base64(hmac_sha1(api_key, userpart, false))
 
-    module:log("debug", "Fetching info for user %s in room %s with URL %s", userId, room.jid, user_info_url);
+    module:log("debug", "Fetching info for user %s in room %s with URL %s", user_id, room.jid, user_info_url);
     local body = json_encode({
-        userId = userId;
-        sessionId = sessionId;
-        roomId = room:get_talky_core_id();
+        user_id = user_id;
+        session_id = session_id;
+        room_id = room:get_talky_core_id();
     });
 
     local response = {};
@@ -113,7 +113,7 @@ local function stamp_info(event)
     local tag = stanza:tag("user", {
         xmlns = xmlns_talky;
         type = user_info.userType or "guest";
-        sid = user_info.sessionId;
+        sid = user_info.id;
         rid = room:get_talky_core_id();
     });
     if user_info.customerData then

@@ -37,8 +37,8 @@ local function fetch_role(room, jid)
 
     module:log("debug", "Testing room affiliation for user %s in room %s with URL %s", jid, room.jid, muc_affiliation_url);
     local body = json_encode({
-        userId = jid;
-        roomId = room:get_talky_core_id();
+        user_id = jid;
+        room_id = room:get_talky_core_id();
     });
 
     local response = {};

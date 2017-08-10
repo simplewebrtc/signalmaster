@@ -12,6 +12,7 @@
     "createdb": "psql -d postgres -c \"CREATE ROLE talky WITH PASSWORD 'password' NOSUPERUSER NOCREATEDB NOCREATEROLE INHERIT LOGIN\" && createdb talky_api -O talky",
     "destroydb": "psql -d postgres -c \"DROP DATABASE talky_api\" && psql -d postgres -c \"DROP ROLE talky;\"",
     "test": "lab -a code -L -v -e test",
+    "coverage": "lab -a code -e test -L -r html -o coverage.html",
     "start-prosody": "node ./scripts/start-prosody",
     "prosody-config": "node ./scripts/prosody-config",
     "prosody-config-install-docker": "npm run -s prosody-config > config/prosody.cfg.lua",

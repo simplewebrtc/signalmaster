@@ -44,12 +44,14 @@ describe('POST /telemetry', () => {
   it('inserts event', () => {
 
     const newRoom = Fixtures.room();
+    newRoom.room_id = newRoom.id;
+    delete newRoom.id;
     const prosodyPayload = {
       eventType: 'room_created',
       data: newRoom
     };
     const headers = {
-      authorization: Fixtures.prosodyAuthHeader('testUser')
+      authorization: Fixtures.prosodyBasicHeader('testUser')
     };
 
     return server.inject({ method: 'POST', url: '/prosody/telemetry', payload: prosodyPayload, headers })
@@ -58,13 +60,13 @@ describe('POST /telemetry', () => {
         expect(res.statusCode).to.equal(200);
         const clientPayload = {
           eventType: 'video_paused',
-          roomId: newRoom.id
+          roomId: newRoom.room_id
         };
         return server.inject({ method: 'POST', url: '/telemetry', payload: clientPayload, credentials: session });
       }).then((res) => {
 
         expect(res.statusCode).to.equal(200);
-        return server.inject({ method: 'GET', url: `/dashboard/rooms/${newRoom.id}` });
+        return server.inject({ method: 'GET', url: `/dashboard/rooms/${newRoom.room_id}` });
       }).then((res) => {
 
         expect(res.statusCode).to.equal(200);
@@ -76,10 +78,10 @@ describe('POST /telemetry', () => {
 
           return $(this).text().trim();
         }).get();
-        expect(roomInfo).to.include(newRoom.id); // Resource
+        expect(roomInfo).to.include(newRoom.room_id); // Resource
         expect(roomInfo).to.include(Crypto.createHash('sha1').update(newRoom.name).digest('base64')); // Name
         expect(roomInfo).to.include('video_paused');
-        return db.rooms.destroy({ id: newRoom.id });
+        return db.rooms.destroy({ id: newRoom.room_id });
       });
 
   });

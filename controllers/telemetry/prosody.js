@@ -10,12 +10,15 @@ module.exports = {
   handler: async function (request, reply) {
 
     const { eventType, data } = request.payload;
-    const { session_id, room_id, user_id } = data;
+    const { session_id, room_id } = data;
     let { name } = data;
+    const { jid } = data;
 
+    //$lab:coverage:off$
     if (name && Config.talky.metrics && Config.talky.metrics.maskRoomNames) {
       name = Crypto.createHash('sha1').update(name).digest('base64');
     }
+    //$lab:coverage:on$
 
     const session = await this.db.sessions.findOne({ id: session_id });
 
@@ -24,9 +27,10 @@ module.exports = {
     }
 
     if (room_id) {
-      let room = await this.db.rooms.findOne({ room_id });
+      let room = await this.db.rooms.findOne({ id: room_id });
       if (!room) {
-        room = await this.db.rooms.insert({ name, id: room_id, jid: data.jid });
+        const roomAttrs = { name, id: room_id, jid };
+        room = await this.db.rooms.insert(roomAttrs);
       }
 
       if (eventType === 'room_destroyed') {
@@ -35,8 +39,9 @@ module.exports = {
         await this.db.events.insert({ type: eventType, room_id: room.id, actor_id: session_id });
       }
       else {
+        const event = { type: eventType, room_id: room.id, actor_id: session_id };
         //Record event
-        await this.db.events.insert({ type: eventType, room_id: room.id, actor_id: session_id });
+        await this.db.events.insert(event);
       }
 
       return reply();

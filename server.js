@@ -14,6 +14,7 @@ const ResetDB = require('./lib/reset_db');
 
 const Pkg = require('./package.json');
 
+//$lab:coverage:off$
 if (Config.getconfig.env !== 'production') {
   if (FS.existsSync('config/key.pem') && FS.existsSync('config/cert.pem')) {
     const key = FS.readFileSync('config/key.pem');
@@ -21,6 +22,7 @@ if (Config.getconfig.env !== 'production') {
     Config.server.tls = { key, cert };
   }
 }
+//$lab:coverage:on$
 
 const server = new Hapi.Server();
 const db = new Muckraker({ connection: Config.db });
@@ -124,17 +126,20 @@ exports.Server = server.register([
       isCached: !Config.getconfig.isDev
     });
 
+    // $lab:coverage:off$
     server.listener.on('upgrade', (req, socket, head) => {
 
       wsProxy.ws(req, socket, head);
     });
 
-    server.bind({ db });
 
     if (Config.getconfig.isDev && !Config.noProsody) {
       const prosody = require('./scripts/start-prosody').startProsody(process);
       prosody.stdout.pipe(process.stdout);
     }
+    // $lab:coverage:on$
+
+    server.bind({ db });
     server.route(require('./routes'));
   }).then(() => {
 
@@ -164,6 +169,7 @@ exports.Server = server.register([
     // $lab:coverage:on$
   });
 
+// $lab:coverage:off$
 process.on('unhandledException', function () {
 
   console.log(arguments);
@@ -175,3 +181,4 @@ process.on('unhandledRejection', function () {
   console.log(arguments);
   process.exit();
 });
+// $lab:coverage:on$

@@ -6,7 +6,9 @@ module.exports = {
   tags: ['api', 'websocket'],
   handler: function (request, reply) {
 
+    //$lab:coverage:off$
     reply('This route is for websocket upgrading');
+    //$lab:coverage:on$
   }
 };
 

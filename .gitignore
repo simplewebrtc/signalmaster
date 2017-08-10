@@ -1,7 +1,8 @@
 node_modules
-config/prosody.cfg.lua
+config/*.lua
 config/local.json
 config/*.pem
 
 env.list
 cm-prosody-config.json
+coverage.html

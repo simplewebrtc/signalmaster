@@ -33,19 +33,21 @@ describe('POST /prosody/telemetry', () => {
     it('creates room that exists in dashboard', () => {
 
       const newRoom = Fixtures.room();
+      newRoom.room_id = newRoom.id;
+      delete newRoom.id;
       const payload = {
         eventType: 'room_created',
         data: newRoom
       };
       const headers = {
-        authorization: Fixtures.prosodyAuthHeader('testUser')
+        authorization: Fixtures.prosodyBasicHeader('testUser')
       };
 
       return server.inject({ method: 'POST', url: '/prosody/telemetry', payload, headers })
         .then((res) => {
 
           expect(res.statusCode).to.equal(200);
-          return server.inject({ method: 'GET', url: `/dashboard/rooms/${newRoom.id}` });
+          return server.inject({ method: 'GET', url: `/dashboard/rooms/${newRoom.room_id}` });
         }).then((res) => {
 
           expect(res.statusCode).to.equal(200);
@@ -57,10 +59,10 @@ describe('POST /prosody/telemetry', () => {
 
             return $(this).text().trim();
           }).get();
-          expect(roomInfo).to.include(newRoom.id); // Resource
+          expect(roomInfo).to.include(newRoom.room_id); // Resource
           expect(roomInfo).to.include(Crypto.createHash('sha1').update(newRoom.name).digest('base64')); // Name
           expect(roomInfo).to.include('room_created');
-          return db.rooms.destroy({ id: newRoom.id });
+          return db.rooms.destroy({ id: newRoom.room_id });
         });
     });
   });
@@ -70,12 +72,15 @@ describe('POST /prosody/telemetry', () => {
     it('logs properly in dashboard', () => {
 
       const newRoom = Fixtures.room();
+      newRoom.room_id = newRoom.id;
+      delete newRoom.id;
+
       const createPayload = {
         eventType: 'room_created',
         data: newRoom
       };
       const headers = {
-        authorization: Fixtures.prosodyAuthHeader('testUser')
+        authorization: Fixtures.prosodyBasicHeader('testUser')
       };
       const destroyPayload = {
         eventType: 'room_destroyed',
@@ -90,7 +95,7 @@ describe('POST /prosody/telemetry', () => {
         }).then((res) => {
 
           expect(res.statusCode).to.equal(200);
-          return server.inject({ method: 'GET', url: `/dashboard/rooms/${newRoom.id}` });
+          return server.inject({ method: 'GET', url: `/dashboard/rooms/${newRoom.room_id}` });
         }).then((res) => {
 
           expect(res.statusCode).to.equal(200);
@@ -102,11 +107,11 @@ describe('POST /prosody/telemetry', () => {
 
             return $(this).text().trim();
           }).get();
-          expect(roomInfo).to.include(newRoom.id); // Resource
+          expect(roomInfo).to.include(newRoom.room_id); // Resource
           expect(roomInfo).to.include(Crypto.createHash('sha1').update(newRoom.name).digest('base64')); // Name
           expect(roomInfo).to.include('room_destroyed'); // Destroy event
           //TODO it should update ended_at but where is that reflected in the dashboard?
-          return db.rooms.destroy({ id: newRoom.id });
+          return db.rooms.destroy({ id: newRoom.room_id });
         });
     });
   });
@@ -122,7 +127,7 @@ describe('POST /prosody/telemetry', () => {
         }
       };
       const headers = {
-        authorization: Fixtures.prosodyAuthHeader('testUser')
+        authorization: Fixtures.prosodyBasicHeader('testUser')
       };
 
       return server.inject({ method: 'POST', url: '/prosody/telemetry', payload, headers })
@@ -160,7 +165,7 @@ describe('POST /prosody/telemetry', () => {
         }
       };
       const headers = {
-        authorization: Fixtures.prosodyAuthHeader('testUser')
+        authorization: Fixtures.prosodyBasicHeader('testUser')
       };
 
       return server.inject({ method: 'POST', url: '/prosody/telemetry', payload, headers })
@@ -197,7 +202,7 @@ describe('POST /prosody/telemetry', () => {
         }
       };
       const headers = {
-        authorization: Fixtures.prosodyAuthHeader('testUser')
+        authorization: Fixtures.prosodyBasicHeader('testUser')
       };
 
       return server.inject({ method: 'POST', url: '/prosody/telemetry', payload, headers })

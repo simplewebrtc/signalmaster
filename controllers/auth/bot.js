@@ -7,7 +7,5 @@ module.exports = {
 
     return reply('true').type('text/plain').code(200);
   },
-  //TODO response swagger
   auth: 'prosody-bots'
 };
-

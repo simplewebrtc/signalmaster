@@ -35,14 +35,7 @@ module.exports = {
       return reply(Boom.forbidden('Talky Core active user limit reached'));
     }
 
-    let ice = [];
-    try {
-      ice = await FetchICE(request);
-    }
-    catch (err) {
-      request.log(['error'], 'Could not fetch ICE servers');
-      request.log(['error'], err);
-    }
+    const ice = await FetchICE(request);
 
     const { ua, browser, device, os } = UAParser(request.headers['user-agent']);
 

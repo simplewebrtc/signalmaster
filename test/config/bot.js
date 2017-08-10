@@ -52,7 +52,7 @@ describe('Bot account', () => {
           session_id: botUser.id
         };
         const headers = {
-          authorization: Fixtures.prosodyAuthHeader('testUser')
+          authorization: Fixtures.prosodyBasicHeader('testUser')
         };
 
         return server.inject({ method: 'POST', url: '/prosody/rooms/user-info', payload, headers });
@@ -65,6 +65,6 @@ describe('Bot account', () => {
         expect(result).to.include({ userType: 'bot', id: botUser.id });
         return db.sessions.destroy({ id: botUser.id });
       });
-    return db.sessions.destroy({ id: botUser.id });
   });
+
 });

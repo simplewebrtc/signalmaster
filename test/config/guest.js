@@ -52,7 +52,7 @@ describe('Guest account', () => {
           session_id: guestUser.id
         };
         const headers = {
-          authorization: Fixtures.prosodyAuthHeader('testUser')
+          authorization: Fixtures.prosodyBasicHeader('testUser')
         };
 
         return server.inject({ method: 'POST', url: '/prosody/rooms/user-info', payload, headers });

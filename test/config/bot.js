@@ -52,7 +52,7 @@ describe('Bot account', () => {
           session_id: botUser.id
         };
         const headers = {
-          authorization: Fixtures.prosodyAuthHeader('testUser')
+          authorization: Fixtures.prosodyBasicHeader('testUser')
         };
 
         return server.inject({ method: 'POST', url: '/prosody/rooms/user-info', payload, headers });

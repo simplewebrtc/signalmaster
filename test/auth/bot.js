@@ -2,7 +2,7 @@
 
 const Lab = require('lab');
 const Code = require('code');
-const Fixtures = require('./fixtures');
+const Fixtures = require('../fixtures');
 const { Server } = Fixtures;
 
 const lab = exports.lab = Lab.script();
@@ -10,7 +10,7 @@ const lab = exports.lab = Lab.script();
 const { describe, it, before } = lab;
 const { expect } = Code;
 
-describe('GET /ice-servers', () => {
+describe('GET /prosody/auth/bot', () => {
 
   let server;
 
@@ -21,7 +21,7 @@ describe('GET /ice-servers', () => {
 
   it('requires auth', () => {
 
-    return server.inject({ method: 'GET', url: '/ice-servers' })
+    return server.inject({ method: 'GET', url: '/prosody/auth/bot' })
       .then((res) => {
 
         expect(res.statusCode).to.equal(401);
@@ -30,24 +30,15 @@ describe('GET /ice-servers', () => {
 
   it('works', () => {
 
-    const session = Fixtures.session();
-    return server.inject({ method: 'GET', url: '/ice-servers', credentials: session })
-      .then((res) => {
-
-        expect(res.statusCode).to.equal(200);
-      });
-  });
-
-  it('auth', () => {
-
     const headers = {
-      authorization: Fixtures.clientToken(Fixtures.session())
+      authorization: Fixtures.prosodyTokenHeader({ id: 'testUser' }, 'bots')
     };
 
-    return server.inject({ method: 'GET', url: '/ice-servers', headers })
+    return server.inject({ method: 'GET', url: '/prosody/auth/bot', headers })
       .then((res) => {
 
         expect(res.statusCode).to.equal(200);
+        expect(res.result).to.equal('true');
       });
   });
 });

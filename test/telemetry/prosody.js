@@ -40,7 +40,7 @@ describe('POST /prosody/telemetry', () => {
         data: newRoom
       };
       const headers = {
-        authorization: Fixtures.prosodyAuthHeader('testUser')
+        authorization: Fixtures.prosodyBasicHeader('testUser')
       };
 
       return server.inject({ method: 'POST', url: '/prosody/telemetry', payload, headers })
@@ -80,7 +80,7 @@ describe('POST /prosody/telemetry', () => {
         data: newRoom
       };
       const headers = {
-        authorization: Fixtures.prosodyAuthHeader('testUser')
+        authorization: Fixtures.prosodyBasicHeader('testUser')
       };
       const destroyPayload = {
         eventType: 'room_destroyed',
@@ -127,7 +127,7 @@ describe('POST /prosody/telemetry', () => {
         }
       };
       const headers = {
-        authorization: Fixtures.prosodyAuthHeader('testUser')
+        authorization: Fixtures.prosodyBasicHeader('testUser')
       };
 
       return server.inject({ method: 'POST', url: '/prosody/telemetry', payload, headers })
@@ -165,7 +165,7 @@ describe('POST /prosody/telemetry', () => {
         }
       };
       const headers = {
-        authorization: Fixtures.prosodyAuthHeader('testUser')
+        authorization: Fixtures.prosodyBasicHeader('testUser')
       };
 
       return server.inject({ method: 'POST', url: '/prosody/telemetry', payload, headers })
@@ -202,7 +202,7 @@ describe('POST /prosody/telemetry', () => {
         }
       };
       const headers = {
-        authorization: Fixtures.prosodyAuthHeader('testUser')
+        authorization: Fixtures.prosodyBasicHeader('testUser')
       };
 
       return server.inject({ method: 'POST', url: '/prosody/telemetry', payload, headers })

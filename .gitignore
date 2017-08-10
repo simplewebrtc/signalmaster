@@ -1,4 +1,5 @@
 node_modules
-config/prosody.cfg.lua
+config/*.lua
 config/local.json
 config/*.pem
+coverage.html

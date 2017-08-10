@@ -34,7 +34,7 @@ describe('POST /prosody/rooms/affiliation', () => {
       data: newRoom
     };
     const headers = {
-      authorization: Fixtures.prosodyAuthHeader('testUser')
+      authorization: Fixtures.prosodyBasicHeader('testUser')
     };
 
     return server.inject({ method: 'POST', url: '/prosody/telemetry', payload: createPayload, headers })

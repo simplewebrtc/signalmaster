@@ -26,7 +26,7 @@ describe('POST /config/user', () => {
 
     const iceServers = Fixtures.iceServers();
     const session = Fixtures.session();
-    const token = Fixtures.token(session);
+    const token = Fixtures.apiToken(session);
 
     Nock(Config.talky.ice.servers[0])
       .get('/ice-servers.json')
@@ -62,7 +62,7 @@ describe('POST /config/user', () => {
           session_id: registeredUser.id
         };
         const headers = {
-          authorization: Fixtures.prosodyAuthHeader('testUser')
+          authorization: Fixtures.prosodyBasicHeader('testUser')
         };
 
         return server.inject({ method: 'POST', url: '/prosody/rooms/user-info', payload, headers });

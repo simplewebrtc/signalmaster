@@ -4,7 +4,7 @@
   "description": "Talky Metrics API",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon -e js,json,lua,pug,css server.js",
+    "start": "node server.js",
     "migrate": "knex migrate:latest",
     "rollback": "knex migrate:rollback",
     "lint": "eslint .",

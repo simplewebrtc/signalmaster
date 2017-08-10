@@ -1,0 +1,5 @@
+/node_modules
+/prosody_modules
+/prosody_deps
+/k8s
+/test

@@ -1,0 +1,52 @@
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  labels:
+    name: talky-core-api
+  name: talky-core-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: talky-api-01
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      name: talky-api-01
+      labels:
+        name: talky-api-01
+    spec:
+      containers:
+        - name: api
+          image: andyet/talky-core-api:stage
+          imagePullPolicy: Always
+          env:
+          - name: KUBERNETES_RO_SERVICE_HOST
+            value: 127.0.0.1
+          - name: KUBERNETES_RO_SERVICE_PORT
+            value: "8001"
+          - name: POSTGRES_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: cm-talky-api
+                key: postgres-host
+          lifecycle:
+            postStart:
+              exec:
+                command: ["node", "/app/scripts/create-configmap.js"]
+        - image: lachlanevenson/k8s-kubectl:latest
+          imagePullPolicy: Always
+          name: kubectl
+          args:
+          - proxy
+          - -p
+          - "8001"
+      dnsPolicy: ClusterFirst
+      hostNetwork: true
+      imagePullSecrets:
+      - name: andyetops
+      nodeSelector:
+        service: talky-core-api
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 10

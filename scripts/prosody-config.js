@@ -9,7 +9,7 @@ const Domains = InflateDomains(Config.talky.domains);
 console.log(`
 admins = {}
 plugin_paths = {
-    "${__dirname}/../prosody_modules";
+    "/etc/prosody_modules";
     "/usr/lib/prosody-modules";
 }
 

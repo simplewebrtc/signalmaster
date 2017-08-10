@@ -1,0 +1,38 @@
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  labels:
+    name: talky-core-prosody
+  name: talky-core-prosody
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: talky-prosody-01
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      name: talky-prosody-01
+      labels:
+        name: talky-prosody-01
+    spec:
+      containers:
+      - image: andyet/prosody-docker:api
+        imagePullPolicy: Always
+        name: prosody
+        volumeMounts:
+        - mountPath: /etc/prosody
+          name: prosody-config
+      dnsPolicy: ClusterFirst
+      volumes:
+      - name: prosody-config
+        configMap:
+          name: prosody-config
+      hostNetwork: true
+      imagePullSecrets:
+      - name: andyetops
+      nodeSelector:
+        service: talky-core-api
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 10

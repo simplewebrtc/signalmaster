@@ -1,4 +1,5 @@
 {
+  "isDevTLS": false,
   "good": {
     "includes": {
       "request": ["headers"]
@@ -19,10 +20,36 @@
       ]
     }
   },
+  "auth": {
+    "secret": "internal-use-jwt-password-makethisoneprettysecureok",
+    "options": {
+      "algorithm": "HS256"
+    }
+  },
   "db": {
-    "host": "$POSTGRES_HOST",
+    "host": "talky-api-db-00.cz0esz3hqll8.us-east-1.rds.amazonaws.com",
     "user": "talky",
     "password": "password",
     "database": "talky_api"
+  },
+  "talky": {
+    "license": { "roomLimit": 5, "userLimit": 5, "expiresIn": "30d" },
+
+    "apiKey": "customer-api-shared-jwt-password-makethisoneprettysecureok",
+
+    "domains": {
+      "api": "localhost"
+    },
+
+    "ice": {
+      "secret": "foo",
+      "servers": [
+        "http://ice.kestrel.link"
+      ]
+    },
+
+    "metrics": {
+      "maskRoomNames": true
+    }
   }
 }

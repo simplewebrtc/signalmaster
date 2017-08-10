@@ -16,6 +16,12 @@ exports.iceServers = function () {
   const result = [{
     type: 'turn',
     host: '10.0.0.42'
+  }, {
+    type: 'turns',
+    host: '10.0.0.43'
+  }, {
+    type: 'stun',
+    host: '10.0.0.44'
   }];
 
   return result;

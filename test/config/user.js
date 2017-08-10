@@ -46,8 +46,9 @@ describe('POST /config/user', () => {
         const decodedJid = JSON.parse(Base32.decode(user_id.split('@')[0]));
 
         expect(registeredUser.iceServers).to.part.include(iceServers);
-        expect(registeredUser.iceServers).to.part.include(iceServers);
         expect(registeredUser.iceServers[0]).to.include(['username', 'password']);
+        expect(registeredUser.iceServers[1]).to.include(['username', 'password']);
+        expect(registeredUser.iceServers[2]).to.not.include(['username', 'password']);
         expect(decodedJid.id).to.equal(session.id);
         expect(decodedJid.scopes).to.equal(session.scopes);
         return server.inject({ method: 'GET', url: `/dashboard/sessions/${registeredUser.id}` });

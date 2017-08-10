@@ -41,4 +41,17 @@ describe('GET /prosody/auth/bot', () => {
         expect(res.result).to.equal('true');
       });
   });
+
+  it('invalid auth', () => {
+
+    const headers = {
+      authorization: Fixtures.prosodyBasicHeader('testUser')
+    };
+
+    return server.inject({ method: 'GET', url: '/prosody/auth/bot', headers })
+      .then((res) => {
+
+        expect(res.statusCode).to.equal(401);
+      });
+  });
 });

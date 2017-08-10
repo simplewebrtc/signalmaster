@@ -92,7 +92,9 @@ exports.createLicense = function (opts) {
 };
 
 
-if (require.main === module) {
+//Output token to stdout if being run from command line
+//$lab:coverage:off$
+if (!module.parent) {
   const Readline = require('readline-sync');
   const ParseArgs = require('minimist');
   const opts = ParseArgs(process.argv.slice(2));
@@ -119,4 +121,4 @@ if (require.main === module) {
 
   console.log(token);
 }
-
+//$lab:coverage:on$

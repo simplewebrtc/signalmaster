@@ -65,6 +65,6 @@ describe('Bot account', () => {
         expect(result).to.include({ userType: 'bot', id: botUser.id });
         return db.sessions.destroy({ id: botUser.id });
       });
-    return db.sessions.destroy({ id: botUser.id });
   });
+
 });

@@ -8,8 +8,8 @@ module.exports = {
   handler: async function (request, reply) {
 
     const params = Object.assign({}, request.query);
-    const limit = params.limit || 25;
-    params.offset = ((params.page || 1) - 1) * limit;
+    const limit = params.limit;
+    params.offset = (params.page - 1) * limit;
 
     const count = await this.db.rooms.count(params);
     const activeCount = await this.db.rooms.count_active();
@@ -47,7 +47,7 @@ module.exports = {
   validate: {
     query: {
       limit: Joi.number().default(25).min(1).max(100),
-      page: Joi.number().positive()
+      page: Joi.number().positive().default(1)
     }
   }
 };

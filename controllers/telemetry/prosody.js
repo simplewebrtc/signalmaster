@@ -14,9 +14,11 @@ module.exports = {
     let { name } = data;
     const { jid } = data;
 
+    //$lab:coverage:off$
     if (name && Config.talky.metrics && Config.talky.metrics.maskRoomNames) {
       name = Crypto.createHash('sha1').update(name).digest('base64');
     }
+    //$lab:coverage:on$
 
     const session = await this.db.sessions.findOne({ id: session_id });
 

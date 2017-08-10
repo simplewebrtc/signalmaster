@@ -10,14 +10,17 @@ module.exports = {
 
     const { eventType, peerId, roomId } = request.payload;
     const session = request.auth.credentials;
-    this.db.events.insert({
+    const result = this.db.events.insert({
       type: eventType,
-      peer_id: peerId || null,
-      room_id: roomId || null,
+      peer_id: peerId,
+      room_id: roomId,
       actor_id: session.id
-    })
-      .then(() => reply(request.payload))
-      .catch((err) => reply(err));
+    }).then(() => {
+
+      return request.payload;
+    });
+
+    return reply(result);
   },
   validate: {
     payload: {

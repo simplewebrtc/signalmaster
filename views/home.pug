@@ -5,32 +5,43 @@ block content
     h3 Talky Core API Server
     h2.supersize #{domains.api}
   section.content-narrower
+    h4 Domains
     table
       tbody
         tr
-          th(colspan='2') API Domain
+          th API
           td #{domains.api}
         tr
-          td
           th Users
           td #{domains.users}
         tr
-          td
           th Guests
           td #{domains.guests}
         tr
-          td
           th Bots
           td #{domains.bots}
         tr
-          td
           th Rooms
           td #{domains.rooms}
-        for server, i in iceServers
-          tr
-            if i === 0
-              th(colspan='2') ICE Server
+
+    h4 ICE Servers
+    ul
+      for server, i in iceServers
+        li
+          a(href=server) #{server}
+
+    h4 Browser Screensharing Extensions 
+    table
+      tbody
+        tr
+          th Chrome
+          td
+            if screensharingExtensions.chrome
+              a(href='https://chrome.google.com/webstore/detail/' + screensharingExtensions.chrome) #{screensharingExtensions.chrome}
             else
-              td(colspan='2')
+              Not configured
+        if screensharingExtensions.firefox
+          tr
+            th Firefox (Obsolete)
             td
-              a(href=server) #{server}
+              a(href='https://addons.mozilla.org/en-US/firefox/addon/' + screensharingExtensions.firefox) #{screensharingExtensions.firefox}

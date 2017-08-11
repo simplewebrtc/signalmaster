@@ -26,6 +26,7 @@ module.exports = {
       telemetryUrl: `${BuildUrl('http', Domains.api)}/telemetry`,
       roomServer: Domains.rooms,
       iceServers: ice,
+      screensharingExtensions: TalkyCoreConfig.screensharingExtensions || {},
       credential: 'some-signed-jwt-token'//TODO
     };
 

@@ -10,6 +10,10 @@ module.exports = {
   tags: ['web'],
   handler: function (request, reply) {
 
-    reply.view('home', { domains: Domains, iceServers: Config.talky.ice.servers });
+    reply.view('home', {
+      domains: Domains,
+      iceServers: Config.talky.ice.servers,
+      screensharingExtensions: Config.talky.screensharingExtensions || {}
+    });
   }
 };

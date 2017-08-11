@@ -18,6 +18,10 @@
 
     "metrics": {
       "maskRoomNames": true
+    },
+
+    "screensharingExtensions": {
+      "chrome": "ikljcimogjdaoojhmkbioipmffflodgk"
     }
   },
   "db": {

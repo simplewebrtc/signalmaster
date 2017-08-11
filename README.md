@@ -94,7 +94,7 @@ I think it's safe for us to just work out of the [initial migrations]('./migrati
 To run the API with HTTPS (needed for local testing clients), run:
 
 ```sh
-$ npm run certgen
+$ npm run create-key-pair 
 ```
 
 You will be prompted to fill in information for the certificate. The `Common Name` setting MUST be set to the domain/port you are using:

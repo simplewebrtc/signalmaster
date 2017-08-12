@@ -1,5 +1,9 @@
 {
   "isDevTLS": false,
+  "TLS": {
+    "pemFile": "/etc/prosody_certs/certs.pem",
+    "keyFile": "/etc/prosody_certs/certs.key"
+  },
   "good": {
     "includes": {
       "request": ["headers"]
@@ -27,10 +31,13 @@
     }
   },
   "db": {
-    "host": "talky-api-db-00.cz0esz3hqll8.us-east-1.rds.amazonaws.com",
+    "host": "$POSTGRES_HOST",
     "user": "talky",
     "password": "password",
     "database": "talky_api"
+  },
+  "server": {
+    "port": 8003
   },
   "talky": {
     "license": { "roomLimit": 5, "userLimit": 5, "expiresIn": "30d" },
@@ -38,13 +45,15 @@
     "apiKey": "customer-api-shared-jwt-password-makethisoneprettysecureok",
 
     "domains": {
-      "api": "localhost"
+      "api": "stage-api.talky.me",
+      "guests": "stage-guests.talky.me",
+      "rooms": "stage-rooms.talky.me"
     },
 
     "ice": {
-      "secret": "foo",
+      "secret": "$TURN_SECRET",
       "servers": [
-        "http://ice.kestrel.link"
+        "http://turn-stage.talky.io"
       ]
     },
 

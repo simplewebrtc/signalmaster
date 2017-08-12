@@ -70,6 +70,14 @@ modules_disabled = {
     "tls";
 }
 `);
+} else {
+  // set default ssl certs
+  console.log(`
+ssl = {
+    key = "${Config.TLS.keyFile}";
+    certificate = "${Config.TLS.pemFile}";
+}
+    `);
 }
 
 

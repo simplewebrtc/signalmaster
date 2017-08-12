@@ -8,19 +8,34 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      name: talky-prosody-01
+      name: talky-core-prosody
   strategy:
     type: Recreate
   template:
     metadata:
-      name: talky-prosody-01
+      name: talky-core-prosody
       labels:
-        name: talky-prosody-01
+        name: talky-core-prosody
     spec:
       containers:
       - image: andyet/prosody-docker:api
         imagePullPolicy: Always
         name: prosody
+        ports:
+        - containerPort: 5269
+          hostPort: 5269
+          name: s2s
+          protocol: TCP
+        - containerPort: 5222
+          hostPort: 5222
+          name: c2s
+          protocol: TCP
+        - containerPort: 5280
+          name: bosh
+          protocol: TCP
+        - containerPort: 5281
+          name: bosh-tls
+          protocol: TCP
         volumeMounts:
         - mountPath: /etc/prosody
           name: prosody-config
@@ -29,7 +44,6 @@ spec:
       - name: prosody-config
         configMap:
           name: prosody-config
-      hostNetwork: true
       imagePullSecrets:
       - name: andyetops
       nodeSelector:

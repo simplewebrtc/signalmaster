@@ -12,7 +12,8 @@ RUN apk update \
  && apk add --no-cache wget \
  && npm i -q \
  && mkdir -p /etc/prosody \
- && npm run prosody-config-install-etc \
  && chmod +x  ./scripts/post-prosody-config.sh
+
+
 
 CMD ["npm", "start"]

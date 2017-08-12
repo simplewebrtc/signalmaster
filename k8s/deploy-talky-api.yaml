@@ -8,14 +8,14 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      name: talky-api-01
+      name: talky-core-api
   strategy:
     type: Recreate
   template:
     metadata:
-      name: talky-api-01
+      name: talky-core-api
       labels:
-        name: talky-api-01
+        name: talky-core-api
     spec:
       containers:
         - name: api
@@ -31,6 +31,11 @@ spec:
               configMapKeyRef:
                 name: cm-talky-api
                 key: postgres-host
+          - name: TURN_SECRET
+            valueFrom:
+              configMapKeyRef:
+                name: cm-talky-api
+                key: turn-auth-shared
           lifecycle:
             postStart:
               exec:

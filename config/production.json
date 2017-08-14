@@ -44,7 +44,6 @@
   },
   "talky": {
     "license": "$TALKY_LICENSE",
-
     "apiKey": "customer-api-shared-jwt-password-makethisoneprettysecureok",
 
     "domains": {

@@ -31,6 +31,11 @@ spec:
               configMapKeyRef:
                 name: cm-talky-api
                 key: postgres-host
+          - name: TALKY_LICENSE
+            valueFrom:
+              configMapKeyRef:
+                name: cm-talky-api
+                key: license-key
           - name: TURN_SECRET
             valueFrom:
               configMapKeyRef:

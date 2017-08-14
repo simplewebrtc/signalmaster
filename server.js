@@ -45,7 +45,7 @@ server.on('request-error', (err, m) => {
 });
 
 const wsPort = Config.getconfig.isDev ? (Config.isDevTLS ? 5281 : 5280) : 5281;
-const wsProxy = Proxy.createProxyServer({ target: `${BuildUrl('ws', Domains.api, wsPort)}` });
+const wsProxy = Proxy.createProxyServer({ target: `${BuildUrl('ws', Domains.prosody, wsPort)}` });
 wsProxy.on('error', (err) => {
 
   server.log(err, 'Prosody not responding');

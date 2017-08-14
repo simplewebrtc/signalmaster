@@ -50,7 +50,8 @@
     "domains": {
       "api": "stage-api.talky.me",
       "guests": "stage-guests.talky.me",
-      "rooms": "stage-rooms.talky.me"
+      "rooms": "stage-rooms.talky.me",
+      "prosody": "stage-prosody.talky.me"
     },
 
     "ice": {

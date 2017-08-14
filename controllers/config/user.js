@@ -51,10 +51,11 @@ module.exports = {
     const { ua, browser, device, os } = UAParser(request.headers['user-agent']);
 
     const id = UUID.v4();
-    const user_id = `${Base32.encode(JSON.stringify({
+    const username = Base32.encode(JSON.stringify({
       id: customerData.id,
       scopes: customerData.scopes || []
-    }))}@${Domains.users}`;
+    }));
+    const user_id = `${username}@${Domains.users}`;
 
     try {
       await this.db.sessions.insert({
@@ -87,7 +88,7 @@ module.exports = {
         expiresIn: '1 day',
         issuer: Domains.api,
         audience: Domains.guests,
-        subject: user_id
+        subject: username
       })
     };
 

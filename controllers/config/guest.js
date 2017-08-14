@@ -73,7 +73,7 @@ module.exports = {
         expiresIn: '1 day',
         issuer: Domains.api,
         audience: Domains.guests,
-        subject: user_id
+        subject: id
       })
     };
 

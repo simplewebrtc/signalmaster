@@ -43,7 +43,7 @@
     }
   },
   "talky": {
-    "license": { "roomLimit": 5, "userLimit": 5, "expiresIn": "30d" },
+    "license": "$TALKY_LICENSE",
 
     "apiKey": "customer-api-shared-jwt-password-makethisoneprettysecureok",
 

@@ -87,6 +87,12 @@ console.log(`
 VirtualHost "${Domains.api}"
 `);
 
+if (Domains.prosody !== Domains.api) {
+  console.log(`
+VirtualHost "${Domains.prosody}"
+`);
+}
+
 console.log(`
 VirtualHost "${Domains.guests}"
     authentication = "talky_core";

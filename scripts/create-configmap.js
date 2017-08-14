@@ -4,6 +4,7 @@ const FS = require('fs');
 const Exec = require('child_process').exec;
 
 Exec('npm run prosody-config-install-etc', (err, stdout, stderr) => {
+
   FS.readFile('/etc/prosody/prosody.cfg.lua', 'utf8', (err, data) => {
 
     if (err) {
@@ -20,14 +21,14 @@ Exec('npm run prosody-config-install-etc', (err, stdout, stderr) => {
       }
 
       console.log('Config Written');
-      Exec('/bin/sh /app/scripts/post-prosody-config.sh', (err, stdout, stderr) => {
+      Exec('/bin/sh /app/scripts/post-prosody-config.sh', (err, stdout2, stderr2) => {
 
         if (err) {
           console.log(err);
         }
 
-        process.stdout.write(stdout);
-        process.stderr.write(stderr);
+        process.stdout.write(stdout2);
+        process.stderr.write(stderr2);
       });
     });
   });

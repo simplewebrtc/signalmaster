@@ -9,6 +9,7 @@ const Domains = InflateDomains(Config.talky.domains);
 console.log(`
 admins = {}
 plugin_paths = {
+    ${Config.getconfig.env !== 'production' ? `"${__dirname}/../prosody_docker/prosody_modules";` : ''}
     "/etc/prosody_modules";
     "/usr/lib/prosody-modules";
 }
@@ -70,7 +71,8 @@ modules_disabled = {
     "tls";
 }
 `);
-} else {
+}
+else {
   // set default ssl certs
   console.log(`
 ssl = {

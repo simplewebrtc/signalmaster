@@ -53,7 +53,7 @@
     "ice": {
       "secret": "$TURN_SECRET",
       "servers": [
-        "http://turn-stage.talky.io"
+        "http://turn-stage.talky.io:8000"
       ]
     },
 

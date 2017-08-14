@@ -37,7 +37,10 @@
     "database": "talky_api"
   },
   "server": {
-    "port": 8003
+    "port": 8003,
+    "routes": {
+      "cors": true
+    }
   },
   "talky": {
     "license": { "roomLimit": 5, "userLimit": 5, "expiresIn": "30d" },

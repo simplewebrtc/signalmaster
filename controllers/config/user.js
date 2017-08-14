@@ -74,7 +74,7 @@ module.exports = {
     const result = {
       id,
       userId: user_id,
-      signalingUrl: `${BuildUrl('ws', Domains.api)}/ws-bind`,
+      signalingUrl: `${BuildUrl('ws', Domains.prosody)}/ws-bind`,
       telemetryUrl: `${BuildUrl('http', Domains.api)}/telemetry`,
       roomServer: Domains.rooms,
       iceServers: ice,

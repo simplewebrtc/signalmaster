@@ -3,20 +3,23 @@ extends layout_admin
 block content
   section
     h3 Talky Core Licensing Information
-    table
-      tbody
-        tr
-          th License Type
-          td #{license.iss === 'licenses.talky.io' ? 'Production' : 'Development'}
-        tr
-          th Expires
-          td #{license.exp ? new Date(license.exp * 1000) : 'Never'}
-        tr
-          th Active User Limit
-          td #{license.userLimit || 'Unrestricted'}
-        tr
-          th Active Room Limit
-          td #{license.roomLimit || 'Unrestricted'}
-        tr 
-          th Room Size Limit
-          td #{license.roomUserLimit || 'Unrestricted'}
+    if licenseError
+      .message.message-error #{licenseError}
+    else    
+      table
+        tbody
+          tr
+            th License Type
+            td #{license.iss === 'licenses.talky.io' ? 'Production' : 'Development'}
+          tr
+            th Expires
+            td #{license.exp ? new Date(license.exp * 1000) : 'Never'}
+          tr
+            th Active User Limit
+            td #{license.userLimit || 'Unrestricted'}
+          tr
+            th Active Room Limit
+            td #{license.roomLimit || 'Unrestricted'}
+          tr 
+            th Room Size Limit
+            td #{license.roomUserLimit || 'Unrestricted'}

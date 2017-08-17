@@ -22,7 +22,7 @@ module.exports = {
     const result =  {
       id: randomId,
       userId: `${randomId}@${Domains.bots}`,
-      signalingUrl: `${BuildUrl('ws', Domains.prosody)}/ws-bind`,
+      signalingUrl: `${BuildUrl('ws', Domains.signaling)}/ws-bind`,
       telemetryUrl: `${BuildUrl('http', Domains.api)}/telemetry`,
       roomServer: Domains.rooms,
       iceServers: ice,

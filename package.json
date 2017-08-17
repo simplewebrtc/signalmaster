@@ -25,6 +25,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "array-shuffle": "^1.0.1",
     "base32-crockford-browser": "^1.0.0",
     "boom": "^5.1.0",
     "getconfig": "^3.1.0",

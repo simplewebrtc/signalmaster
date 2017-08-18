@@ -36,6 +36,7 @@ modules_enabled = {
     "bosh";
     "websocket";
     "talky_core_metrics";
+    "talky_core_instance_check";
 }
 
 allow_registration = false
@@ -63,6 +64,7 @@ log = {
 
 talky_core_api_key = "${Config.auth.secret}"
 talky_core_telemetry_url = "${BuildUrl('http', Domains.api)}/prosody/telemetry"
+talky_core_instance_check_url = "${BuildUrl('http', Domains.api)}/instance-check";
 `);
 
 if (Config.getconfig.env !== 'production') {

@@ -21,6 +21,9 @@ module.exports = [
   // Fetch ICE servers
   { method: 'GET', path: '/ice-servers', config: Controllers.ice },
 
+  // Domain verificiation
+  { method: 'GET', path: '/instance-check', config: Controllers.instance_check },
+
   // Client auto-configuration
   { method: 'POST', path: '/config/user', config: Controllers.config.user },
   { method: 'POST', path: '/config/guest', config: Controllers.config.guest },

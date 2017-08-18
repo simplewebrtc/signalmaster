@@ -87,9 +87,9 @@ console.log(`
 VirtualHost "${Domains.api}"
 `);
 
-if (Domains.prosody !== Domains.api) {
+if (Domains.signaling !== Domains.api) {
   console.log(`
-VirtualHost "${Domains.prosody}"
+VirtualHost "${Domains.signaling}"
 `);
 }
 

@@ -1,5 +1,6 @@
 'use strict';
 
+const Config = require('getconfig');
 const InstanceCheck = require('../lib/instance_check');
 const Schema = require('../lib/schema');
 
@@ -9,7 +10,9 @@ module.exports = {
   handler: function (request, reply) {
 
     return reply({
-      instance: InstanceCheck.getInstanceID()
+      instance: InstanceCheck.getInstanceID(),
+      host: Config.talky.domains.api,
+      service: 'api'
     });
   },
   response: {

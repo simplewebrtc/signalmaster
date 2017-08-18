@@ -9,6 +9,7 @@ end
 local http = require "socket.http";
 local https = require "ssl.https";
 local json_encode = require "util.json".encode;
+local json_decode = require "util.json".decode;
 local serialize = require "util.serialization".serialize;
 local ltn12 = require("ltn12")
 
@@ -34,11 +35,12 @@ local function fetch_identifier()
     });
 
     local data = table.concat(response);
+    local parsed = json_decode(data);
 
     local code = 200;
     if type(code) == "number" and code >= 200 and code <= 299 then
         module:log("debug", "HTTP API returned identifer: "..data);
-        return data;
+        return parsed;
     else
         module:log("debug", "HTTP API returned status code: "..code);
     end
@@ -55,11 +57,20 @@ module:provides("http", {
             response.headers.content_type = "application/json";
             response.headers.access_control_allow_origin = "*";
 
+            local host = event.request.headers.host;
+            local host_parts = {};
+            for match in string.gmatch(host, "[^:]+") do
+                table.insert(host_parts, match);
+            end
+            local domain = host_parts[1];
+
             local identifier, err = fetch_identifier();
             if err then
                 response.statusCode = 404;
             else
-                return identifier;
+                identifier.service = "signaling";
+                identifier.host = domain;
+                return json_encode(identifier);
             end
         end
     }

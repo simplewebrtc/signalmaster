@@ -8,13 +8,14 @@ module.exports = {
   tags: ['api', 'metrics'],
   handler: function (request, reply) {
 
-    const { eventType, peerId, roomId } = request.payload;
+    const { eventType, peerId, roomId, data } = request.payload;
     const session = request.auth.credentials;
     const result = this.db.events.insert({
       type: eventType,
       peer_id: peerId,
       room_id: roomId,
-      actor_id: session.id
+      actor_id: session.id,
+      data: data || {}
     }).then(() => {
 
       return request.payload;
@@ -27,7 +28,7 @@ module.exports = {
       eventType: Schema.eventTypes,
       peerId: Joi.string(),
       roomId: Joi.string(),
-      data: Joi.object()
+      data: Joi.object().unknown()
     }
   },
   auth: 'client-token'

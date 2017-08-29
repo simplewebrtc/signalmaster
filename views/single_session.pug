@@ -24,6 +24,8 @@ block dashboardContent
     thead
       th Event
       th Room
+      th Peer
+      th Data
       th Time
     tbody
       each val in data
@@ -31,4 +33,11 @@ block dashboardContent
           td #{val.type}
           td
             a(href='/dashboard/rooms/' + val.room_id) #{val.room_id}
+          td
+            if(val.peer_id)
+              a(href='/dashboard/sessions/' + val.peer_id) #{val.peer_id}
+          td
+            if(val.data)
+              code
+                #{JSON.stringify(val.data)}
           td #{val.created_at}

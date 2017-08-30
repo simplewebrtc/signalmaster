@@ -1,0 +1,13 @@
+pipeline:
+  docker:
+    image: plugins/docker
+    repo: andyet/talky-core-api
+    tags: ${DRONE_TAG##v}
+    secrets: [ docker_username, docker_password, docker_email ]
+    when:
+      event: tag
+  slack:
+    image: plugins/slack
+    username: drone
+    channel: alerts
+    secrets: [ slack_webhook ]

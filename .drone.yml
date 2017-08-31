@@ -13,7 +13,7 @@ pipeline:
     kubernetes_token: ${KUBERNETES_TOKEN}
     deployment: talky-core-api
     repo: andyet/talky-core-api
-    container: talky-core-api
+    container: api
     namespace: default
     tag: 
     - 0.1

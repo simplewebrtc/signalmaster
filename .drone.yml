@@ -6,6 +6,20 @@ pipeline:
     secrets: [ docker_username, docker_password, docker_email ]
     when:
       event: tag
+  deploy_stage:
+    image: quay.io/honestbee/drone-kubernetes
+    kubernetes_server: ${KUBERNETES_SERVER}
+    kubernetes_cert: ${KUBERNETES_CERT}
+    kubernetes_token: ${KUBERNETES_TOKEN}
+    deployment: talky-core-api
+    repo: andyet/talky-core-api
+    container: talky-core-api
+    namespace: default
+    tag: 
+    - 0.1
+    when:
+      branch: master
+    secrets: [ kubernetes_cert, kubernetes_server, kubernetes_token ]
   slack:
     image: plugins/slack
     username: drone

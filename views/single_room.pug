@@ -30,13 +30,13 @@ block dashboardContent
       if similarPrev
         tr
           th
-            a(href='/dashboard/rooms/' + similarPrev.roomid) Previous instance
+            a(href='/dashboard/rooms/' + similarPrev.id) Previous instance
           td #{similarPrev.delta}
           td #{similarPrev.duration}
       if similarNext
         tr
           th
-            a(href='/dashboard/rooms/' + similarNext.roomid) Next instance
+            a(href='/dashboard/rooms/' + similarNext.id) Next instance
           td #{similarNext.delta}
           td #{similarNext.duration}
 

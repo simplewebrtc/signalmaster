@@ -18,8 +18,15 @@ spec:
         name: talky-core-api
     spec:
       containers:
+        - name: kubectl
+          image: lachlanevenson/k8s-kubectl:latest
+          imagePullPolicy: Always
+          args:
+          - proxy
+          - -p
+          - "8001"
         - name: api
-          image: andyet/talky-core-api:stage
+          image: andyet/talky-core-api:0.1
           imagePullPolicy: Always
           env:
           - name: KUBERNETES_RO_SERVICE_HOST
@@ -44,14 +51,7 @@ spec:
           lifecycle:
             postStart:
               exec:
-                command: ["node", "/app/scripts/create-configmap.js"]
-        - image: lachlanevenson/k8s-kubectl:latest
-          imagePullPolicy: Always
-          name: kubectl
-          args:
-          - proxy
-          - -p
-          - "8001"
+                command: ["/usr/local/bin/node", "/app/scripts/create-configmap.js"]
       dnsPolicy: ClusterFirst
       hostNetwork: true
       imagePullSecrets:

@@ -18,7 +18,7 @@ spec:
         name: talky-core-prosody
     spec:
       containers:
-      - image: andyet/prosody-docker:api
+      - image: andyet/prosody:api
         imagePullPolicy: Always
         name: prosody
         ports:

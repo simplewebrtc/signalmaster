@@ -16,9 +16,10 @@ pipeline:
     container: api
     namespace: default
     tag: 
-    - 0.1
+    - ${DRONE_TAG##v}
     when:
       branch: master
+      event: push
     secrets: [ kubernetes_cert, kubernetes_server, kubernetes_token ]
   slack:
     image: plugins/slack

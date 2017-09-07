@@ -17,12 +17,18 @@ module.exports = {
     }
 
     const events = await this.db.events.find({ room_id: id });
+    events.sort((a, b) => {
+
+      return a.created_at > b.created_at ? 1 : a.created_at < b.created_at ? -1 : 0;
+    });
+
     const similarPrev = (await this.db.rooms.get_similar_prev({
       name: room.name,
       interval: 5,
       created_at: room.created_at,
       ended_at: room.ended_at
     }))[0];
+
     const similarNext = (await this.db.rooms.get_similar_next({
       name: room.name,
       interval: 5,

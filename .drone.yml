@@ -2,7 +2,9 @@ pipeline:
   docker:
     image: plugins/docker
     repo: andyet/talky-core-api
-    tags: ${DRONE_TAG##v}
+    tags: 
+      - ${DRONE_TAG##v}
+      - latest
     secrets: [ docker_username, docker_password, docker_email ]
     when:
       event: tag
@@ -16,10 +18,10 @@ pipeline:
     container: api
     namespace: default
     tag: 
-    - 0.2
+    - latest
     when:
       branch: master
-      event: push
+      event: [ push, tag ]
     secrets: [ kubernetes_cert, kubernetes_server, kubernetes_token ]
   slack:
     image: plugins/slack

@@ -20,10 +20,16 @@ module.exports = {
     }
     //$lab:coverage:on$
 
-    const session = await this.db.sessions.findOne({ id: session_id });
+    let session = await this.db.sessions.findOne({ id: session_id });
 
     if (!session) {
-      //TODO edge case to handle
+      // This exists to accommodate existing Talky iOS app users.
+      session = {
+        id: session_id,
+        user_id: `mobile-user-${session_id}`,
+        type: 'mobile'
+      };
+      await this.db.sessions.insert(session);
     }
 
     if (room_id) {
@@ -72,14 +78,13 @@ module.exports = {
       });
       return reply();
     }
+
     await this.db.events.insert({
       type: eventType,
       room_id: null,
       actor_id: session_id
     });
     return reply();
-
-
   },
   validate: {
     payload: {

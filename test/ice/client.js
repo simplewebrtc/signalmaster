@@ -2,7 +2,7 @@
 
 const Lab = require('lab');
 const Code = require('code');
-const Fixtures = require('./fixtures');
+const Fixtures = require('../fixtures');
 const { Server } = Fixtures;
 
 const lab = exports.lab = Lab.script();

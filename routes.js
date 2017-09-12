@@ -4,14 +4,6 @@ const Controllers = require('keyfob').load({ path: './controllers', fn: require 
 
 
 module.exports = [
-  // Public web routes for clients
-  { method: 'GET', path: '/', config: Controllers.home },
-  { method: 'GET', path: '/setup', config: Controllers.setup },
-  { method: 'GET', path: '/license', config: Controllers.license },
-  { method: 'GET', path: '/dashboard', config: Controllers.dashboard.home },
-  { method: 'GET', path: '/dashboard/sessions/{id}', config: Controllers.dashboard.get_one_session },
-  { method: 'GET', path: '/dashboard/rooms/{id}', config: Controllers.dashboard.get_one_room },
-
   // Signaling
   { method: 'GET', path: '/ws-bind', config: Controllers.signaling },
 
@@ -19,7 +11,7 @@ module.exports = [
   { method: 'GET', path: '/.well-known/host-meta.json', config: Controllers.hostmeta },
 
   // Fetch ICE servers
-  { method: 'GET', path: '/ice-servers', config: Controllers.ice },
+  { method: 'GET', path: '/ice-servers', config: Controllers.ice.client },
 
   // Domain verificiation
   { method: 'GET', path: '/instance-check', config: Controllers.instance_check },
@@ -33,11 +25,25 @@ module.exports = [
   { method: 'POST', path: '/telemetry', config: Controllers.telemetry.client },
 
 
+  // Web UI Routes
+  // ---------------------------------------------------------------------
+
+  { method: 'GET', path: '/', config: Controllers.home },
+  { method: 'GET', path: '/setup', config: Controllers.setup },
+  { method: 'GET', path: '/license', config: Controllers.license },
+  { method: 'GET', path: '/dashboard', config: Controllers.dashboard.home },
+  { method: 'GET', path: '/dashboard/sessions/{id}', config: Controllers.dashboard.get_one_session },
+  { method: 'GET', path: '/dashboard/rooms/{id}', config: Controllers.dashboard.get_one_room },
+
+
   // Internal routes for Prosody
   // ---------------------------------------------------------------------
 
   // Telemetry
   { method: 'POST', path: '/prosody/telemetry', config: Controllers.telemetry.prosody },
+
+  // Legacy ICE requests
+  { method: 'POST', path: '/prosody/ice-servers', config: Controllers.ice.prosody },
 
   // Authentication
   { method: 'GET', path: '/prosody/auth/user', config: Controllers.auth.user },
@@ -48,6 +54,9 @@ module.exports = [
   { method: 'POST', path: '/prosody/rooms/affiliation', config: Controllers.rooms.affiliation },
   { method: 'POST', path: '/prosody/rooms/user-info', config: Controllers.rooms.user_info },
 
-  //Static assets
+
+  // Static assets
+  // ---------------------------------------------------------------------
+
   { method: 'GET', path: '/{path*}', config: { handler: { directory: { path: './public', listing: false } }, auth: false } }
 ];

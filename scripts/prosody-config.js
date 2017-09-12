@@ -63,6 +63,7 @@ log = {
 }
 
 talky_core_api_key = "${Config.auth.secret}"
+talky_core_ice_url = "${BuildUrl('http', Domains.api)}/prosody/ice-servers";
 talky_core_telemetry_url = "${BuildUrl('http', Domains.api)}/prosody/telemetry"
 talky_core_instance_check_url = "${BuildUrl('http', Domains.api)}/instance-check";
 `);
@@ -97,6 +98,10 @@ VirtualHost "${Domains.signaling}"
 
 console.log(`
 VirtualHost "${Domains.guests}"
+    modules_enabled = {
+        "talky_core_ice";
+    };
+
     authentication = "talky_core";
     talky_core_auth_allow_anonymous = true;
     talky_core_auth_url = "${BuildUrl('http', Domains.api)}/prosody/auth/guest";

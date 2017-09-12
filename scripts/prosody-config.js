@@ -6,6 +6,22 @@ const InflateDomains = require('../lib/domains');
 const BuildUrl = require('../lib/build_url');
 const Domains = InflateDomains(Config.talky.domains);
 
+
+const Cert = (service) => {
+
+  if (Config.getconfig.env !== 'production' && !Config.isDevTLS) {
+    return '';
+  }
+
+  const cert = Config.tls[service];
+  if (!cert) {
+    return '';
+  }
+
+  return `ssl = { key = "${cert.keyFile}"; certificate = "${cert.pemFile}"; }`;
+};
+
+
 console.log(`
 admins = {}
 plugin_paths = {
@@ -68,7 +84,7 @@ talky_core_telemetry_url = "${BuildUrl('http', Domains.api)}/prosody/telemetry"
 talky_core_instance_check_url = "${BuildUrl('http', Domains.api)}/instance-check";
 `);
 
-if (Config.getconfig.env !== 'production') {
+if (Config.getconfig.env !== 'production' && !Config.isDevTLS) {
   console.log(`
 modules_disabled = {
     "tls";
@@ -77,12 +93,7 @@ modules_disabled = {
 }
 else {
   // set default ssl certs
-  console.log(`
-ssl = {
-    key = "${Config.TLS.keyFile}";
-    certificate = "${Config.TLS.pemFile}";
-}
-    `);
+  console.log(Cert('*'));
 }
 
 
@@ -105,18 +116,24 @@ VirtualHost "${Domains.guests}"
     authentication = "talky_core";
     talky_core_auth_allow_anonymous = true;
     talky_core_auth_url = "${BuildUrl('http', Domains.api)}/prosody/auth/guest";
+
+    ${Cert('guests')}
 `);
 
 console.log(`
 VirtualHost "${Domains.users}"
     authentication = "talky_core";
     talky_core_auth_url = "${BuildUrl('http', Domains.api)}/prosody/auth/user";
+
+    ${Cert('users')}
 `);
 
 console.log(`
 VirtualHost "${Domains.bots}"
     authentication = "talky_core";
     talky_core_auth_url = "${BuildUrl('http', Domains.api)}/prosody/auth/bot";
+
+    ${Cert('bots')}
 `);
 
 console.log(`
@@ -148,4 +165,6 @@ Component "${Domains.rooms}" "muc"
         "muc#roomconfig_affiliationnotify";
         "muc#roomconfig_roomname";
     };
+
+    ${Cert('rooms')}
 `);

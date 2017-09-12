@@ -1,8 +1,10 @@
 {
   "isDevTLS": false,
-  "TLS": {
-    "pemFile": "/etc/prosody_certs/certs.pem",
-    "keyFile": "/etc/prosody_certs/certs.key"
+  "tls": {
+    "*": {
+      "pemFile": "/etc/prosody_certs/certs.pem",
+      "keyFile": "/etc/prosody_certs/certs.key"
+    }
   },
   "good": {
     "includes": {

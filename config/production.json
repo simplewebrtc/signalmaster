@@ -45,6 +45,10 @@
     }
   },
   "talky": {
+    "admins": {
+      "admin": "admin"
+    },
+
     "license": "$TALKY_LICENSE",
     "apiKey": "customer-api-shared-jwt-password-makethisoneprettysecureok",
 

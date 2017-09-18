@@ -1,6 +1,9 @@
 {
   "isDevTLS": false,
   "talky": {
+    "admins": {
+      "testAdmin": "testing"
+    },
     "license": { "roomLimit": 5, "userLimit": 5, "expiresIn": "30d" },
     "apiKey": "testkey",
     "domains": {

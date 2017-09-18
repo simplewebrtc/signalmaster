@@ -1,6 +1,10 @@
 {
   "isDevTLS": false,
   "talky": {
+    "admins": {
+      "admin": "admin"
+    },
+
     "license": { "roomLimit": 5, "userLimit": 5, "expiresIn": "30d" },
 
     "apiKey": "customer-api-shared-jwt-password-makethisoneprettysecureok",

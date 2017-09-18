@@ -120,6 +120,14 @@ exports.Server = server.register([
       }
     });
 
+    server.auth.strategy('admin', 'basic', {
+      validateFunc: (request, username, password, cb) => {
+
+        const admins = Config.talky.admins || {};
+        return cb(null, admins[username] === password, {});
+      }
+    });
+
     server.views({
       engines: { pug: require('pug') },
       path: `${__dirname}/views`,

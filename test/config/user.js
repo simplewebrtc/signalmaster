@@ -51,7 +51,7 @@ describe('POST /config/user', () => {
         expect(registeredUser.iceServers[2]).to.not.include(['username', 'password']);
         expect(decodedJid.id).to.equal(session.id);
         expect(decodedJid.scopes).to.equal(session.scopes);
-        return server.inject({ method: 'GET', url: `/dashboard/sessions/${registeredUser.id}` });
+        return Fixtures.getAdminUrl(server, `/dashboard/sessions/${registeredUser.id}`);
       }).then((res) => {
 
         expect(res.statusCode).to.equal(200);

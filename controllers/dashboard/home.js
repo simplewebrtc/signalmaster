@@ -5,6 +5,7 @@ const Duration = require('humanize-duration');
 module.exports = {
   description: 'Dashboard',
   tags: ['web', 'metrics'],
+  auth: 'admin',
   handler: async function (request, reply) {
 
     const params = Object.assign({}, request.query);

@@ -10,6 +10,7 @@ const Domains = InflateDomains(Config.talky.domains);
 module.exports = {
   description: 'Talky License information',
   tags: ['web'],
+  auth: 'admin',
   handler: function (request, reply) {
 
     return CheckLicense().then((license) => {

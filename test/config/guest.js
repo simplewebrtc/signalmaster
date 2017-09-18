@@ -40,7 +40,7 @@ describe('Guest account', () => {
         guestUser = result;
         expect(guestUser.iceServers).to.part.include(iceServers);
         expect(guestUser.iceServers[0]).to.include(['username', 'password']);
-        return server.inject({ method: 'GET', url: `/dashboard/sessions/${guestUser.id}` });
+        return Fixtures.getAdminUrl(server, `/dashboard/sessions/${guestUser.id}`);
       }).then((res) => {
 
         expect(res.statusCode).to.equal(200);

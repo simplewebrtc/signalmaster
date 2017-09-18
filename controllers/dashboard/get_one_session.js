@@ -6,6 +6,7 @@ const Boom = require('boom');
 module.exports = {
   description: 'Dashboard',
   tags: ['web', 'metrics'],
+  auth: 'admin',
   handler: async function (request, reply) {
 
     const { id } = request.params;

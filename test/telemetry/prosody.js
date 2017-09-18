@@ -47,7 +47,7 @@ describe('POST /prosody/telemetry', () => {
         .then((res) => {
 
           expect(res.statusCode).to.equal(200);
-          return server.inject({ method: 'GET', url: `/dashboard/rooms/${newRoom.room_id}` });
+          return Fixtures.getAdminUrl(server, `/dashboard/rooms/${newRoom.room_id}`);
         }).then((res) => {
 
           expect(res.statusCode).to.equal(200);
@@ -95,7 +95,7 @@ describe('POST /prosody/telemetry', () => {
         }).then((res) => {
 
           expect(res.statusCode).to.equal(200);
-          return server.inject({ method: 'GET', url: `/dashboard/rooms/${newRoom.room_id}` });
+          return Fixtures.getAdminUrl(server, `/dashboard/rooms/${newRoom.room_id}`);
         }).then((res) => {
 
           expect(res.statusCode).to.equal(200);
@@ -134,7 +134,7 @@ describe('POST /prosody/telemetry', () => {
         .then((res) => {
 
           expect(res.statusCode).to.equal(200);
-          return server.inject({ method: 'GET', url: `/dashboard/sessions/${session.id}` });
+          return Fixtures.getAdminUrl(server, `/dashboard/sessions/${session.id}`);
         }).then((res) => {
 
           expect(res.statusCode).to.equal(200);
@@ -172,7 +172,7 @@ describe('POST /prosody/telemetry', () => {
         .then((res) => {
 
           expect(res.statusCode).to.equal(200);
-          return server.inject({ method: 'GET', url: `/dashboard/sessions/${session.id}` });
+          return Fixtures.getAdminUrl(server, `/dashboard/sessions/${session.id}`);
         }).then((res) => {
 
           expect(res.statusCode).to.equal(200);
@@ -209,7 +209,7 @@ describe('POST /prosody/telemetry', () => {
         .then((res) => {
 
           expect(res.statusCode).to.equal(200);
-          return server.inject({ method: 'GET', url: `/dashboard/sessions/${session.id}` });
+          return Fixtures.getAdminUrl(server, `/dashboard/sessions/${session.id}`);
         }).then((res) => {
 
           expect(res.statusCode).to.equal(200);

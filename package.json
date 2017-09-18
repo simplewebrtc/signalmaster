@@ -1,6 +1,6 @@
 {
   "name": "api.talky.io",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Talky Metrics API",
   "main": "server.js",
   "scripts": {

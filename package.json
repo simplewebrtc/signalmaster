@@ -14,6 +14,7 @@
     "test": "lab -a code -L -v -e test",
     "coverage": "lab -a code -e test -L -r html -o coverage.html",
     "start-prosody": "node ./scripts/start-prosody",
+    "purge-pii": "node ./scripts/purge-pii",
     "prosody-config": "node ./scripts/prosody-config",
     "prosody-config-install-docker": "npm run -s prosody-config > config/prosody.cfg.lua",
     "prosody-config-install-local": "npm run -s prosody-config > /usr/local/etc/prosody/prosody.cfg.lua",

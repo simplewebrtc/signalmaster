@@ -2,9 +2,7 @@ var socketIO = require('socket.io'),
     uuid = require('node-uuid'),
     crypto = require('crypto');
 
-module.exports = function (server, config) {
-    var io = socketIO.listen(server);
-
+module.exports = function (io, config) {
     io.sockets.on('connection', function (client) {
         client.resources = {
             screen: false,

@@ -124,7 +124,7 @@ module.exports = function (io, config) {
 
     function describeRoom(name) {
         var adapter = io.nsps['/'].adapter;
-        var clients = adapter.rooms[name] || {};
+        var clients = io.nsps['/'].connected || {};
         var result = {
             clients: {}
         };

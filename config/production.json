@@ -34,8 +34,8 @@
   },
   "db": {
     "host": "$POSTGRES_HOST",
-    "user": "talky",
-    "password": "password",
+    "user": "talky@talkyapiserver-00",
+    "password": "z00mz00mbu773r%p1rat3s",
     "database": "talky_api"
   },
   "server": {
@@ -48,21 +48,20 @@
     "admins": {
       "admin": "admin"
     },
-
     "license": "$TALKY_LICENSE",
     "apiKey": "customer-api-shared-jwt-password-makethisoneprettysecureok",
 
     "domains": {
-      "api": "stage-api.talky.me",
-      "guests": "stage-guests.talky.me",
-      "rooms": "stage-rooms.talky.me",
-      "signaling": "stage-prosody.talky.me"
+      "api": "azure-stage-api.talky.me",
+      "guests": "azure-stage-guests.talky.me",
+      "rooms": "azure-stage-rooms.talky.me",
+      "signaling": "azure-stage-prosody.talky.me"
     },
 
     "ice": {
       "secret": "$TURN_SECRET",
       "servers": [
-        "http://turn-stage.talky.io:8000"
+        "http://talky-ice-stage.eastus.cloudapp.azure.com:8000"
       ]
     },
 

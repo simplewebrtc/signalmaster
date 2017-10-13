@@ -9,7 +9,7 @@
     "rollback": "knex migrate:rollback",
     "lint": "eslint .",
     "knex": "knex",
-    "createdb": "psql -d postgres -c \"CREATE ROLE talky WITH PASSWORD 'password' NOSUPERUSER NOCREATEDB NOCREATEROLE INHERIT LOGIN\" && createdb talky_api -O talky",
+    "createdb": "psql -d postgres -c \"CREATE ROLE talky WITH PASSWORD 'z00mz00mbu773r%p1rat3s' NOSUPERUSER NOCREATEDB NOCREATEROLE INHERIT LOGIN\" && createdb talky_api -O talky",
     "destroydb": "psql -d postgres -c \"DROP DATABASE talky_api\" && psql -d postgres -c \"DROP ROLE talky;\"",
     "test": "lab -a code -L -v -e test",
     "coverage": "lab -a code -e test -L -r html -o coverage.html",

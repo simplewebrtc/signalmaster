@@ -21,7 +21,7 @@ pipeline:
     - latest
     when:
       branch: master
-      event: [ push, tag ]
+      event: tag
     secrets: [ kubernetes_cert, kubernetes_server, kubernetes_token ]
   slack:
     image: plugins/slack

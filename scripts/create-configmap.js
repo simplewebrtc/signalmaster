@@ -12,7 +12,7 @@ Exec('npm run prosody-config-install-etc', (err, stdout, stderr) => {
     }
 
     const prosodyConfig = data.toString().replace(/\"/g, '\'').replace(/\n/g, '\\n');
-    const configMapTemplate = `{ \n "apiVersion": "v1", \n "kind": "ConfigMap", \n "metadata": { \n "name": "prosody-config-${NODE_ENV}",\n"namespace": "default"\n},\n"data": {\n"prosody.cfg.lua": "${prosodyConfig}"\n     }\n   }`;
+    const configMapTemplate = `{ \n "apiVersion": "v1", \n "kind": "ConfigMap", \n "metadata": { \n "name": "prosody-config-${ENV_LEVEL}",\n"namespace": "default"\n},\n"data": {\n"prosody.cfg.lua": "${prosodyConfig}"\n     }\n   }`;
 
     FS.writeFile('./cm-prosody-config.json', configMapTemplate, (err) => {
 

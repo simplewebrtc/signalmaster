@@ -59,8 +59,7 @@
     "domains": {
       "api": "$API_DOMAIN",
       "guests": "$GUESTS_DOMAIN",
-      "rooms": "$ROOMS_DOMAIN",
-      "signaling": "$SIGNALING_DOMAIN"
+      "rooms": "$ROOMS_DOMAIN"
     },
 
     "ice": {

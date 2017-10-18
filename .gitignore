@@ -9,3 +9,5 @@ coverage.html
 
 prosody_docker/certs.pem
 prosody_docker/certs.key
+
+k8s/

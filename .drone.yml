@@ -1,7 +1,7 @@
 pipeline:
   docker:
     image: plugins/docker
-    repo: andyet/talky-core-api
+    repo: andyet/talky-api-stage
     tags: 
       - ${DRONE_TAG##v}
       - latest
@@ -20,7 +20,6 @@ pipeline:
     tag: 
     - ${DRONE_TAG##v}
     when:
-      branch: master
       event: tag
     secrets: [ kubernetes_cert, kubernetes_server, kubernetes_token ]
   slack:

@@ -18,7 +18,7 @@ pipeline:
     container: api
     namespace: default
     tag: 
-    - latest
+    - ${DRONE_TAG##v}
     when:
       branch: master
       event: tag

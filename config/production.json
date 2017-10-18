@@ -2,9 +2,14 @@
   "isDevTLS": false,
   "tls": {
     "*": {
-      "pemFile": "/etc/prosody_certs/certs.pem",
-      "keyFile": "/etc/prosody_certs/certs.key"
+      "pemFile": "$PATH_TO_STAR_PEM",
+      "keyFile": "$PATH_TO_STAR_KEY"
+    },
+    "guests": {
+      "pemFile": "$PATH_TO_GUESTS_PEM",
+      "keyFile": "$PATH_TO_GUESTS_KEY"
     }
+
   },
   "good": {
     "includes": {
@@ -27,16 +32,16 @@
     }
   },
   "auth": {
-    "secret": "internal-use-jwt-password-makethisoneprettysecureok",
+    "secret": "$JWT_PASSWORD",
     "options": {
       "algorithm": "HS256"
     }
   },
   "db": {
     "host": "$POSTGRES_HOST",
-    "user": "talky@talkyapiserver-00",
-    "password": "z00mz00mbu773r%p1rat3s",
-    "database": "talky_api"
+    "user": "$POSRGRES_USER",
+    "password": "$POSTGRES_PASSWORD",
+    "database": "$POSTGRES_DB"
   },
   "server": {
     "port": 8003,
@@ -46,27 +51,31 @@
   },
   "talky": {
     "admins": {
-      "admin": "admin"
+      "admin": "$ADMIN_PASSWORD"
     },
     "license": "$TALKY_LICENSE",
-    "apiKey": "customer-api-shared-jwt-password-makethisoneprettysecureok",
+    "apiKey": "$TALKY_API_KEY",
 
     "domains": {
-      "api": "azure-stage-api.talky.me",
-      "guests": "azure-stage-guests.talky.me",
-      "rooms": "azure-stage-rooms.talky.me",
-      "signaling": "azure-stage-prosody.talky.me"
+      "api": "$API_DOMAIN",
+      "guests": "$GUESTS_DOMAIN",
+      "rooms": "$ROOMS_DOMAIN",
+      "signaling": "$SIGNALING_DOMAIN"
     },
 
     "ice": {
       "secret": "$TURN_SECRET",
       "servers": [
-        "http://talky-ice-stage.eastus.cloudapp.azure.com:8000"
+        "$ICE_URL"
       ]
     },
 
     "metrics": {
       "maskRoomNames": true
+    },
+
+    "screensharingExtensions": {
+      "chrome": "$CHROME_EXTENSION_ID"
     }
   }
 }

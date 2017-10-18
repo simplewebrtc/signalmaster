@@ -39,7 +39,7 @@
   },
   "db": {
     "host": "$POSTGRES_HOST",
-    "user": "$POSRGRES_USER",
+    "user": "$POSTGRES_USER",
     "password": "$POSTGRES_PASSWORD",
     "database": "$POSTGRES_DB"
   },

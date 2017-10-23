@@ -26,6 +26,11 @@ module.exports = {
     session.duration = Duration((session.ended_at || new Date(Date.now())).getTime() - session.created_at.getTime());
 
     const events = await this.db.events.find({ actor_id: id });
+    events.sort((a, b) => {
+
+      return a.created_at > b.created_at ? 1 : a.created_at < b.created_at ? -1 : 0;
+    });
+
 
     return reply.view('single_session', { session, data: events });
   }

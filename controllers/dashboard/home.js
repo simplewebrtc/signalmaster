@@ -15,13 +15,23 @@ module.exports = {
     const count = await this.db.rooms.count(params);
     const activeCount = await this.db.rooms.count_active();
     const sessionCount = await this.db.sessions.count_active();
+
+    const sessionDayCount = await this.db.sessions.count_period({
+      ts: new Date(),
+      interval: '1 day'
+    });
+    const sessionWeekCount = await this.db.sessions.count_period({
+      ts: new Date(),
+      interval: '7 days'
+    });
+
     const roomDayCount = await this.db.rooms.count_period({
       ts: new Date(),
       interval: '1 day'
     });
-    const roomMonthCount = await this.db.rooms.count_period({
+    const roomWeekCount = await this.db.rooms.count_period({
       ts: new Date(),
-      interval: '30 days'
+      interval: '7 days'
     });
 
     request.totalCount = count.count;
@@ -35,6 +45,10 @@ module.exports = {
 
       room.duration = Duration(end - start);
     }
+    rooms.sort((a, b) => {
+
+      return a.created_at > b.created_at ? -1 : a.created_at < b.created_at ? 1 : 0;
+    });
 
     return reply.view('list_of_rooms', {
       pages: pagesArr,
@@ -42,7 +56,9 @@ module.exports = {
       activeRoomCount: activeCount.count,
       activeSessionCount: sessionCount.count,
       prevDayRoomCount: roomDayCount.count,
-      prevMonthRoomCount: roomMonthCount.count
+      prevWeekRoomCount: roomWeekCount.count,
+      prevDaySessionCount: sessionDayCount.count,
+      prevWeekSessionCount: sessionWeekCount.count
     });
   },
   validate: {

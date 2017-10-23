@@ -3,18 +3,23 @@ extends layout_dashboard
 block dashboardContent
   section.content-narrower
     table
-      tr
-        th Active Rooms
-        td #{activeRoomCount}
-      tr
-        th Active Users
-        td #{activeSessionCount}
-      tr
-        th Rooms in last 24h
-        td #{prevDayRoomCount}
-      tr
-        th Rooms in last 30 days
-        td #{prevMonthRoomCount}
+      thead
+        tr
+          th
+          th Active
+          th Last 24 hours
+          th Last 7 days
+      tbody
+        tr
+          td Rooms
+          td #{activeRoomCount}
+          td #{prevDayRoomCount}
+          td #{prevWeekRoomCount}
+        tr
+          td Sessions
+          td #{activeSessionCount}
+          td #{prevDaySessionCount}
+          td #{prevWeekSessionCount}
 
   section
     h1 Recent rooms

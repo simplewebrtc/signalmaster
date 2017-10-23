@@ -37,7 +37,6 @@ local function fetch_identifier()
     local data = table.concat(response);
     local parsed = json_decode(data);
 
-    local code = 200;
     if type(code) == "number" and code >= 200 and code <= 299 then
         module:log("debug", "HTTP API returned identifer: "..data);
         return parsed;

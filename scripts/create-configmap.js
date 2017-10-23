@@ -11,7 +11,7 @@ Exec('npm run prosody-config-install-etc', (err, stdout, stderr) => {
       return console.log(err);
     }
 
-    var envLevel = process.env.ENV_LEVEL;
+    const envLevel = process.env.ENV_LEVEL;
     const prosodyConfig = data.toString().replace(/\"/g, '\'').replace(/\n/g, '\\n');
     const configMapTemplate = `{ \n "apiVersion": "v1", \n "kind": "ConfigMap", \n "metadata": { \n "name": "prosody-config-${envLevel}",\n"namespace": "default"\n},\n"data": {\n"prosody.cfg.lua": "${prosodyConfig}"\n     }\n   }`;
 

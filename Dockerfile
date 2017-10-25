@@ -2,7 +2,7 @@ FROM node:alpine
 
 MAINTAINER Heather Young heather@andyet.net
 
-ENV NODE_ENV=production
+ENV NODE_ENV=purge
 
 ADD . /app
 WORKDIR /app

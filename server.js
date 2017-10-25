@@ -12,6 +12,7 @@ const BuildUrl = require('./lib/build_url');
 const Domains = InflateDomains(Config.talky.domains);
 const ProsodyAuth = require('./lib/prosody_auth');
 const ResetDB = require('./lib/reset_db');
+const EventWorker = require('./lib/event_worker');
 
 const Pkg = require('./package.json');
 
@@ -28,7 +29,9 @@ if (Config.getconfig.env !== 'production') {
 const server = new Hapi.Server();
 const db = new Muckraker({ connection: Config.db });
 const redisClient = Redis.createClient(Config.redis.connection);
+const eventWorker = new EventWorker({ db, redis: redisClient });
 server.connection(Config.server);
+
 
 //$lab:coverage:off$
 process.on('sigterm', async () => {
@@ -166,6 +169,7 @@ exports.Server = server.register([{ register: require('hapi-auth-basic') }]).the
         });
       }
 
+      eventWorker.start();
       return server.start().then(() => {
 
         server.connections.forEach((connection) => {

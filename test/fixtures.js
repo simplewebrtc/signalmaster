@@ -10,6 +10,7 @@ const Domains = InflateDomains(Config.talky.domains);
 
 exports.Server = Server.Server;
 exports.db = Server.db;
+exports.redis = Server.redis;
 
 exports.iceServers = function () {
 

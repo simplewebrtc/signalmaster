@@ -47,6 +47,7 @@
     "muckraker": "^3.4.0",
     "pg": "^6.2.4",
     "pug": "^2.0.0-rc.2",
+    "redis": "^2.8.0",
     "ua-parser-js": "^0.7.12",
     "vision": "^4.1.1"
   },
@@ -62,10 +63,12 @@
     "minimist": "^1.2.0",
     "nock": "^9.0.14",
     "nodemon": "^1.11.0",
-    "readline-sync": "^1.4.7"
+    "readline-sync": "^1.4.7",
+    "redis-mock": "^0.20.0"
   },
   "pre-commit": [
     "lint",
     "test"
-  ]
+  ],
+  "private": true
 }

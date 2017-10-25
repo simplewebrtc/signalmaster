@@ -3,6 +3,7 @@
 const Config = require('getconfig');
 const Crypto = require('crypto');
 const Joi = require('joi');
+const { promisify } = require('util');
 
 module.exports = {
   description: 'Ingest metrics from Prosody',
@@ -14,6 +15,7 @@ module.exports = {
     let { name } = data;
     const { jid } = data;
 
+    const rpush = promisify(this.redis.rpush);
     //$lab:coverage:off$
     if (name && Config.talky.metrics && Config.talky.metrics.maskRoomNames) {
       name = Crypto.createHash('sha1').update(name).digest('base64');
@@ -42,13 +44,10 @@ module.exports = {
       if (eventType === 'room_destroyed') {
         //Record room ended column
         await this.db.rooms.updateOne(room, { ended_at: new Date() });
-        await this.db.events.insert({ type: eventType, room_id: room.id, actor_id: session_id });
       }
-      else {
-        const event = { type: eventType, room_id: room.id, actor_id: session_id };
-        //Record event
-        await this.db.events.insert(event);
-      }
+      //Record event
+      const event = { type: eventType, room_id: room.id, actor_id: session_id };
+      await rpush('events', JSON.stringify(event));
 
       return reply();
     }
@@ -57,11 +56,12 @@ module.exports = {
       await this.db.sessions.updateOne(session, {
         ended_at: new Date()
       });
-      await this.db.events.insert({
+      const event = {
         type: eventType,
         room_id: null,
         actor_id: session_id
-      });
+      };
+      await rpush('events', JSON.stringify(event));
       return reply();
     }
     else if (eventType === 'user_online') {
@@ -71,19 +71,21 @@ module.exports = {
         ended_at: null
       });
 
-      await this.db.events.insert({
+      const event = {
         type: eventType,
         room_id: null,
         actor_id: session_id
-      });
+      };
+      await rpush('events', JSON.stringify(event));
       return reply();
     }
 
-    await this.db.events.insert({
+    const event = {
       type: eventType,
       room_id: null,
       actor_id: session_id
-    });
+    };
+    await rpush('events', JSON.stringify(event));
     return reply();
   },
   validate: {

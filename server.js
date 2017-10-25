@@ -3,6 +3,7 @@
 const Hapi = require('hapi');
 const Muckraker = require('muckraker');
 const Config = require('getconfig');
+const Redis = require(Config.redis.module);
 const Proxy = require('http-proxy');
 const FS = require('fs');
 
@@ -26,6 +27,7 @@ if (Config.getconfig.env !== 'production') {
 
 const server = new Hapi.Server();
 const db = new Muckraker({ connection: Config.db });
+const redisClient = Redis.createClient(Config.redis.connection);
 server.connection(Config.server);
 
 //$lab:coverage:off$
@@ -55,6 +57,7 @@ wsProxy.on('error', (err) => {
 //$lab:coverage:on$
 
 exports.db = db;
+exports.redis = redisClient;
 
 
 exports.Server = server.register([{ register: require('hapi-auth-basic') }]).then(() => {
@@ -150,7 +153,7 @@ exports.Server = server.register([{ register: require('hapi-auth-basic') }]).the
       }
       // $lab:coverage:on$
 
-      server.bind({ db });
+      server.bind({ db, redis: redisClient });
       server.route(require('./routes'));
     }).then(() => {
 

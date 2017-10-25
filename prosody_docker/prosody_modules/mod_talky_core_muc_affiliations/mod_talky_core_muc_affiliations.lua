@@ -56,7 +56,6 @@ local function fetch_role(room, jid)
 
     local data = table.concat(response);
 
-    local code = 200;
     if type(code) == "number" and code >= 200 and code <= 299 then
         module:log("debug", "HTTP API returned affiliation: "..data);
         return data;

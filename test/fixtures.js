@@ -11,6 +11,7 @@ const Domains = InflateDomains(Config.talky.domains);
 exports.Server = Server.Server;
 exports.db = Server.db;
 exports.redis = Server.redis;
+exports.eventWorker = Server.eventWorker;
 
 exports.iceServers = function () {
 
@@ -28,6 +29,20 @@ exports.iceServers = function () {
   return result;
 };
 
+exports.event = function (attrs) {
+
+  const defaults = {
+    room_id: Faker.lorem.word()
+  };
+
+  if (Math.random() * 2 > 1) {
+    defaults.actor_id = Faker.internet.email();
+    if (Math.random() * 3 > 1) {
+      defaults.peer_id = Faker.internet.email();
+    }
+  }
+  return Object.assign(defaults, attrs);
+};
 exports.session = function (attrs) {
 
   const defaults = {

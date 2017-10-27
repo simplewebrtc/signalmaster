@@ -61,6 +61,7 @@ wsProxy.on('error', (err) => {
 
 exports.db = db;
 exports.redis = redisClient;
+exports.eventWorker = eventWorker;
 
 
 exports.Server = server.register([{ register: require('hapi-auth-basic') }]).then(() => {

@@ -17,6 +17,12 @@ describe('POST /prosody/telemetry', () => {
 
   let server;
   const session = Fixtures.session();
+  const createdRoom = Fixtures.room();
+  createdRoom.room_id = createdRoom.id;
+  delete createdRoom.id;
+  const destroyedRoom = Fixtures.room();
+  destroyedRoom.room_id = destroyedRoom.id;
+  delete destroyedRoom.id;
 
   before(async () => {
 
@@ -31,19 +37,21 @@ describe('POST /prosody/telemetry', () => {
 
   after(async () => {
 
-    await db.sessions.destroy({ id: session.id });
+    await Promise.all([
+      db.sessions.destroy({ id: session.id }),
+      db.rooms.destroy({ id: createdRoom.room_id }),
+      db.rooms.destroy({ id: destroyedRoom.room_id }),
+      db.events.destroy({ room_id: destroyedRoom.room_id })
+    ]);
   });
 
   describe('room_created', () => {
 
     it('creates room that exists in dashboard', async () => {
 
-      const newRoom = Fixtures.room();
-      newRoom.room_id = newRoom.id;
-      delete newRoom.id;
       const payload = {
         eventType: 'room_created',
-        data: newRoom
+        data: createdRoom
       };
       const headers = {
         authorization: Fixtures.prosodyBasicHeader('testUser')
@@ -54,9 +62,9 @@ describe('POST /prosody/telemetry', () => {
       let event = await promisify(redis.lindex)('events', 0);
       expect(event).to.exist();
       event = JSON.parse(event);
-      expect(event).to.include({ type: 'room_created', room_id: newRoom.room_id });
+      expect(event).to.include({ type: 'room_created', room_id: createdRoom.room_id });
       //TODO worker tests
-      //return Fixtures.getAdminUrl(server, `/dashboard/rooms/${newRoom.room_id}`);
+      //return Fixtures.getAdminUrl(server, `/dashboard/rooms/${createdRoom.room_id}`);
       //}).then((res) => {
 
       //expect(res.statusCode).to.equal(200);
@@ -68,10 +76,10 @@ describe('POST /prosody/telemetry', () => {
 
       //return $(this).text().trim();
       //}).get();
-      //expect(roomInfo).to.include(newRoom.room_id); // Resource
-      //expect(roomInfo).to.include(Crypto.createHash('sha1').update(newRoom.name).digest('base64')); // Name
+      //expect(roomInfo).to.include(createdRoom.room_id); // Resource
+      //expect(roomInfo).to.include(Crypto.createHash('sha1').update(createdRoom.name).digest('base64')); // Name
       //expect(roomInfo).to.include('room_created');
-      //return db.rooms.destroy({ id: newRoom.room_id });
+      //return db.rooms.destroy({ id: createdRoom.room_id });
       //});
     });
   });
@@ -80,20 +88,16 @@ describe('POST /prosody/telemetry', () => {
 
     it('logs properly in dashboard', async () => {
 
-      const newRoom = Fixtures.room();
-      newRoom.room_id = newRoom.id;
-      delete newRoom.id;
-
       const createPayload = {
         eventType: 'room_created',
-        data: newRoom
+        data: destroyedRoom
       };
       const headers = {
         authorization: Fixtures.prosodyBasicHeader('testUser')
       };
       const destroyPayload = {
         eventType: 'room_destroyed',
-        data: newRoom
+        data: destroyedRoom
       };
 
       let res = await server.inject({ method: 'POST', url: '/prosody/telemetry', payload: createPayload, headers });
@@ -101,16 +105,16 @@ describe('POST /prosody/telemetry', () => {
       let event = await promisify(redis.lindex)('events', 0);
       expect(event).to.exist();
       event = JSON.parse(event);
-      expect(event).to.include({ type: 'room_created', room_id: newRoom.room_id });
+      expect(event).to.include({ type: 'room_created', room_id: destroyedRoom.room_id });
 
       res = await server.inject({ method: 'POST', url: '/prosody/telemetry', payload: destroyPayload, headers });
       expect(res.statusCode).to.equal(200);
       event = await promisify(redis.lindex)('events', 1);
       expect(event).to.exist();
       event = JSON.parse(event);
-      expect(event).to.include({ type: 'room_destroyed', room_id: newRoom.room_id });
+      expect(event).to.include({ type: 'room_destroyed', room_id: destroyedRoom.room_id });
       //TODO worker tests
-      //return Fixtures.getAdminUrl(server, `/dashboard/rooms/${newRoom.room_id}`);
+      //return Fixtures.getAdminUrl(server, `/dashboard/rooms/${destroyedRoom.room_id}`);
       //}).then((res) => {
 
       //expect(res.statusCode).to.equal(200);
@@ -122,11 +126,11 @@ describe('POST /prosody/telemetry', () => {
 
       //return $(this).text().trim();
       //}).get();
-      //expect(roomInfo).to.include(newRoom.room_id); // Resource
-      //expect(roomInfo).to.include(Crypto.createHash('sha1').update(newRoom.name).digest('base64')); // Name
+      //expect(roomInfo).to.include(destroyedRoom.room_id); // Resource
+      //expect(roomInfo).to.include(Crypto.createHash('sha1').update(destroyedRoom.name).digest('base64')); // Name
       //expect(roomInfo).to.include('room_destroyed'); // Destroy event
       ////TODO it should update ended_at but where is that reflected in the dashboard?
-      //return db.rooms.destroy({ id: newRoom.room_id });
+      //return db.rooms.destroy({ id: destroyedRoom.room_id });
     });
   });
 

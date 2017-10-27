@@ -17,6 +17,9 @@ describe('POST /telemetry', () => {
 
   let server;
   const session = Fixtures.session();
+  const newRoom = Fixtures.room();
+  newRoom.room_id = newRoom.id;
+  delete newRoom.id;
 
   before(async () => {
 
@@ -32,6 +35,8 @@ describe('POST /telemetry', () => {
   after(async () => {
 
     await db.sessions.destroy({ id: session.id });
+    await db.rooms.destroy({ id: newRoom.room_id });
+    await db.events.destroy({ room_id: newRoom.room_id });
   });
 
   it('unauthorized', () => {
@@ -49,9 +54,6 @@ describe('POST /telemetry', () => {
 
   it('inserts event', () => {
 
-    const newRoom = Fixtures.room();
-    newRoom.room_id = newRoom.id;
-    delete newRoom.id;
     const prosodyPayload = {
       eventType: 'room_created',
       data: newRoom

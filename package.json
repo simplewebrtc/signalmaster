@@ -1,7 +1,7 @@
 {
-  "name": "api.talky.io",
+  "name": "talky-core-api",
   "version": "1.3.0",
-  "description": "Talky Metrics API",
+  "description": "Talky Core API",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -24,7 +24,7 @@
     "certgen": "openssl req -nodes -new -x509 -keyout config/key.pem -out config/cert.pem -days 365"
   },
   "author": "",
-  "license": "ISC",
+  "license": "See LICENSE file",
   "dependencies": {
     "array-shuffle": "^1.0.1",
     "base32-crockford-browser": "^1.0.0",

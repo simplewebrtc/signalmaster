@@ -2,8 +2,7 @@ pipeline:
   docker_stage:
     image: plugins/docker
     repo: andyet/talky-api-stage
-    tags: 
-      - ${DRONE_TAG##v}
+    tags:
       - latest
     secrets: [ docker_username, docker_password, docker_email ]
     when:

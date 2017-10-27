@@ -22,8 +22,8 @@ pipeline:
     kubernetes_server: ${KUBERNETES_SERVER}
     kubernetes_cert: ${KUBERNETES_CERT}
     kubernetes_token: ${KUBERNETES_TOKEN}
-    deployment: talky-core-api
-    repo: andyet/talky-core-api
+    deployment: talky-api-stage
+    repo: andyet/talky-api-stage
     container: api
     namespace: default
     tag: 

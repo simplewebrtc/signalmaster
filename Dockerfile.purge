@@ -1,0 +1,15 @@
+FROM node:alpine
+
+MAINTAINER Heather Young heather@andyet.net
+
+ENV NODE_ENV=purge
+
+ADD config /app/config
+ADD scripts /app/scripts
+ADD db /app/db
+ADD package.json /app/package.json
+WORKDIR /app
+
+RUN npm i -q muckraker minimist getconfig
+
+CMD ["npm", "run", "purge-pii"]

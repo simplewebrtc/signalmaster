@@ -45,6 +45,7 @@
     "keyfob": "^1.0.0",
     "knex": "^0.13.0",
     "muckraker": "^3.4.0",
+    "minimist": "^1.2.0",
     "pg": "^6.2.4",
     "pug": "^2.0.0-rc.2",
     "ua-parser-js": "^0.7.12",
@@ -59,7 +60,6 @@
     "faker": "^4.1.0",
     "git-validate": "^2.2.2",
     "lab": "^14.1.0",
-    "minimist": "^1.2.0",
     "nock": "^9.0.14",
     "nodemon": "^1.11.0",
     "readline-sync": "^1.4.7"

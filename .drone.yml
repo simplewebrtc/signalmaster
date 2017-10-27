@@ -7,7 +7,8 @@ pipeline:
       - latest
     secrets: [ docker_username, docker_password, docker_email ]
     when:
-      event: tag
+      event: push
+      branch: stage
   docker_prod:
     image: plugins/docker
     repo: andyet/talky-api-prod
@@ -26,9 +27,10 @@ pipeline:
     container: api
     namespace: default
     tag: 
-    - ${DRONE_TAG##v}
+    - latest
     when:
-      event: tag
+      event: push
+      branch: stage
     secrets: [ kubernetes_cert, kubernetes_server, kubernetes_token ]
   slack:
     image: plugins/slack

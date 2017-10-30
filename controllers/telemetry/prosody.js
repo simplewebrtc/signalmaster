@@ -98,5 +98,5 @@ module.exports = {
       }).unknown()
     }
   },
-  auth: 'prosody-api'
+  auth: 'internal-api'
 };

@@ -12,7 +12,7 @@ module.exports = {
 
     return reply('owner').type('text/plain').code(200);
   },
-  auth: 'prosody-api',
+  auth: 'internal-api',
   validate: {
     payload: {
       room_id: Joi.string(),

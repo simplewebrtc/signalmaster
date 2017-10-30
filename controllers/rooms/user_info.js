@@ -40,7 +40,7 @@ module.exports = {
 
     return reply(userInfo).type('application/json').code(200);
   },
-  auth: 'prosody-api',
+  auth: 'internal-api',
   validate: {
     payload: Joi.object({
       room_id: Joi.string().required(),

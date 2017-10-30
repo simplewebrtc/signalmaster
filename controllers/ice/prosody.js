@@ -15,6 +15,6 @@ module.exports = {
       200: Schema.iceServers
     }
   },
-  auth: 'prosody-api'
+  auth: 'internal-api'
 };
 

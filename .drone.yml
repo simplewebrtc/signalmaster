@@ -8,6 +8,7 @@ pipeline:
     secrets: [ docker_username, docker_password, docker_email ]
     when:
       event: tag
+      branch: master
   docker_prod:
     image: plugins/docker
     repo: andyet/talky-api-prod
@@ -29,6 +30,7 @@ pipeline:
     - ${DRONE_TAG##v}
     when:
       event: tag
+      branch: master
     secrets: [ kubernetes_cert, kubernetes_server, kubernetes_token ]
   deploy_prod:
     image: quay.io/honestbee/drone-kubernetes

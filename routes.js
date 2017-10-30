@@ -11,7 +11,7 @@ module.exports = [
   { method: 'GET', path: '/.well-known/host-meta.json', config: Controllers.hostmeta },
 
   // Fetch ICE servers
-  { method: 'GET', path: '/ice-servers', config: Controllers.ice.client },
+  { method: 'GET', path: '/ice', config: Controllers.ice.client },
 
   // Domain verificiation
   { method: 'GET', path: '/instance-check', config: Controllers.instance_check },
@@ -35,6 +35,9 @@ module.exports = [
   { method: 'GET', path: '/dashboard/sessions/{id}', config: Controllers.dashboard.get_one_session },
   { method: 'GET', path: '/dashboard/rooms/{id}', config: Controllers.dashboard.get_one_room },
 
+  // Internal routes for ICE
+
+  { method: 'POST', path: '/ice/usage', config: Controllers.ice.usage },
 
   // Internal routes for Prosody
   // ---------------------------------------------------------------------

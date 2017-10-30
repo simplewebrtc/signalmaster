@@ -8,8 +8,14 @@ const db = new Muckraker({ connection: Config.db });
 
 const purge = async (interval = 7) => {
 
+  const opts = { now: new Date(), interval };
+
   try {
-    await db.events.purge_pii({ now: new Date(), interval });
+    const eventPurge = db.events.purge(opts);
+    const sessionPurge = db.sessions.purge(opts);
+    const roomPurge = db.rooms.purge(opts);
+
+    await Promise.all([eventPurge, sessionPurge, roomPurge]);
   }
   catch (err) {
     console.error(err);

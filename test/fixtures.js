@@ -31,7 +31,10 @@ exports.iceServers = function () {
 
 exports.event = function (attrs) {
 
+  const now = new Date();
   const defaults = {
+    created_at: now,
+    updated_at: now,
     room_id: Faker.lorem.word()
   };
 

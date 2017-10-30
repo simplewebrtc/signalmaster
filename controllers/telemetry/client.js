@@ -11,12 +11,15 @@ module.exports = {
 
     const { eventType, peerId, roomId, data } = request.payload;
     const session = request.auth.credentials;
+    const now = new Date();
     const event = {
+      created_at: now,
+      updated_at: now,
       type: eventType,
       peer_id: peerId,
       room_id: roomId,
       actor_id: session.id,
-      data: data
+      data
     };
 
     const rpush = promisify(this.redis.rpush);

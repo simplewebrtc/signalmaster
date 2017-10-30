@@ -11,9 +11,9 @@ module.exports = {
   handler: async function (request, reply) {
 
     const { eventType, data } = request.payload;
-    const { session_id, room_id } = data;
+    const { jid, session_id, room_id } = data;
     let { name } = data;
-    const { jid } = data;
+    const now = new Date();
 
     const rpush = promisify(this.redis.rpush);
     //$lab:coverage:off$
@@ -46,7 +46,13 @@ module.exports = {
         await this.db.rooms.updateOne(room, { ended_at: new Date() });
       }
       //Record event
-      const event = { type: eventType, room_id: room.id, actor_id: session_id };
+      const event = {
+        type: eventType,
+        room_id: room.id,
+        actor_id: session_id,
+        created_at: now,
+        updated_at: now
+      };
       await rpush('events', JSON.stringify(event));
 
       return reply();
@@ -57,6 +63,8 @@ module.exports = {
         ended_at: new Date()
       });
       const event = {
+        created_at: now,
+        update_at: now,
         type: eventType,
         room_id: null,
         actor_id: session_id
@@ -72,6 +80,8 @@ module.exports = {
       });
 
       const event = {
+        created_at: now,
+        updated_at: now,
         type: eventType,
         room_id: null,
         actor_id: session_id
@@ -81,6 +91,8 @@ module.exports = {
     }
 
     const event = {
+      created_at: now,
+      updated_at: now,
       type: eventType,
       room_id: null,
       actor_id: session_id

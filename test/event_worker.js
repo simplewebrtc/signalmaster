@@ -33,9 +33,9 @@ describe('event worker', () => {
 
   after(async () => {
 
-    await db.events.destroy(main_event);
+    await db.events.destroy({ room_id: main_event.room_id, type: main_event.type });
     for (const event of events) {
-      await db.events.destroy(event);
+      await db.events.destroy({ room_id: event.room_id, type: event.type });
     }
   });
 
@@ -45,9 +45,15 @@ describe('event worker', () => {
     await eventWorker.start();
     await timeout(250); //hack way to try to let it drain the queue
     await eventWorker.stop();
-    const db_events = await db.events.find();
-    expect(db_events.length).to.equal(11);
-    expect(db_events).to.part.include(main_event);
-    expect(db_events).to.part.include(events);
+    const db_main_event = await db.events.findOne({ room_id: main_event.room_id, type: main_event.type });
+    expect(db_main_event).to.exist();
+    expect(Number(db_main_event.created_at)).to.be.about(Number(main_event.created_at), 1000);
+    expect(Number(db_main_event.updated_at)).to.be.about(Number(main_event.updated_at), 1000);
+    for (const event of events) {
+      const db_event = await db.events.findOne({ room_id: event.room_id, type: event.type });
+      expect(db_event).to.exist();
+      expect(Number(db_event.created_at)).to.be.about(Number(event.created_at), 1000);
+      expect(Number(db_event.updated_at)).to.be.about(Number(event.updated_at), 1000);
+    }
   });
 });

@@ -16,6 +16,8 @@ local serialize = require "util.serialization".serialize;
 local ltn12 = require("ltn12")
 local os_time = os.time;
 
+local cache = require "util.cache".new(4096);
+
 local muc_service = module:depends("muc");
 local room_mt = muc_service.room_mt;
 
@@ -32,10 +34,17 @@ end
 
 
 local function fetch_role(room, jid)
+    module:log("debug", "Testing room affiliation for user %s in room %s with URL %s", jid, room.jid, muc_affiliation_url);
+
+    local cached = cache:get(jid);
+    if cached then
+        module:log("debug", "Using cached affiliation: "..cached);
+        return cached;
+    end
+
     local userpart = tostring(os_time());
     local secret = base64(hmac_sha1(api_key, userpart, false))
 
-    module:log("debug", "Testing room affiliation for user %s in room %s with URL %s", jid, room.jid, muc_affiliation_url);
     local body = json_encode({
         user_id = jid;
         room_id = room:get_talky_core_id();
@@ -58,6 +67,7 @@ local function fetch_role(room, jid)
 
     if type(code) == "number" and code >= 200 and code <= 299 then
         module:log("debug", "HTTP API returned affiliation: "..data);
+        cache:set(jid, data);
         return data;
     else
         module:log("debug", "HTTP API returned status code: "..code);
@@ -79,6 +89,12 @@ room_mt.get_affiliation = function (room, jid)
 
     return role;
 end
+
+
+module:hook("muc-occupant-left", function (event)
+    local jid = event.occupant.bare_jid;
+    cache:set(jid, nil);
+end);
 
 
 module:log("info", "Loaded mod_talky_core_muc_affiliations for %s", module.host);

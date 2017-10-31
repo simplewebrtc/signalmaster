@@ -1,7 +1,10 @@
 {
   "redis": {
     "module": "redis",
-    "connection": {}
+    "connection": {
+      "host": "$REDIS_HOST",
+      "port": "$REDIS_PORT"
+    }
   },
   "isDevTLS": false,
   "tls": {
@@ -14,26 +17,6 @@
       "keyFile": "$PATH_TO_GUESTS_KEY"
     }
 
-  },
-  "good": {
-    "includes": {
-      "request": ["headers"]
-    },
-    "reporters": {
-      "console": [{
-        "module": "good-squeeze",
-        "name": "Squeeze",
-        "args": [{
-          "log": "*",
-          "response": "*",
-          "request": "*",
-          "error": "*"
-        }]
-      }, {
-        "module": "good-console"
-      }, "stdout"
-      ]
-    }
   },
   "auth": {
     "secret": "$JWT_PASSWORD",

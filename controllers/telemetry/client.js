@@ -22,7 +22,7 @@ module.exports = {
       data
     };
 
-    const rpush = promisify(this.redis.rpush);
+    const rpush = promisify(this.redis.rpush.bind(this.redis));
     await rpush('events', JSON.stringify(event));
 
     return reply();

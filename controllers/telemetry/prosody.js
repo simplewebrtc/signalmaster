@@ -15,7 +15,7 @@ module.exports = {
     let { name } = data;
     const now = new Date();
 
-    const rpush = promisify(this.redis.rpush);
+    const rpush = promisify(this.redis.rpush.bind(this.redis));
     //$lab:coverage:off$
     if (name && Config.talky.metrics && Config.talky.metrics.maskRoomNames) {
       name = Crypto.createHash('sha1').update(name).digest('base64');

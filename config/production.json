@@ -64,9 +64,7 @@
 
     "ice": {
       "secret": "$TURN_SECRET",
-      "servers": [
-        "$ICE_URL"
-      ]
+      "server": "$ICE_URL"
     },
 
     "metrics": {

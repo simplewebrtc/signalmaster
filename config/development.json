@@ -15,9 +15,7 @@
 
     "ice": {
       "secret": "foo",
-      "servers": [
-        "http://ice.kestrel.link"
-      ]
+      "server": "http://localhost:8000"
     },
 
     "metrics": {

@@ -18,6 +18,8 @@ const ExtractCustomerData = require('../../lib/customer_data');
 const TalkyCoreConfig = require('getconfig').talky;
 const Domains = InflateDomains(TalkyCoreConfig.domains);
 
+const DEFAULT_ORG = 'andyet';
+
 
 module.exports = {
   description: 'Auto-configure a registered user client session',
@@ -38,7 +40,6 @@ module.exports = {
       return reply(Boom.forbidden('Talky Core active user limit reached'));
     }
 
-    const ice = await FetchICE(request);
 
     let customerData = {};
     try {
@@ -56,6 +57,7 @@ module.exports = {
       scopes: customerData.scopes || []
     }));
     const user_id = `${username}@${Domains.users}`;
+    const ice = FetchICE(DEFAULT_ORG, id);
 
     try {
       await this.db.sessions.insert({
@@ -74,6 +76,7 @@ module.exports = {
     const result = {
       id,
       userId: user_id,
+      orgId: DEFAULT_ORG,
       signalingUrl: `${BuildUrl('ws', Domains.signaling)}/ws-bind`,
       telemetryUrl: `${BuildUrl('http', Domains.api)}/telemetry`,
       roomServer: Domains.rooms,
@@ -82,6 +85,7 @@ module.exports = {
       screensharingExtensions: TalkyCoreConfig.screensharingExtensions || {},
       credential: JWT.sign({
         id,
+        orgId: DEFAULT_ORG,
         registeredUser: true
       }, Config.auth.secret, {
         algorithm: 'HS256',

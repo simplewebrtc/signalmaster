@@ -36,8 +36,9 @@ module.exports = [
   { method: 'GET', path: '/dashboard/rooms/{id}', config: Controllers.dashboard.get_one_room },
 
   // Internal routes for ICE
+  // ---------------------------------------------------------------------
 
-  { method: 'POST', path: '/ice/usage', config: Controllers.ice.usage },
+  { method: 'POST', path: '/ice/telemetry', config: Controllers.telemetry.ice },
 
   // Internal routes for Prosody
   // ---------------------------------------------------------------------
@@ -46,7 +47,7 @@ module.exports = [
   { method: 'POST', path: '/prosody/telemetry', config: Controllers.telemetry.prosody },
 
   // Legacy ICE requests
-  { method: 'POST', path: '/prosody/ice-servers', config: Controllers.ice.prosody },
+  { method: 'POST', path: '/prosody/ice', config: Controllers.ice.prosody },
 
   // Authentication
   { method: 'GET', path: '/prosody/auth/user', config: Controllers.auth.user },

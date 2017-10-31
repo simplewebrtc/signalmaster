@@ -10,6 +10,10 @@ module.exports = {
 
     // Placeholder route to start accepting data until we have the
     // processing & billing side sorted out.
+
+    // TODO: save ICE usage metric events
+
+    request.log(['ice'], request.payload);
     return reply();
   },
   validate: {

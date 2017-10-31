@@ -79,7 +79,7 @@ log = {
 }
 
 talky_core_api_key = "${Config.auth.secret}"
-talky_core_ice_url = "${BuildUrl('http', Domains.api)}/prosody/ice-servers";
+talky_core_ice_url = "${BuildUrl('http', Domains.api)}/prosody/ice";
 talky_core_telemetry_url = "${BuildUrl('http', Domains.api)}/prosody/telemetry"
 talky_core_instance_check_url = "${BuildUrl('http', Domains.api)}/instance-check";
 `);

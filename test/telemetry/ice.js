@@ -30,7 +30,7 @@ describe('POST /ice/usage', () => {
       bytesSent: 0,
       bytesReceived: 0
     };
-    return server.inject({ method: 'POST', url: '/telemetry', payload })
+    return server.inject({ method: 'POST', url: '/ice/telemetry', payload })
       .then((res) => {
 
         expect(res.statusCode).to.equal(401);
@@ -51,7 +51,7 @@ describe('POST /ice/usage', () => {
       bytesReceived: 0
     };
 
-    return server.inject({ method: 'POST', url: '/ice/usage', payload, headers })
+    return server.inject({ method: 'POST', url: '/ice/telemetry', payload, headers })
       .then((res) => {
 
         expect(res.statusCode).to.equal(200);

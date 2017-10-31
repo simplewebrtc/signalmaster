@@ -1,34 +1,38 @@
 'use strict';
 
 const Joi = require('joi');
+const { promisify } = require('util');
 const Schema = require('../../lib/schema');
 
 module.exports = {
   description: 'Ingest metrics from clients',
   tags: ['api', 'metrics'],
-  handler: function (request, reply) {
+  handler: async function (request, reply) {
 
     const { eventType, peerId, roomId, data } = request.payload;
     const session = request.auth.credentials;
-    const result = this.db.events.insert({
+    const now = new Date();
+    const event = {
+      created_at: now,
+      updated_at: now,
       type: eventType,
       peer_id: peerId,
       room_id: roomId,
       actor_id: session.id,
-      data: data || {}
-    }).then(() => {
+      data
+    };
 
-      return request.payload;
-    });
+    const rpush = promisify(this.redis.rpush);
+    await rpush('events', JSON.stringify(event));
 
-    return reply(result);
+    return reply();
   },
   validate: {
     payload: {
       eventType: Schema.eventTypes,
       peerId: Joi.string(),
       roomId: Joi.string(),
-      data: Joi.object().unknown()
+      data: Joi.object().unknown().default({})
     }
   },
   auth: 'client-token'

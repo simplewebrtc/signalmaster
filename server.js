@@ -3,6 +3,7 @@
 const Hapi = require('hapi');
 const Muckraker = require('muckraker');
 const Config = require('getconfig');
+const Redis = require(Config.redis.module);
 const Proxy = require('http-proxy');
 const FS = require('fs');
 
@@ -11,6 +12,7 @@ const BuildUrl = require('./lib/build_url');
 const Domains = InflateDomains(Config.talky.domains);
 const ProsodyAuth = require('./lib/prosody_auth');
 const ResetDB = require('./lib/reset_db');
+const EventWorker = require('./lib/event_worker');
 
 const Pkg = require('./package.json');
 
@@ -26,7 +28,10 @@ if (Config.getconfig.env !== 'production') {
 
 const server = new Hapi.Server();
 const db = new Muckraker({ connection: Config.db });
+const redisClient = Redis.createClient(Config.redis.connection);
+const eventWorker = new EventWorker({ db, redis: redisClient });
 server.connection(Config.server);
+
 
 //$lab:coverage:off$
 process.on('sigterm', async () => {
@@ -55,6 +60,8 @@ wsProxy.on('error', (err) => {
 //$lab:coverage:on$
 
 exports.db = db;
+exports.redis = redisClient;
+exports.eventWorker = eventWorker;
 
 
 exports.Server = server.register([{ register: require('hapi-auth-basic') }]).then(() => {
@@ -150,7 +157,7 @@ exports.Server = server.register([{ register: require('hapi-auth-basic') }]).the
       }
       // $lab:coverage:on$
 
-      server.bind({ db });
+      server.bind({ db, redis: redisClient });
       server.route(require('./routes'));
     }).then(() => {
 
@@ -163,6 +170,7 @@ exports.Server = server.register([{ register: require('hapi-auth-basic') }]).the
         });
       }
 
+      eventWorker.start();
       return server.start().then(() => {
 
         server.connections.forEach((connection) => {

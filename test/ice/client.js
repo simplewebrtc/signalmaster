@@ -10,7 +10,7 @@ const lab = exports.lab = Lab.script();
 const { describe, it, before } = lab;
 const { expect } = Code;
 
-describe('GET /ice-servers', () => {
+describe('GET /ice', () => {
 
   let server;
 
@@ -21,7 +21,7 @@ describe('GET /ice-servers', () => {
 
   it('requires auth', () => {
 
-    return server.inject({ method: 'GET', url: '/ice-servers' })
+    return server.inject({ method: 'GET', url: '/ice' })
       .then((res) => {
 
         expect(res.statusCode).to.equal(401);
@@ -31,7 +31,7 @@ describe('GET /ice-servers', () => {
   it('works', () => {
 
     const session = Fixtures.session();
-    return server.inject({ method: 'GET', url: '/ice-servers', credentials: session })
+    return server.inject({ method: 'GET', url: '/ice', credentials: session })
       .then((res) => {
 
         expect(res.statusCode).to.equal(200);
@@ -44,7 +44,7 @@ describe('GET /ice-servers', () => {
       authorization: Fixtures.clientToken(Fixtures.session())
     };
 
-    return server.inject({ method: 'GET', url: '/ice-servers', headers })
+    return server.inject({ method: 'GET', url: '/ice', headers })
       .then((res) => {
 
         expect(res.statusCode).to.equal(200);

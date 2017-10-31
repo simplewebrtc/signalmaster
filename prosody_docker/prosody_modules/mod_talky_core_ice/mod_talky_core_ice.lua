@@ -13,8 +13,7 @@ local json_encode = require "util.json".encode;
 local json_decode = require "util.json".decode;
 local jid_split = require "util.jid".split;
 local jid_resource = require "util.jid".resource;
-local hmac_sha1 = require "util.hashes".hmac_sha1;
-local base64 = require "util.encodings".base64.encode;
+local hmac_sha1 = require "util.hashes".hmac_sha1; local base64 = require "util.encodings".base64.encode;
 local serialize = require "util.serialization".serialize;
 local ltn12 = require("ltn12")
 local os_time = os.time;
@@ -31,11 +30,16 @@ else
 end
 
 
-local function fetch_ice()
+local function fetch_ice(user_id, session_id)
     local userpart = tostring(os_time());
     local secret = base64(hmac_sha1(api_key, userpart, false))
 
     module:log("debug", "Fetching ICE servers with URL %s", ice_url);
+
+    local body = json_encode({
+        user_id = user_id;
+        session_id = session_id;
+    });
 
     local response = {};
     local _, code = request({
@@ -44,8 +48,10 @@ local function fetch_ice()
         headers = {
             Authorization = "Basic "..base64(userpart..":"..secret);
             ["Content-Type"] = "application/json";
+            ["Content-Length"] = string.len(body);
         };
         sink = ltn12.sink.table(response);
+        source = ltn12.source.string(body);
     });
 
     local data = table.concat(response);
@@ -57,9 +63,9 @@ end
 
 
 module:hook("iq-get/host/urn:xmpp:extdisco:1:services", function(event)
-    module:log("debug", "ICE???");
     local origin, stanza = event.origin, event.stanza;
-    local ice, err = fetch_ice();
+    local user, domain, resource = jid_split(stanza.attr.from);
+    local ice, err = fetch_ice(user..'@'..domain, resource);
 
     if err then
         module:log("error", err);

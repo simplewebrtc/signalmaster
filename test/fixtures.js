@@ -17,14 +17,20 @@ exports.iceServers = function () {
 
   const result = [{
     type: 'turn',
-    host: '10.0.0.42'
+    host: 'ice-test.talky.io',
+    port: 3478
+  }, {
+    type: 'turn',
+    host: 'ice-test.talky.io',
+    port: 3478,
+    transport: 'tcp'
   }, {
     type: 'turns',
-    host: '10.0.0.43'
-  }, {
-    type: 'stun',
-    host: '10.0.0.44'
-  }];
+    host: 'ice-test.talky.io',
+    port: 443,
+    transport: 'tcp'
+  }
+  ];
 
   return result;
 };

@@ -22,6 +22,8 @@ local room_mt = muc_service.room_mt;
 local api_key = module:get_option_string("talky_core_api_key", "");
 local muc_affiliation_url = module:get_option_string("talky_core_muc_affiliation_url",  "");
 
+local affiliation_cache = {};
+
 
 local request;
 if string.sub(muc_affiliation_url, 1, string.len('https')) == 'https' then
@@ -32,10 +34,17 @@ end
 
 
 local function fetch_role(room, jid)
+    module:log("debug", "Testing room affiliation for user %s in room %s with URL %s", jid, room.jid, muc_affiliation_url);
+
+    local cached = affiliation_cache[jid];
+    if cached then
+        module:log("debug", "Using cached affiliation: "..cached);
+        return cached;
+    end
+
     local userpart = tostring(os_time());
     local secret = base64(hmac_sha1(api_key, userpart, false))
 
-    module:log("debug", "Testing room affiliation for user %s in room %s with URL %s", jid, room.jid, muc_affiliation_url);
     local body = json_encode({
         user_id = jid;
         room_id = room:get_talky_core_id();
@@ -58,6 +67,7 @@ local function fetch_role(room, jid)
 
     if type(code) == "number" and code >= 200 and code <= 299 then
         module:log("debug", "HTTP API returned affiliation: "..data);
+        affiliation_cache[jid] = data;
         return data;
     else
         module:log("debug", "HTTP API returned status code: "..code);
@@ -79,6 +89,12 @@ room_mt.get_affiliation = function (room, jid)
 
     return role;
 end
+
+
+module:hook("muc-occupant-left", function (event)
+    local jid = event.occupant.bare_jid;
+    affiliation_cache[jid] = nil;
+end);
 
 
 module:log("info", "Loaded mod_talky_core_muc_affiliations for %s", module.host);

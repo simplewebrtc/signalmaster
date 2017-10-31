@@ -10,7 +10,7 @@ const lab = exports.lab = Lab.script();
 const { describe, it, before } = lab;
 const { expect } = Code;
 
-describe('GET /prosody/ice-servers', () => {
+describe('GET /prosody/ice', () => {
 
   let server;
 
@@ -21,7 +21,7 @@ describe('GET /prosody/ice-servers', () => {
 
   it('requires auth', () => {
 
-    return server.inject({ method: 'POST', url: '/prosody/ice-servers' })
+    return server.inject({ method: 'POST', url: '/prosody/ice' })
       .then((res) => {
 
         expect(res.statusCode).to.equal(401);
@@ -31,7 +31,11 @@ describe('GET /prosody/ice-servers', () => {
   it('works', () => {
 
     const session = Fixtures.session();
-    return server.inject({ method: 'POST', url: '/prosody/ice-servers', credentials: session })
+    const payload = {
+      user_id: session.user_id,
+      session_id: session.id
+    };
+    return server.inject({ method: 'POST', url: '/prosody/ice', credentials: session, payload })
       .then((res) => {
 
         expect(res.statusCode).to.equal(200);
@@ -40,11 +44,15 @@ describe('GET /prosody/ice-servers', () => {
 
   it('auth', () => {
 
+    const session = Fixtures.session();
     const headers = {
       authorization: Fixtures.prosodyBasicHeader('testUser')
     };
-
-    return server.inject({ method: 'POST', url: '/prosody/ice-servers', headers })
+    const payload = {
+      user_id: session.user_id,
+      session_id: session.id
+    };
+    return server.inject({ method: 'POST', url: '/prosody/ice', headers, payload })
       .then((res) => {
 
         expect(res.statusCode).to.equal(200);

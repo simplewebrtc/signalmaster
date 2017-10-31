@@ -23,12 +23,10 @@ block content
         tr
           th Rooms
           td #{domains.rooms}
-
-    h4 ICE Servers
-    ul
-      for server, i in iceServers
-        li
-          a(href=server) #{server}
+        tr
+          th ICE
+          td
+            a(href=iceServer) #{iceServer.replace(/https?:\/\//, '').replace(/:[0-9]+/, '')}
 
     h4 Browser Screensharing Extensions 
     table

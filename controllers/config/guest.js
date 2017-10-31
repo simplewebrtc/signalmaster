@@ -15,6 +15,8 @@ const CheckLicense = require('../../lib/licensing');
 const TalkyCoreConfig = require('getconfig').talky;
 const Domains = InflateDomains(TalkyCoreConfig.domains);
 
+const DEFAULT_ORG = 'andyet';
+
 
 module.exports = {
   description: 'Auto-configure a registered user client session',
@@ -35,12 +37,12 @@ module.exports = {
       return reply(Boom.forbidden('Talky Core active user limit reached'));
     }
 
-    const ice = await FetchICE(request);
 
     const { ua, browser, device, os } = UAParser(request.headers['user-agent']);
 
     const id = UUID.v4();
     const user_id = `${id}@${Domains.guests}`;
+    const ice = FetchICE(DEFAULT_ORG, id);
 
     try {
       await this.db.sessions.insert({
@@ -59,6 +61,7 @@ module.exports = {
     const result = {
       id,
       userId: user_id,
+      orgId: DEFAULT_ORG,
       signalingUrl: TalkyCoreConfig.overrideGuestSignalingUrl || `${BuildUrl('ws', Domains.signaling)}/ws-bind`,
       telemetryUrl: `${BuildUrl('http', Domains.api)}/telemetry`,
       roomServer: Domains.rooms,
@@ -67,6 +70,7 @@ module.exports = {
       screensharingExtensions: TalkyCoreConfig.screensharingExtensions || {},
       credential: JWT.sign({
         id,
+        orgId: DEFAULT_ORG,
         registeredUser: false
       }, Config.auth.secret, {
         algorithm: 'HS256',

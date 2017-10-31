@@ -8,9 +8,12 @@ const FS = require('fs');
 
 const InflateDomains = require('./lib/domains');
 const BuildUrl = require('./lib/build_url');
-const Domains = InflateDomains(Config.talky.domains);
-const ProsodyAuth = require('./lib/prosody_auth');
 const ResetDB = require('./lib/reset_db');
+const Domains = InflateDomains(Config.talky.domains);
+
+const InternalAuth = require('./lib/internal_auth');
+const ProsodyAuth = require('./lib/prosody_auth');
+
 
 const Pkg = require('./package.json');
 
@@ -118,8 +121,8 @@ exports.Server = server.register([{ register: require('hapi-auth-basic') }]).the
         validateFunc: ProsodyAuth('bots')
       });
 
-      server.auth.strategy('prosody-api', 'basic', {
-        validateFunc: ProsodyAuth('api')
+      server.auth.strategy('internal-api', 'basic', {
+        validateFunc: InternalAuth
       });
 
       server.auth.strategy('client-token', 'jwt', {

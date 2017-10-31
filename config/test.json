@@ -11,9 +11,7 @@
     },
     "ice": {
       "secret": "foo",
-      "servers": [
-        "http://ice-test.talky.io"
-      ]
+      "server": "http://ice-test.talky.io"
     },
     "metrics": {
       "maskRoomNames": true

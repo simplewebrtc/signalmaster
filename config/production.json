@@ -3,7 +3,11 @@
     "module": "redis",
     "connection": {
       "host": "$REDIS_HOST",
-      "port": "$REDIS_PORT"
+      "port": "$REDIS_PORT",
+      "password": "$REDIS_PASSWORD",
+      "tls" {
+        "servername": "$REDIS_HOST"
+      }
     }
   },
   "isDevTLS": false,

@@ -12,7 +12,7 @@ const lab = exports.lab = Lab.script();
 const { describe, it, before, after } = lab;
 const { expect } = Code;
 
-const rpush = promisify(redis.rpush);
+const redis_rpush = promisify(redis.rpush);
 
 describe('event worker', () => {
 
@@ -25,9 +25,9 @@ describe('event worker', () => {
 
   before(async () => {
 
-    await rpush('events', JSON.stringify(main_event));
+    await redis_rpush('events', JSON.stringify(main_event));
     for (const event of events) {
-      await rpush('events', JSON.stringify(event));
+      await redis_rpush('events', JSON.stringify(event));
     }
   });
 
@@ -37,6 +37,7 @@ describe('event worker', () => {
     for (const event of events) {
       await db.events.destroy({ room_id: event.room_id, type: event.type });
     }
+    await eventWorker.stop();
   });
 
   it('processes events', async () => {

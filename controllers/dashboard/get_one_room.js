@@ -58,8 +58,6 @@ module.exports = {
       room,
       similarPrev,
       similarNext,
-      totalSessions,
-      activeSessions,
       data: events
     });
   }

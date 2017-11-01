@@ -1,8 +1,5 @@
 {
-  "isDevTLS": false,
-  "talky": {
-    "admins": {
-      "admin": "admin"
+    "admin": "admin"
     },
 
     "license": { "roomLimit": 5, "userLimit": 5, "expiresIn": "30d" },
@@ -42,6 +39,26 @@
     "host": "localhost",
     "routes": {
       "cors": true
+    }
+  },
+  "good": {
+    "includes": {
+      "request": ["headers"]
+    },
+    "reporters": {
+      "console": [{
+        "module": "good-squeeze",
+        "name": "Squeeze",
+        "args": [{
+          "log": "*",
+          "response": "*",
+          "request": "*",
+          "error": "*"
+        }]
+      }, {
+        "module": "good-console"
+      }, "stdout"
+      ]
     }
   }
 }

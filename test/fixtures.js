@@ -12,6 +12,7 @@ exports.Server = Server.Server;
 exports.db = Server.db;
 exports.redis = Server.redis;
 exports.eventWorker = Server.eventWorker;
+exports.roomReports = Server.roomReports;
 
 exports.iceServers = function () {
 
@@ -41,7 +42,7 @@ exports.event = function (attrs) {
   const defaults = {
     created_at: now,
     updated_at: now,
-    room_id: Faker.lorem.word()
+    room_id: Faker.random.word()
   };
 
   if (Math.random() * 2 > 1) {
@@ -55,7 +56,7 @@ exports.event = function (attrs) {
 exports.session = function (attrs) {
 
   const defaults = {
-    id: Faker.lorem.word(),
+    id: Faker.random.word(),
     user_id: Faker.internet.email(),
     scopes: ['mod']
   };
@@ -91,7 +92,7 @@ exports.clientToken = function (unsigned, attrs) {
 exports.room = function (attrs) {
 
   const defaults = {
-    id: Faker.lorem.word(),
+    id: Faker.random.word(),
     name: Faker.lorem.words().split(' ').join('-'),
     jid: Faker.internet.email()
   };

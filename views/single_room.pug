@@ -15,17 +15,17 @@ block dashboardContent
     tr
       th Largest Room Size
       td
-        - if room.reports
-          #{room.reports.activeSessions}
-        - else
-          =Processing
+        if room.reports
+          | #{room.reports.activeSessions}
+        else
+          | Processing
     tr
       th Total Occupants Joined
       td
-        - if room.reports
-          #{room.reports.totalSessions}
-        - else
-          =Processing
+        if room.reports
+          | #{room.reports.totalSessions}
+        else
+          | Processing
 
   if similarPrev || similarNext
     h3 Related Rooms

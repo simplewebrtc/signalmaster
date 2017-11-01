@@ -32,10 +32,12 @@ module.exports = {
         type: 'mobile'
       };
       await this.db.sessions.insert(session);
+
     }
 
     if (room_id) {
       let room = await this.db.rooms.findOne({ id: room_id });
+
       if (!room) {
         const roomAttrs = { name, id: room_id, jid };
         room = await this.db.rooms.insert(roomAttrs);
@@ -43,7 +45,7 @@ module.exports = {
 
       if (eventType === 'room_destroyed') {
         //Record room ended column
-        await this.db.rooms.updateOne(room, { ended_at: new Date() });
+        await this.db.rooms.updateOne({ id: room.id }, { ended_at: new Date() });
       }
       //Record event
       const event = {

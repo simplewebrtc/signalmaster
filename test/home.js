@@ -24,7 +24,6 @@ describe('GET /', () => {
     return server.inject({ method: 'GET', url: '/' })
       .then((res) => {
 
-        console.log(res.result);
         expect(res.statusCode).to.equal(200);
       });
   });

@@ -2,10 +2,7 @@
 
 exports.up = function (knex, Promise) {
 
-  return knex.schema.alterTable('rooms', (table) => {
-
-    table.index('name');
-  });
+  return knex.raw('create index concurrently "rooms_name_index" on "rooms" ("name")');
 };
 
 exports.down = function (knex, Promise) {
@@ -15,3 +12,5 @@ exports.down = function (knex, Promise) {
     table.dropIndex('name');
   });
 };
+
+exports.config = { transaction: false };

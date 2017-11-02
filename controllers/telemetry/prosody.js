@@ -11,7 +11,7 @@ module.exports = {
   handler: async function (request, reply) {
 
     const { eventType, data } = request.payload;
-    const { jid, session_id, room_id } = data;
+    const { session_id, room_id } = data;
     let { name } = data;
     const now = new Date();
 
@@ -22,76 +22,6 @@ module.exports = {
     }
     //$lab:coverage:on$
 
-    let session = await this.db.sessions.findOne({ id: session_id });
-
-    if (!session) {
-      // This exists to accommodate existing Talky iOS app users.
-      session = {
-        id: session_id,
-        user_id: `mobile-user-${session_id}`,
-        type: 'mobile'
-      };
-      await this.db.sessions.insert(session);
-
-    }
-
-    if (room_id) {
-      let room = await this.db.rooms.findOne({ id: room_id });
-
-      if (!room) {
-        const roomAttrs = { name, id: room_id, jid };
-        room = await this.db.rooms.insert(roomAttrs);
-      }
-
-      if (eventType === 'room_destroyed') {
-        //Record room ended column
-        await this.db.rooms.updateOne({ id: room.id }, { ended_at: new Date() });
-      }
-      //Record event
-      const event = {
-        type: eventType,
-        room_id: room.id,
-        actor_id: session_id,
-        created_at: now,
-        updated_at: now
-      };
-      await redis_rpush('events', JSON.stringify(event));
-
-      return reply();
-    }
-    if (eventType === 'user_offline') {
-      //Record user ended column
-      await this.db.sessions.updateOne(session, {
-        ended_at: new Date()
-      });
-      const event = {
-        created_at: now,
-        update_at: now,
-        type: eventType,
-        room_id: null,
-        actor_id: session_id
-      };
-      await redis_rpush('events', JSON.stringify(event));
-      return reply();
-    }
-    else if (eventType === 'user_online') {
-      // Clear out existing user ended column if session reconnected
-      await this.db.sessions.updateOne(session, {
-        created_at: new Date(),
-        ended_at: null
-      });
-
-      const event = {
-        created_at: now,
-        updated_at: now,
-        type: eventType,
-        room_id: null,
-        actor_id: session_id
-      };
-      await redis_rpush('events', JSON.stringify(event));
-      return reply();
-    }
-
     const event = {
       created_at: now,
       updated_at: now,
@@ -99,6 +29,11 @@ module.exports = {
       room_id: null,
       actor_id: session_id
     };
+    if (room_id) {
+      event.room_name = name;
+      event.room_id = room_id;
+    }
+
     await redis_rpush('events', JSON.stringify(event));
     return reply();
   },

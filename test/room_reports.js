@@ -79,7 +79,7 @@ describe('room reports', () => {
     //need to check that the clock is set
     const event_clock = await redis_get('events_clock');
     expect(event_clock).to.exist();
-    //expect(Number(event_clock)).to.be.about(Number(new Date()), 1000);
+
     //fudge the clock six minutes in the future so the reports run
     await redis_set('events_clock', Number(event_clock) + (6 * 60 * 1000));
     await roomReports.start();

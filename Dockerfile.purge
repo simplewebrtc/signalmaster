@@ -1,4 +1,4 @@
-FROM node:alpine
+FROM node:8-alpine
 
 MAINTAINER Heather Young heather@andyet.net
 

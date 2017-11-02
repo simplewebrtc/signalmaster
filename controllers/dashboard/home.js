@@ -1,6 +1,7 @@
 'use strict';
 const Joi = require('joi');
 const Duration = require('humanize-duration');
+const { promisify } = require('util');
 
 module.exports = {
   description: 'Dashboard',
@@ -11,6 +12,10 @@ module.exports = {
     const params = Object.assign({}, request.query);
     const limit = params.limit;
     params.offset = (params.page - 1) * limit;
+
+    const redis_llen = promisify(this.redis.llen.bind(this.redis));
+    const eventQueue = await redis_llen('events');
+    const roomReportQueue = await redis_llen('rooms_destroyed');
 
     const count = await this.db.rooms.count(params);
     const activeCount = await this.db.rooms.count_active();

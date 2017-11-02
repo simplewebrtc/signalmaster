@@ -24,12 +24,6 @@ block content
           th Rooms
           td #{domains.rooms}
         tr
-          th Queue
-          td
-            | Events: #{eventQueue}
-            br
-            | Room Reports: #{roomReportQueue}
-        tr
           th ICE
           td
             a(href=iceServer) #{iceServer.replace(/https?:\/\//, '').replace(/:[0-9]+/, '')}

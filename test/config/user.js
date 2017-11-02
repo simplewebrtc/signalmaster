@@ -3,7 +3,9 @@
 const Lab = require('lab');
 const Code = require('code');
 const Fixtures = require('../fixtures');
-const { db, Server } = Fixtures;
+const { eventWorker, db, Server } = Fixtures;
+const { promisify } = require('util');
+const timeout = promisify(setTimeout);
 const Base32 = require('base32-crockford-browser');
 
 const lab = exports.lab = Lab.script();
@@ -33,7 +35,7 @@ describe('POST /config/user', () => {
 
         expect(res.statusCode).to.equal(200);
         return res.result;
-      }).then((result) => {
+      }).then(async (result) => {
 
         registeredUser = result;
         const user_id = registeredUser.userId;
@@ -45,6 +47,10 @@ describe('POST /config/user', () => {
         expect(registeredUser.iceServers[2]).to.include(['username', 'password']);
         expect(decodedJid.id).to.equal(session.id);
         expect(decodedJid.scopes).to.equal(session.scopes);
+
+        await eventWorker.start();
+        await timeout(250); //hack way to try to let it drain the queue
+        await eventWorker.stop();
         return Fixtures.getAdminUrl(server, `/dashboard/sessions/${registeredUser.id}`);
       }).then((res) => {
 

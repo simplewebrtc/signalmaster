@@ -23,13 +23,15 @@ block dashboardContent
     table
       thead
         tr
-          th Queue Sizes
+          th Workers
+          th Queue Size
       tbody
         tr
-          td
-            | Events: #{eventQueue}
-            br
-            | Room Reports: #{roomReportQueue}
+          td Events
+          td #{eventQueue}     
+        tr
+          td Room Reports
+          td #{roomReportQueue}
 
   section
     h1 Recent rooms

@@ -8,6 +8,15 @@ pipeline:
     secrets: [ docker_username, docker_password, docker_email ]
     when:
       event: tag
+  docker_test:
+    image: plugins/docker
+    repo: andyet/talky-api-prod
+    tags: 
+      - ${DRONE_TAG##v}
+    secrets: [ docker_username, docker_password, docker_email ]
+    when:
+      event: push
+      branch: test-build
   docker_prod:
     image: plugins/docker
     repo: andyet/talky-api-prod

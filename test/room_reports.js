@@ -2,7 +2,7 @@
 
 const Lab = require('lab');
 const Code = require('code');
-//const Cheerio = require('cheerio');
+const Cheerio = require('cheerio');
 const Fixtures = require('./fixtures');
 const { promisify } = require('util');
 const { roomReports, eventWorker, db, redis, Server } = Fixtures;
@@ -80,19 +80,19 @@ describe('room reports', () => {
     const event_clock = await redis_get('events_clock');
     expect(event_clock).to.exist();
     //expect(Number(event_clock)).to.be.about(Number(new Date()), 1000);
-    //fudge the clock six minutes in the past so the reports run
-    await redis_set('events_clock', Number(event_clock) - (6 * 60 * 1000));
+    //fudge the clock six minutes in the future so the reports run
+    await redis_set('events_clock', Number(event_clock) + (6 * 60 * 1000));
     await roomReports.start();
     await timeout(100);
     await roomReports.stop();
     const res = await Fixtures.getAdminUrl(server, `/dashboard/rooms/${room.room_id}`);
     expect(res.statusCode).to.equal(200);
-    //const $ = Cheerio.load(res.result);
-    //const roomInfo = $('td').map(function () {
+    const $ = Cheerio.load(res.result);
+    const roomInfo = $('td').map(function () {
 
-    //return $(this).text().trim();
-    //}).get();
-    //expect(roomInfo[3]).to.equal('2'); //Largest Room Size
-    //expect(roomInfo[4]).to.equal('3'); //Total Occupants Joined
+      return $(this).text().trim();
+    }).get();
+    expect(roomInfo[3]).to.equal('2'); //Largest Room Size
+    expect(roomInfo[4]).to.equal('3'); //Total Occupants Joined
   });
 });

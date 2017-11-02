@@ -38,17 +38,6 @@ const roomReports = new RoomReports({ db, redis: redisClient });
 server.connection(Config.server);
 
 
-//$lab:coverage:off$
-process.on('sigterm', async () => {
-
-  server.log(['info', 'shutdown'], 'graceful shutdown');
-
-  await server.stop({ timeout: 15000 });
-  await ResetDB(db, 'system_stop');
-
-  process.exit(0);
-});
-
 server.on('request-error', (err, m) => {
 
   console.log(m.stack);
@@ -115,7 +104,7 @@ exports.Server = server.register([{ register: require('hapi-auth-basic') }]).the
   ])
     .then(() => {
 
-      return ResetDB(db, 'system_start');
+      return ResetDB(db, redisClient);
     })
     .then(() => {
 

@@ -53,6 +53,8 @@ module.exports = {
     return reply.view('list_of_rooms', {
       pages: pagesArr,
       data: rooms,
+      eventQueue,
+      roomReportQueue,
       activeRoomCount: activeCount.count,
       activeSessionCount: sessionCount.count,
       prevDayRoomCount: roomDayCount.count,

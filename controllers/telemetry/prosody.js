@@ -15,7 +15,7 @@ module.exports = {
     let { name } = data;
     const now = new Date();
 
-    const rpush = promisify(this.redis.rpush.bind(this.redis));
+    const redis_rpush = promisify(this.redis.rpush.bind(this.redis));
     //$lab:coverage:off$
     if (name && Config.talky.metrics && Config.talky.metrics.maskRoomNames) {
       name = Crypto.createHash('sha1').update(name).digest('base64');
@@ -55,7 +55,7 @@ module.exports = {
         created_at: now,
         updated_at: now
       };
-      await rpush('events', JSON.stringify(event));
+      await redis_rpush('events', JSON.stringify(event));
 
       return reply();
     }
@@ -71,7 +71,7 @@ module.exports = {
         room_id: null,
         actor_id: session_id
       };
-      await rpush('events', JSON.stringify(event));
+      await redis_rpush('events', JSON.stringify(event));
       return reply();
     }
     else if (eventType === 'user_online') {
@@ -88,7 +88,7 @@ module.exports = {
         room_id: null,
         actor_id: session_id
       };
-      await rpush('events', JSON.stringify(event));
+      await redis_rpush('events', JSON.stringify(event));
       return reply();
     }
 
@@ -99,7 +99,7 @@ module.exports = {
       room_id: null,
       actor_id: session_id
     };
-    await rpush('events', JSON.stringify(event));
+    await redis_rpush('events', JSON.stringify(event));
     return reply();
   },
   validate: {

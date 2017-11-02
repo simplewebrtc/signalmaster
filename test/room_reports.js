@@ -74,7 +74,7 @@ describe('room reports', () => {
       eventType: 'room_destroyed', data: room
     }, headers });
     await eventWorker.start();
-    await timeout(10);
+    await timeout(100);
     await eventWorker.stop();
     //need to check that the clock is set
     const event_clock = await redis_get('events_clock');
@@ -83,7 +83,7 @@ describe('room reports', () => {
     //fudge the clock six minutes in the past so the reports run
     await redis_set('events_clock', Number(event_clock) - (6 * 60 * 1000));
     await roomReports.start();
-    await timeout(10);
+    await timeout(100);
     await roomReports.stop();
     const res = await Fixtures.getAdminUrl(server, `/dashboard/rooms/${room.room_id}`);
     expect(res.statusCode).to.equal(200);

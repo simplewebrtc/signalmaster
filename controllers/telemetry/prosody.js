@@ -15,7 +15,7 @@ module.exports = {
     let { name } = data;
     const now = new Date();
 
-    const rpush = promisify(this.redis.rpush.bind(this.redis));
+    const redis_rpush = promisify(this.redis.rpush.bind(this.redis));
     //$lab:coverage:off$
     if (name && Config.talky.metrics && Config.talky.metrics.maskRoomNames) {
       name = Crypto.createHash('sha1').update(name).digest('base64');
@@ -32,10 +32,12 @@ module.exports = {
         type: 'mobile'
       };
       await this.db.sessions.insert(session);
+
     }
 
     if (room_id) {
       let room = await this.db.rooms.findOne({ id: room_id });
+
       if (!room) {
         const roomAttrs = { name, id: room_id, jid };
         room = await this.db.rooms.insert(roomAttrs);
@@ -43,7 +45,7 @@ module.exports = {
 
       if (eventType === 'room_destroyed') {
         //Record room ended column
-        await this.db.rooms.updateOne(room, { ended_at: new Date() });
+        await this.db.rooms.updateOne({ id: room.id }, { ended_at: new Date() });
       }
       //Record event
       const event = {
@@ -53,7 +55,7 @@ module.exports = {
         created_at: now,
         updated_at: now
       };
-      await rpush('events', JSON.stringify(event));
+      await redis_rpush('events', JSON.stringify(event));
 
       return reply();
     }
@@ -69,7 +71,7 @@ module.exports = {
         room_id: null,
         actor_id: session_id
       };
-      await rpush('events', JSON.stringify(event));
+      await redis_rpush('events', JSON.stringify(event));
       return reply();
     }
     else if (eventType === 'user_online') {
@@ -86,7 +88,7 @@ module.exports = {
         room_id: null,
         actor_id: session_id
       };
-      await rpush('events', JSON.stringify(event));
+      await redis_rpush('events', JSON.stringify(event));
       return reply();
     }
 
@@ -97,7 +99,7 @@ module.exports = {
       room_id: null,
       actor_id: session_id
     };
-    await rpush('events', JSON.stringify(event));
+    await redis_rpush('events', JSON.stringify(event));
     return reply();
   },
   validate: {

@@ -17,25 +17,21 @@ module.exports = {
       throw Boom.notFound();
     }
 
-    const events = await this.db.events.find({ room_id: id });
-    events.sort((a, b) => {
-
-      return a.created_at > b.created_at ? 1 : a.created_at < b.created_at ? -1 : 0;
-    });
-
-    const similarPrev = (await this.db.rooms.get_similar_prev({
-      name: room.name,
-      interval: 5,
-      created_at: room.created_at,
-      ended_at: room.ended_at
-    }))[0];
-
-    const similarNext = (await this.db.rooms.get_similar_next({
-      name: room.name,
-      interval: 5,
-      created_at: room.created_at,
-      ended_at: room.ended_at
-    }))[0];
+    const [events, similarPrev, similarNext] = await Promise.all([
+      this.db.events.for_room({ room_id: id }),
+      this.db.rooms.get_similar_prev({
+        name: room.name,
+        interval: 5,
+        created_at: room.created_at,
+        ended_at: room.ended_at
+      }),
+      this.db.rooms.get_similar_next({
+        name: room.name,
+        interval: 5,
+        created_at: room.created_at,
+        ended_at: room.ended_at
+      })
+    ]);
 
     for (const roomData of [room, similarPrev, similarNext]) {
       if (!roomData) {
@@ -57,24 +53,11 @@ module.exports = {
       }
     }
 
-    let totalSessions = 0;
-    let activeSessions = 0;
-    const sessions = new Set();
-    for (const event of events) {
-      if (event.type === 'occupant_joined') {
-        totalSessions += 1;
-        sessions.add(event.actor_id);
-        activeSessions = Math.max(sessions.size, activeSessions);
-      }
-    }
-
     return reply.view('single_room', {
       resource: id,
       room,
       similarPrev,
       similarNext,
-      totalSessions,
-      activeSessions,
       data: events
     });
   }

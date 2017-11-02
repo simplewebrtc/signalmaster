@@ -16,6 +16,7 @@ const InternalAuth = require('./lib/internal_auth');
 const ProsodyAuth = require('./lib/prosody_auth');
 
 const EventWorker = require('./lib/event_worker');
+const RoomReports = require('./lib/room_reports');
 
 const Pkg = require('./package.json');
 
@@ -33,6 +34,7 @@ const server = new Hapi.Server();
 const db = new Muckraker({ connection: Config.db });
 const redisClient = Redis.createClient(Config.redis.connection);
 const eventWorker = new EventWorker({ db, redis: redisClient });
+const roomReports = new RoomReports({ db, redis: redisClient });
 server.connection(Config.server);
 
 
@@ -65,6 +67,7 @@ wsProxy.on('error', (err) => {
 exports.db = db;
 exports.redis = redisClient;
 exports.eventWorker = eventWorker;
+exports.roomReports = roomReports;
 
 
 exports.Server = server.register([{ register: require('hapi-auth-basic') }]).then(() => {
@@ -174,6 +177,7 @@ exports.Server = server.register([{ register: require('hapi-auth-basic') }]).the
       }
 
       eventWorker.start();
+      roomReports.start();
       return server.start().then(() => {
 
         server.connections.forEach((connection) => {

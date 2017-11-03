@@ -23,7 +23,7 @@ pipeline:
   #   when:
   #     event: tag
   #   secrets: [ kubernetes_cert, kubernetes_server, kubernetes_token ]
-  deploy_prod:
+  deploy:
     image: quay.io/honestbee/drone-kubernetes
     kubernetes_server: ${KUBERNETES_SERVER}
     kubernetes_cert: ${KUBERNETES_CERT}
@@ -35,7 +35,7 @@ pipeline:
     tag: 
     - ${DRONE_COMMIT_SHA:0:8}
     when:
-      event: deploy
+      event: deployment
     secrets: [ kubernetes_cert, kubernetes_server, kubernetes_token ]
   slack:
     image: plugins/slack

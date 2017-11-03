@@ -1,42 +1,13 @@
 pipeline:
-  test:
-    image: node:8
-    commands:
-      - echo ${DRONE_DEPLOY_TO}
-      - echo $${DRONE_DEPLOY_TO}
-      - echo ${DRONE_TAG}
-      - echo $${DRONE_TAG}
-      - echo ${DRONE_COMMIT_SHA}
-      - echo $${DRONE_COMMIT_SHA}
-    when:
-      event: push
-      branch: test-build
   docker_stage:
-    image: plugins/docker
-    repo: andyet/talky-api-stage
-    tags: 
-      - ${DRONE_COMMIT_SHA##v}
-      - latest
-    secrets: [ docker_username, docker_password, docker_email ]
-    when:
-      event: tag
-  docker_test:
-    image: plugins/docker
-    repo: andyet/talky-api-prod
-    tags: 
-      - ${DRONE_TAG}
-    secrets: [ docker_username, docker_password, docker_email ]
-    when:
-      event: push
-      branch: test-build
-  docker_prod:
     image: plugins/docker
     repo: andyet/talky-api-prod
     tags: 
       - ${DRONE_TAG##v}
+      - latest
     secrets: [ docker_username, docker_password, docker_email ]
     when:
-      event: deployment
+      event: tag
   deploy_stage:
     image: quay.io/honestbee/drone-kubernetes
     kubernetes_server: ${KUBERNETES_SERVER}
@@ -61,7 +32,7 @@ pipeline:
     container: api
     namespace: default
     tag: 
-    - ${DRONE_TAG##v}
+    - latest
     when:
       event: deploy
     secrets: [ kubernetes_cert, kubernetes_server, kubernetes_token ]

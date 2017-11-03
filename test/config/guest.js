@@ -3,9 +3,9 @@
 const Lab = require('lab');
 const Code = require('code');
 const Fixtures = require('../fixtures');
-const { db, Server } = Fixtures;
-const Nock = require('nock');
-const Config = require('getconfig');
+const { eventWorker, db, Server } = Fixtures;
+const { promisify } = require('util');
+const timeout = promisify(setTimeout);
 
 const lab = exports.lab = Lab.script();
 
@@ -26,20 +26,19 @@ describe('Guest account', () => {
     let guestUser;
     const iceServers = Fixtures.iceServers();
 
-    Nock(Config.talky.ice.servers[0])
-      .get('/ice-servers.json')
-      .reply(200, iceServers);
-
     return server.inject({ method: 'POST', url: '/config/guest', payload: {} })
       .then((res) => {
 
         expect(res.statusCode).to.equal(200);
         return res.result;
-      }).then((result) => {
+      }).then(async (result) => {
 
         guestUser = result;
         expect(guestUser.iceServers).to.part.include(iceServers);
         expect(guestUser.iceServers[0]).to.include(['username', 'password']);
+        await eventWorker.start();
+        await timeout(250); //hack way to try to let it drain the queue
+        await eventWorker.stop();
         return Fixtures.getAdminUrl(server, `/dashboard/sessions/${guestUser.id}`);
       }).then((res) => {
 

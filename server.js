@@ -3,14 +3,20 @@
 const Hapi = require('hapi');
 const Muckraker = require('muckraker');
 const Config = require('getconfig');
+const Redis = require(Config.redis.module);
 const Proxy = require('http-proxy');
 const FS = require('fs');
 
 const InflateDomains = require('./lib/domains');
 const BuildUrl = require('./lib/build_url');
-const Domains = InflateDomains(Config.talky.domains);
-const ProsodyAuth = require('./lib/prosody_auth');
 const ResetDB = require('./lib/reset_db');
+const Domains = InflateDomains(Config.talky.domains);
+
+const InternalAuth = require('./lib/internal_auth');
+const ProsodyAuth = require('./lib/prosody_auth');
+
+const EventWorker = require('./lib/event_worker');
+const RoomReports = require('./lib/room_reports');
 
 const Pkg = require('./package.json');
 
@@ -26,18 +32,11 @@ if (Config.getconfig.env !== 'production') {
 
 const server = new Hapi.Server();
 const db = new Muckraker({ connection: Config.db });
+const redisClient = Redis.createClient(Config.redis.connection);
+const eventWorker = new EventWorker({ db, redis: redisClient });
+const roomReports = new RoomReports({ db, redis: redisClient });
 server.connection(Config.server);
 
-//$lab:coverage:off$
-process.on('sigterm', async () => {
-
-  server.log(['info', 'shutdown'], 'graceful shutdown');
-
-  await server.stop({ timeout: 15000 });
-  await ResetDB(db, 'system_stop');
-
-  process.exit(0);
-});
 
 server.on('request-error', (err, m) => {
 
@@ -55,6 +54,9 @@ wsProxy.on('error', (err) => {
 //$lab:coverage:on$
 
 exports.db = db;
+exports.redis = redisClient;
+exports.eventWorker = eventWorker;
+exports.roomReports = roomReports;
 
 
 exports.Server = server.register([{ register: require('hapi-auth-basic') }]).then(() => {
@@ -102,7 +104,7 @@ exports.Server = server.register([{ register: require('hapi-auth-basic') }]).the
   ])
     .then(() => {
 
-      return ResetDB(db, 'system_start');
+      return ResetDB(db, redisClient);
     })
     .then(() => {
 
@@ -118,8 +120,8 @@ exports.Server = server.register([{ register: require('hapi-auth-basic') }]).the
         validateFunc: ProsodyAuth('bots')
       });
 
-      server.auth.strategy('prosody-api', 'basic', {
-        validateFunc: ProsodyAuth('api')
+      server.auth.strategy('internal-api', 'basic', {
+        validateFunc: InternalAuth
       });
 
       server.auth.strategy('client-token', 'jwt', {
@@ -150,7 +152,7 @@ exports.Server = server.register([{ register: require('hapi-auth-basic') }]).the
       }
       // $lab:coverage:on$
 
-      server.bind({ db });
+      server.bind({ db, redis: redisClient });
       server.route(require('./routes'));
     }).then(() => {
 
@@ -163,6 +165,8 @@ exports.Server = server.register([{ register: require('hapi-auth-basic') }]).the
         });
       }
 
+      eventWorker.start();
+      roomReports.start();
       return server.start().then(() => {
 
         server.connections.forEach((connection) => {

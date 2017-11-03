@@ -10,27 +10,53 @@ const Domains = InflateDomains(Config.talky.domains);
 
 exports.Server = Server.Server;
 exports.db = Server.db;
+exports.redis = Server.redis;
+exports.eventWorker = Server.eventWorker;
+exports.roomReports = Server.roomReports;
 
 exports.iceServers = function () {
 
   const result = [{
     type: 'turn',
-    host: '10.0.0.42'
+    host: 'ice-test.talky.io',
+    port: 3478
+  }, {
+    type: 'turn',
+    host: 'ice-test.talky.io',
+    port: 3478,
+    transport: 'tcp'
   }, {
     type: 'turns',
-    host: '10.0.0.43'
-  }, {
-    type: 'stun',
-    host: '10.0.0.44'
-  }];
+    host: 'ice-test.talky.io',
+    port: 443,
+    transport: 'tcp'
+  }
+  ];
 
   return result;
 };
 
+exports.event = function (attrs) {
+
+  const now = new Date();
+  const defaults = {
+    created_at: now,
+    updated_at: now,
+    room_id: Faker.random.word()
+  };
+
+  if (Math.random() * 2 > 1) {
+    defaults.actor_id = Faker.internet.email();
+    if (Math.random() * 3 > 1) {
+      defaults.peer_id = Faker.internet.email();
+    }
+  }
+  return Object.assign(defaults, attrs);
+};
 exports.session = function (attrs) {
 
   const defaults = {
-    id: Faker.lorem.word(),
+    id: Faker.random.word(),
     user_id: Faker.internet.email(),
     scopes: ['mod']
   };
@@ -66,7 +92,7 @@ exports.clientToken = function (unsigned, attrs) {
 exports.room = function (attrs) {
 
   const defaults = {
-    id: Faker.lorem.word(),
+    id: Faker.random.word(),
     name: Faker.lorem.words().split(' ').join('-'),
     jid: Faker.internet.email()
   };

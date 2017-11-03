@@ -20,6 +20,18 @@ block dashboardContent
           td #{activeSessionCount}
           td #{prevDaySessionCount}
           td #{prevWeekSessionCount}
+    table
+      thead
+        tr
+          th Workers
+          th Queue Size
+      tbody
+        tr
+          td Events
+          td #{eventQueue}     
+        tr
+          td Room Reports
+          td #{roomReportQueue}
 
   section
     h1 Recent rooms

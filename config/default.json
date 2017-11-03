@@ -1,2 +1,7 @@
 {
+  "redis": {
+    "module": "redis-mock",
+    "connection": {}
+  }
 }
+

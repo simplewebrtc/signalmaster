@@ -14,10 +14,18 @@ block dashboardContent
       td #{room.duration}
     tr
       th Largest Room Size
-      td #{activeSessions}
+      td
+        if room.reports
+          | #{room.reports.activeSessions}
+        else
+          | Processing
     tr
       th Total Occupants Joined
-      td #{totalSessions}
+      td
+        if room.reports
+          | #{room.reports.totalSessions}
+        else
+          | Processing
 
   if similarPrev || similarNext
     h3 Related Rooms

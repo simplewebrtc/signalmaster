@@ -3,9 +3,9 @@
 const Lab = require('lab');
 const Code = require('code');
 const Fixtures = require('../fixtures');
-const { db, Server } = Fixtures;
-const Nock = require('nock');
-const Config = require('getconfig');
+const { eventWorker, db, Server } = Fixtures;
+const { promisify } = require('util');
+const timeout = promisify(setTimeout);
 const Base32 = require('base32-crockford-browser');
 
 const lab = exports.lab = Lab.script();
@@ -28,10 +28,6 @@ describe('POST /config/user', () => {
     const session = Fixtures.session();
     const token = Fixtures.apiToken(session);
 
-    Nock(Config.talky.ice.servers[0])
-      .get('/ice-servers.json')
-      .reply(200, iceServers);
-
     let registeredUser;
 
     return server.inject({ method: 'POST', url: '/config/user', payload: { token } })
@@ -39,7 +35,7 @@ describe('POST /config/user', () => {
 
         expect(res.statusCode).to.equal(200);
         return res.result;
-      }).then((result) => {
+      }).then(async (result) => {
 
         registeredUser = result;
         const user_id = registeredUser.userId;
@@ -48,9 +44,13 @@ describe('POST /config/user', () => {
         expect(registeredUser.iceServers).to.part.include(iceServers);
         expect(registeredUser.iceServers[0]).to.include(['username', 'password']);
         expect(registeredUser.iceServers[1]).to.include(['username', 'password']);
-        expect(registeredUser.iceServers[2]).to.not.include(['username', 'password']);
+        expect(registeredUser.iceServers[2]).to.include(['username', 'password']);
         expect(decodedJid.id).to.equal(session.id);
         expect(decodedJid.scopes).to.equal(session.scopes);
+
+        await eventWorker.start();
+        await timeout(250); //hack way to try to let it drain the queue
+        await eventWorker.stop();
         return Fixtures.getAdminUrl(server, `/dashboard/sessions/${registeredUser.id}`);
       }).then((res) => {
 

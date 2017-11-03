@@ -8,7 +8,8 @@ module.exports = {
   tags: ['api', 'ice'],
   handler: function (request, reply) {
 
-    return reply(FetchICE(request));
+    const session = request.auth.credentials;
+    return reply(FetchICE(session.orgId, session.id));
   },
   response: {
     status: {

@@ -4,8 +4,6 @@ const Lab = require('lab');
 const Code = require('code');
 const Fixtures = require('../fixtures');
 const { db, Server } = Fixtures;
-const Nock = require('nock');
-const Config = require('getconfig');
 
 const lab = exports.lab = Lab.script();
 
@@ -25,10 +23,6 @@ describe('Bot account', () => {
 
     let botUser;
     const iceServers = Fixtures.iceServers();
-
-    Nock(Config.talky.ice.servers[0])
-      .get('/ice-servers.json')
-      .reply(200, iceServers);
 
     return server.inject({ method: 'POST', url: '/config/bot', payload: {} })
       .then((res) => {

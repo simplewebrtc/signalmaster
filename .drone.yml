@@ -1,9 +1,20 @@
 pipeline:
+  test:
+    commands:
+      - echo ${DRONE_DEPLOY_TO}
+      - echo $${DRONE_DEPLOY_TO}
+      - echo ${DRONE_TAG}
+      - echo $${DRONE_TAG}
+      - echo ${DRONE_COMMIT_SHA}
+      - echo $${DRONE_COMMIT_SHA}
+    when:
+      event: push
+      branch: test-build
   docker_stage:
     image: plugins/docker
     repo: andyet/talky-api-stage
     tags: 
-      - ${DRONE_TAG##v}
+      - ${DRONE_COMMIT_SHA##v}
       - latest
     secrets: [ docker_username, docker_password, docker_email ]
     when:
@@ -12,7 +23,7 @@ pipeline:
     image: plugins/docker
     repo: andyet/talky-api-prod
     tags: 
-      - ${DRONE_TAG##v}
+      - ${DRONE_TAG}
     secrets: [ docker_username, docker_password, docker_email ]
     when:
       event: push

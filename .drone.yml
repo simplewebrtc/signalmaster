@@ -1,5 +1,6 @@
 pipeline:
   test:
+    image: node:8
     commands:
       - echo ${DRONE_DEPLOY_TO}
       - echo $${DRONE_DEPLOY_TO}

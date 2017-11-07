@@ -25,13 +25,16 @@ block dashboardContent
         tr
           th Workers
           th Queue Size
+          th Queue Clock
       tbody
         tr
           td Events
-          td #{eventQueue}     
+          td #{eventQueue}
+          td #{eventClock}
         tr
           td Room Reports
           td #{roomReportQueue}
+          td #{eventClock}
 
   section
     h1 Recent rooms

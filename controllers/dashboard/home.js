@@ -14,8 +14,13 @@ module.exports = {
     params.offset = (params.page - 1) * limit;
 
     const redis_llen = promisify(this.redis.llen.bind(this.redis));
+    const redis_get = promisify(this.redis.get.bind(this.redis));
     const eventQueue = await redis_llen('events');
     const roomReportQueue = await redis_llen('rooms_destroyed');
+    let eventClock = await redis_get('events_clock');
+    if (eventClock) {
+      eventClock = new Date(Number(eventClock));
+    }
 
     const count = await this.db.rooms.count(params);
     const activeCount = await this.db.rooms.count_active();
@@ -58,6 +63,7 @@ module.exports = {
     return reply.view('list_of_rooms', {
       pages: pagesArr,
       data: rooms,
+      eventClock,
       eventQueue,
       roomReportQueue,
       activeRoomCount: activeCount.count,

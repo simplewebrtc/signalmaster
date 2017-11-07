@@ -1,4 +1,10 @@
 pipeline:
+  migratedb_stage:
+    image: node:8
+    commands:
+    - npm run migrate
+    when:
+      event: tag
   docker_stage:
     image: plugins/docker
     repo: andyet/talky-api

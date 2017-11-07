@@ -198,3 +198,14 @@ process.on('unhandledRejection', function () {
   process.exit();
 });
 // $lab:coverage:on$
+
+// $lab:coverage:off$
+process.on('SIGTERM', async () => {
+
+  server.log(['info', 'shutdown'], 'Graceful shutdown');
+  await server.stop({ timeout: 15000 });
+  await eventWorker.stop();
+  await roomReports.stop();
+  process.exit(0);
+});
+// $lab:coverage:on$

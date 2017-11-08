@@ -16,7 +16,7 @@ const InternalAuth = require('./lib/internal_auth');
 const ProsodyAuth = require('./lib/prosody_auth');
 
 const EventWorker = require('./lib/event_worker');
-const RoomReports = require('./lib/room_reports');
+const RoomReports = require('./lib/room_reports_worker');
 
 const Pkg = require('./package.json');
 

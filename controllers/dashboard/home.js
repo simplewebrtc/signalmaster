@@ -15,11 +15,18 @@ module.exports = {
 
     const redis_llen = promisify(this.redis.llen.bind(this.redis));
     const redis_get = promisify(this.redis.get.bind(this.redis));
+    const redis_lindex = promisify(this.redis.lindex.bind(this.redis));
+
     const eventQueue = await redis_llen('events');
     const roomReportQueue = await redis_llen('rooms_destroyed');
     let eventClock = await redis_get('events_clock');
     if (eventClock) {
       eventClock = new Date(Number(eventClock));
+    }
+    const nextReport = await redis_lindex('rooms_destroyed', 0);
+    let roomReportClock = '-';
+    if (nextReport) {
+      roomReportClock = new Date(JSON.parse(nextReport).created_at);
     }
 
     const count = await this.db.rooms.count(params);
@@ -64,6 +71,7 @@ module.exports = {
       pages: pagesArr,
       data: rooms,
       eventClock,
+      roomReportClock,
       eventQueue,
       roomReportQueue,
       activeRoomCount: activeCount.count,

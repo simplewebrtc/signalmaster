@@ -27,6 +27,7 @@ block dashboardContent
         else
           | Processing
 
+
   if similarPrev || similarNext
     h3 Related Rooms
     p This room's name was reused in a short period of time. You may need to check these related rooms for more event logs:
@@ -47,6 +48,36 @@ block dashboardContent
             a(href='/dashboard/rooms/' + similarNext.id) Next instance
           td #{similarNext.delta}
           td #{similarNext.duration}
+
+  if room.reports && room.reports.speakingTimes
+    if room.reports.speakingTimes.totalTime > 0
+      h3 Talk Time (Total: #{(room.reports.speakingTimes.totalTime / 60000).toFixed(2)} min)
+    else
+      h3 Talk Time (None)
+  else
+    h3 Talk Time (Processing)
+  table
+    thead
+      th Speaker
+      th Times Spoke
+      th Talk Time
+      th Talk Time Percentage
+    tbody
+      if room.reports && room.reports.speakingTimes
+        if room.reports.speakingTimes.speakers.length
+          each speaker in room.reports.speakingTimes.speakers
+            tr
+              td
+                a(href='/dashboard/sessions/' + speaker.speaker) #{speaker.speaker} 
+              td #{speaker.count}
+              td #{(speaker.duration / 60000).toFixed(2)} min
+              td #{speaker.percentage.toFixed(2)}%
+        else
+          tr
+            td(colspan=4) No speakers
+      else
+        tr
+          td(colspan=4) Processing
 
   h3 Events
   table

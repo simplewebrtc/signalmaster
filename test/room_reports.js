@@ -92,7 +92,7 @@ describe('room reports', () => {
 
       return $(this).text().trim();
     }).get();
-    expect(roomInfo[3]).to.equal('2'); //Largest Room Size
-    expect(roomInfo[4]).to.equal('3'); //Total Occupants Joined
+    expect(roomInfo[6]).to.equal('2'); //Largest Room Size
+    expect(roomInfo[7]).to.equal('3'); //Total Occupants Joined
   });
 });

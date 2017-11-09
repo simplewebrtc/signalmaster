@@ -1,32 +1,12 @@
 extends layout_dashboard
 
 block dashboardContent
-  h3 Room Info
+  h3 Room Summary
   table
-    tr
-      th Room ID
-      td #{resource}
-    tr
-      th Room Name
-      td #{room.name}
-    tr
-      th Duration
-      td #{room.duration}
-    tr
-      th Largest Room Size
-      td
-        if room.reports
-          | #{room.reports.activeSessions}
-        else
-          | Processing
-    tr
-      th Total Occupants Joined
-      td
-        if room.reports
-          | #{room.reports.totalSessions}
-        else
-          | Processing
-
+    each row in summary
+      tr
+        th #{row[0]}
+        td #{row[1]}
 
   if similarPrev || similarNext
     h3 Related Rooms
@@ -49,46 +29,52 @@ block dashboardContent
           td #{similarNext.delta}
           td #{similarNext.duration}
 
-  if room.reports && room.reports.speakingTimes
-    if room.reports.speakingTimes.totalTime > 0
-      h3 Talk Time (Total: #{(room.reports.speakingTimes.totalTime / 60000).toFixed(2)} min)
-    else
-      h3 Talk Time (None)
-  else
-    h3 Talk Time (Processing)
-  table
-    thead
-      th Speaker
-      th Times Spoke
-      th Talk Time
-      th Talk Time Percentage
-    tbody
-      if room.reports && room.reports.speakingTimes
-        if room.reports.speakingTimes.speakers.length
-          each speaker in room.reports.speakingTimes.speakers
+  if report 
+    h3 Occupants
+    table
+      thead
+        th #
+        th Session 
+        th Times Joined 
+        th Duration
+      tbody
+        if report.occupants.occupants.length
+          each occupant in room.reports.occupants.occupants
             tr
               td
-                a(href='/dashboard/sessions/' + speaker.speaker) #{speaker.speaker} 
+                a(href='/dashboard/sessions/' + occupant.session) #{shortSessions[occupant.session]} 
+              td
+                a(href='/dashboard/sessions/' + occupant.session) #{occupant.session} 
+              td #{occupant.count}
+              td #{occupant.duration}
+        else
+          tr td(colspan=4) No occupants
+
+    h3 Talk Time 
+    table
+      thead
+        th Speaker
+        th Times Spoke
+        th Times Interrupted
+        th Talk Time
+        th Talk Time Percentage
+      tbody
+        if report.speakingTimes.speakers.length
+          each speaker in report.speakingTimes.speakers
+            tr
+              td
+                a(href='/dashboard/sessions/' + speaker.speaker) #{shortSessions[speaker.speaker]} 
               td #{speaker.count}
-              td #{(speaker.duration / 60000).toFixed(2)} min
+              td #{speaker.interrupts}
+              td #{speaker.duration}
               td #{speaker.percentage.toFixed(2)}%
         else
           tr
             td(colspan=4) No speakers
+  else
+    h3.center
+      if room.ended_at
+        | Room report is being generated.
       else
-        tr
-          td(colspan=4) Processing
+        | Room is currently live.
 
-  h3 Events
-  table
-    thead
-      th Event
-      th Session
-      th Time
-    tbody
-      each val in data
-        tr
-          td #{val.type}
-          td
-            a(href='/dashboard/sessions/' + val.actor_id) #{val.actor_id}
-          td #{val.created_at}

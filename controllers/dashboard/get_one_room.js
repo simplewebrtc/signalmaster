@@ -82,6 +82,10 @@ module.exports = {
       for (const speaker of report.speakingTimes.speakers) {
         speaker.duration = Duration(speaker.duration);
       }
+
+      for (const session of report.jingle) {
+        session.duration = Duration(session.duration);
+      }
     }
 
     return reply.view('single_room', {

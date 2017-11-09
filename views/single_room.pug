@@ -71,6 +71,31 @@ block dashboardContent
         else
           tr
             td(colspan=4) No speakers
+
+    h3 Media Sessions
+    table
+      thead
+        th Initiator
+        th Responder
+        th Audio
+        th Video
+        th Connected
+        th Duration
+      tbody
+        if report.jingle.length
+          each session in report.jingle
+            tr
+              td
+                a(href='/dashboard/sessions/' + session.initiator) #{shortSessions[session.initiator]} 
+              td
+                a(href='/dashboard/sessions/' + session.responder) #{shortSessions[session.responder]} 
+              td #{session.audio ? 'Yes' : 'No'}
+              td #{session.video ? 'Yes' : 'No'}
+              td #{session.connected ? 'Yes' : 'No'}
+              td #{session.duration}
+        else
+          tr
+            td(colspan=6) No sessions
   else
     h3.center
       if room.ended_at

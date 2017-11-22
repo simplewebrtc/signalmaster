@@ -51,6 +51,11 @@ end
 module:provides("http", {
     default_path = "/";
     route = {
+        ["GET /"] = function (event)
+            local response = event.response;
+            response.statusCode = 200;
+            return "";
+        end;
         ["GET /instance-check"] = function (event)
             local response = event.response;
             response.headers.content_type = "application/json";
@@ -71,7 +76,7 @@ module:provides("http", {
                 identifier.host = domain;
                 return json_encode(identifier);
             end
-        end
+        end;
     }
 });
 

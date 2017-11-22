@@ -23,7 +23,7 @@
 
   },
   "auth": {
-    "secret": "$JWT_PASSWORD",
+    "secret": "$INTERNAL_API_KEY",
     "options": {
       "algorithm": "HS256"
     }
@@ -45,7 +45,7 @@
       "admin": "$ADMIN_PASSWORD"
     },
     "license": "$TALKY_LICENSE",
-    "apiKey": "$TALKY_API_KEY",
+    "apiKey": "$CUSTOMER_API_KEY",
 
     "domains": {
       "api": "$API_DOMAIN",

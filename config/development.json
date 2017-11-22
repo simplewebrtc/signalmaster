@@ -27,9 +27,10 @@
     }
   },
   "db": {
+    "host": "35.188.162.85",
     "user": "talky",
-    "password": "password",
-    "database": "talky_api"
+    "password": "z00mz00mbu773r%p1rat3s",
+    "database": "talky_api_stage"
   },
   "auth": {
     "secret": "internal-use-jwt-password-makethisoneprettysecureok",

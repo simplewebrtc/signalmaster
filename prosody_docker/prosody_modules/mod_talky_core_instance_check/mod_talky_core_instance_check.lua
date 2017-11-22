@@ -56,6 +56,11 @@ module:provides("http", {
             response.statusCode = 200;
             return "";
         end;
+        ["HEAD /"] = function (event)
+            local response = event.response;
+            response.statusCode = 200;
+            return "";
+        end;
         ["GET /instance-check"] = function (event)
             local response = event.response;
             response.headers.content_type = "application/json";

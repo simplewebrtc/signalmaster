@@ -7,7 +7,7 @@ exports.up = async function (knex, Promise) {
 
     table.text('id').unique().index();
     table.bigint('seq').defaultTo(knex.raw('nextval(\'rooms_seq\')')).index(); //Used for pagination
-    table.text('name').index();
+    table.text('name');
     table.text('jid');
     table.timestamps();
   });

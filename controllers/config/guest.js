@@ -57,7 +57,10 @@ module.exports = {
       created_at: new Date(),
       updated_at: new Date()
     };
+
+    console.log('BEFORE REDIS');
     await redis_rpush('events', JSON.stringify(event));
+    console.log('AFTER REDIS');
 
     const result = {
       id,

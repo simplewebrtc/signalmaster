@@ -1,5 +1,13 @@
 {
   "isDevTLS": false,
+  "redis": {
+    "module": "redis",
+    "connection": {
+      "host": "",
+      "port": "$REDIS_PORT",
+      "password": "$REDIS_PASSWORD"
+    }
+  },
   "talky": {
     "admins": {
       "admin": "admin"
@@ -27,10 +35,10 @@
     }
   },
   "db": {
-    "host": "35.188.162.85",
+    "host": "localhost",
     "user": "talky",
-    "password": "z00mz00mbu773r%p1rat3s",
-    "database": "talky_api_stage"
+    "password": "password",
+    "database": "talky_api"
   },
   "auth": {
     "secret": "internal-use-jwt-password-makethisoneprettysecureok",

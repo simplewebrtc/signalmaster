@@ -1,13 +1,5 @@
--- Globals required by socket.http
-if rawget(_G, "PROXY") == nil then
-    rawset(_G, "PROXY", false)
-end
-if rawget(_G, "base_parsed") == nil then
-    rawset(_G, "base_parsed", false)
-end
-
-local http = require "socket.http";
-local https = require "ssl.https";
+local async = require "util.async";
+local http = require "net.http";
 
 local new_sasl = require "util.sasl".new;
 local base64 = require "util.encodings".base64.encode;
@@ -16,27 +8,25 @@ local auth_url = module:get_option_string("talky_core_auth_url",  "");
 local allow_anon = module:get_option_boolean("talky_core_auth_allow_anonymous",  false);
 
 
-local request;
-if string.sub(auth_url, 1, string.len('https')) == 'https' then
-    request = https.request;
-else
-    request = http.request;
-end
-
-
 local function http_auth(username, password)
-    local _, code, headers, status = request{
-        url = auth_url,
+    local wait, done = async.waiter();
+    local content, code, request, response;
+    local ex = {
         headers = { Authorization = "Basic "..base64(username..":"..password); };
-    };
-
-    if type(code) == "number" and code >= 200 and code <= 299 then
-        module:log("debug", "HTTP API confirmed password");
+    }
+    local function cb(content_, code_, request_, response_)
+        content, code, request, response = content_, code_, request_, response_;
+        done();
+    end
+    http.request(auth_url, ex, cb);
+    wait();
+    if code >= 200 and code <= 299 then
+        module:log("debug", "HTTP auth provider confirmed valid password");
         return true;
     else
-        module:log("debug", "HTTP API returned status code: "..code);
+        module:log("debug", "HTTP auth provider returned status code %d", code);
     end
-    return nil, "Invalid username or password.";
+    return nil, "Auth failed. Invalid username or password.";
 end
 
 

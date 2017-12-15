@@ -1,13 +1,5 @@
--- Globals required by socket.http
-if rawget(_G, "PROXY") == nil then
-    rawset(_G, "PROXY", false)
-end
-if rawget(_G, "base_parsed") == nil then
-    rawset(_G, "base_parsed", false)
-end
-
-local http = require "socket.http";
-local https = require "ssl.https";
+local async = require "util.async";
+local http = require "net.http";
 local json_encode = require "util.json".encode;
 local jid_split = require "util.jid".split;
 local hmac_sha1 = require "util.hashes".hmac_sha1;
@@ -23,14 +15,6 @@ local api_key = module:get_option_string("talky_core_api_key", "");
 local muc_affiliation_url = module:get_option_string("talky_core_muc_affiliation_url",  "");
 
 local affiliation_cache = {};
-
-
-local request;
-if string.sub(muc_affiliation_url, 1, string.len('https')) == 'https' then
-    request = https.request;
-else
-    request = http.request;
-end
 
 
 local function fetch_role(room, jid)
@@ -50,30 +34,33 @@ local function fetch_role(room, jid)
         room_id = room:get_talky_core_id();
     });
 
-    local response = {};
-    local _, code = request({
-        url = muc_affiliation_url,
-        method = "POST",
+    local wait, done = async.waiter();
+    local content, code, request, response;
+    local ex = {
+        method = "POST";
         headers = {
             Authorization = "Basic "..base64(userpart..":"..secret);
             ["Content-Type"] = "application/json";
             ["Content-Length"] = string.len(body);
         };
-        sink = ltn12.sink.table(response);
-        source = ltn12.source.string(body);
-    });
-
-    local data = table.concat(response);
+        body = body;
+    };
+    local function cb(content_, code_, request_, response_)
+        content, code, request, response = content_, code_, request_, response_;
+        done();
+    end
+    http.request(muc_affiliation_url, ex, cb);
+    wait();
 
     if type(code) == "number" and code >= 200 and code <= 299 then
-        module:log("debug", "HTTP API returned affiliation: "..data);
-        affiliation_cache[jid] = data;
-        return data;
+        module:log("debug", "HTTP API returned affiliation: "..content);
+        affiliation_cache[jid] = content;
+        return content;
     else
         module:log("debug", "HTTP API returned status code: "..code);
     end
 
-    return nil, "Affiliation lookup failed: "..data;
+    return nil, "Affiliation lookup failed: "..content;
 end
 
 

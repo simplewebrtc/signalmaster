@@ -70,6 +70,7 @@ module.exports = {
       iceServers: ice,
       displayName: '',
       screensharingExtensions: TalkyCoreConfig.screensharingExtensions || {},
+      apiVersion: Config.talky.apiVersion,
       credential: JWT.sign({
         id,
         orgId: DEFAULT_ORG,

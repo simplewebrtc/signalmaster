@@ -148,7 +148,7 @@ Component "${Domains.rooms}" "muc"
         "talky_core_metrics";
     };
 
-    talky_core_version = "2.0.0";
+    talky_core_version = "${Config.talky.apiVersion}";
     talky_core_muc_affiliation_url = "${BuildUrl('http', Domains.api)}/prosody/rooms/affiliation";
     talky_core_muc_user_info_url = "${BuildUrl('http', Domains.api)}/prosody/rooms/user-info";
 

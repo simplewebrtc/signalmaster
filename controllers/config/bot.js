@@ -31,7 +31,8 @@ module.exports = {
       roomServer: Domains.rooms,
       iceServers: ice,
       screensharingExtensions: TalkyCoreConfig.screensharingExtensions || {},
-      credential: 'some-signed-jwt-token'//TODO
+      credential: 'some-signed-jwt-token', //TODO
+      apiVersion: TalkyCoreConfig.apiVersion
     };
 
     return reply(result);

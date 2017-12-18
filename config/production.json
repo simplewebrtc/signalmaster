@@ -38,6 +38,8 @@
     }
   },
   "talky": {
+    "apiVersion": "2.0.0",
+
     "admins": {
       "admin": "$ADMIN_PASSWORD"
     },

@@ -3,12 +3,14 @@
   "redis": {
     "module": "redis",
     "connection": {
-      "host": "",
-      "port": "$REDIS_PORT",
-      "password": "$REDIS_PASSWORD"
+      "host": "localhost",
+      "port": "6379",
+      "password": ""
     }
   },
   "talky": {
+    "apiVersion": "2.0.0",
+
     "admins": {
       "admin": "admin"
     },

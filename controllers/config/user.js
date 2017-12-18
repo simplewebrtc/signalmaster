@@ -83,6 +83,7 @@ module.exports = {
       roomServer: Domains.rooms,
       iceServers: ice,
       displayName: customerData.displayName || '',
+      apiVersion: Config.talky.apiVersion,
       screensharingExtensions: TalkyCoreConfig.screensharingExtensions || {},
       credential: JWT.sign({
         id,

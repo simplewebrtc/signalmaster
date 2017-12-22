@@ -6,7 +6,7 @@ pipeline:
       - ${DRONE_COMMIT_SHA:0:8}
       - ${DRONE_TAG##v}
       - latest
-    secrets: [ docker_username, docker_password, docker_email ]
+    secrets: [ docker_username, docker_password ]
     when:
       event: tag
   deploy_stage:

@@ -186,16 +186,17 @@ exports.Server = server.register([{ register: require('hapi-auth-basic') }]).the
 });
 
 // $lab:coverage:off$
-process.on('unhandledException', function () {
 
-  console.log(arguments);
-  process.exit();
+process.on('unhandledException', (err) => {
+
+  console.error(err.stack);
+  process.exit(1);
 });
 
-process.on('unhandledRejection', function () {
+process.on('unhandledRejection', (err) => {
 
-  console.log(arguments);
-  process.exit();
+  console.error(err.stack);
+  process.exit(1);
 });
 // $lab:coverage:on$
 

@@ -48,7 +48,7 @@
 
     "domains": {
       "api": "$API_DOMAIN",
-      "api_private": "$API_PRIVATE_DOMAIN",
+      "api_private": "$$API_PRIVATE_DOMAIN",
       "guests": "$GUESTS_DOMAIN",
       "rooms": "$ROOMS_DOMAIN"
     },

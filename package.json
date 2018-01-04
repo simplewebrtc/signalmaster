@@ -29,7 +29,7 @@
     "array-shuffle": "^1.0.1",
     "base32-crockford-browser": "^1.0.0",
     "boom": "^6.0.0",
-    "getconfig": "^3.1.0",
+    "getconfig": "^4.0.0",
     "good": "^7.3.0",
     "good-console": "^6.4.0",
     "good-squeeze": "^5.0.2",

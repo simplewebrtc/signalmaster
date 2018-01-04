@@ -1,13 +1,5 @@
--- Globals required by socket.http
-if rawget(_G, "PROXY") == nil then
-    rawset(_G, "PROXY", false)
-end
-if rawget(_G, "base_parsed") == nil then
-    rawset(_G, "base_parsed", false)
-end
-
-local http = require "socket.http";
-local https = require "ssl.https";
+local async = require "util.async";
+local http = require "net.http";
 local st = require "util.stanza";
 local json_encode = require "util.json".encode;
 local json_decode = require "util.json".decode;
@@ -15,19 +7,10 @@ local jid_split = require "util.jid".split;
 local jid_resource = require "util.jid".resource;
 local hmac_sha1 = require "util.hashes".hmac_sha1; local base64 = require "util.encodings".base64.encode;
 local serialize = require "util.serialization".serialize;
-local ltn12 = require("ltn12")
 local os_time = os.time;
 
 local api_key = module:get_option_string("talky_core_api_key", "");
 local ice_url = module:get_option_string("talky_core_ice_url",  "");
-
-
-local request;
-if string.sub(ice_url, 1, string.len('https')) == 'https' then
-    request = https.request;
-else
-    request = http.request;
-end
 
 
 local function fetch_ice(user_id, session_id)
@@ -40,25 +23,27 @@ local function fetch_ice(user_id, session_id)
         user_id = user_id;
         session_id = session_id;
     });
-
-    local response = {};
-    local _, code = request({
-        url = ice_url,
-        method = "POST",
+    local wait, done = async.waiter();
+    local content, code, request, response;
+    local ex = {
+        method = "POST";
         headers = {
             Authorization = "Basic "..base64(userpart..":"..secret);
             ["Content-Type"] = "application/json";
             ["Content-Length"] = string.len(body);
         };
-        sink = ltn12.sink.table(response);
-        source = ltn12.source.string(body);
-    });
+        body = body;
+    };
+    local function cb(content_, code_, request_, response_)
+        content, code, request, response = content_, code_, request_, response_;
+        done();
+    end
+    http.request(ice_url, ex, cb);
+    wait();
 
-    local data = table.concat(response);
+    module:log("debug", "Received ICE data %s", content);
 
-    module:log("debug", "Received ICE data %s", data);
-
-    return json_decode(data);
+    return json_decode(content);
 end
 
 

@@ -5,7 +5,6 @@ local jid_split = require "util.jid".split;
 local hmac_sha1 = require "util.hashes".hmac_sha1;
 local base64 = require "util.encodings".base64.encode;
 local serialize = require "util.serialization".serialize;
-local ltn12 = require("ltn12")
 local os_time = os.time;
 
 local muc_service = module:depends("muc");

@@ -1,13 +1,5 @@
--- Globals required by socket.http
-if rawget(_G, "PROXY") == nil then
-    rawset(_G, "PROXY", false)
-end
-if rawget(_G, "base_parsed") == nil then
-    rawset(_G, "base_parsed", false)
-end
-
-local http = require "socket.http";
-local https = require "ssl.https";
+local async = require "util.async";
+local http = require "net.http";
 local json_encode = require "util.json".encode;
 local json_decode = require "util.json".decode;
 local jid_split = require "util.jid".split;
@@ -15,7 +7,6 @@ local jid_resource = require "util.jid".resource;
 local hmac_sha1 = require "util.hashes".hmac_sha1;
 local base64 = require "util.encodings".base64.encode;
 local serialize = require "util.serialization".serialize;
-local ltn12 = require("ltn12")
 local os_time = os.time;
 
 local xmlns_talky = "https://talky.io/ns/core";
@@ -25,14 +16,6 @@ local room_mt = muc_service.room_mt;
 
 local api_key = module:get_option_string("talky_core_api_key", "");
 local user_info_url = module:get_option_string("talky_core_muc_user_info_url",  "");
-
-
-local request;
-if string.sub(user_info_url, 1, string.len('https')) == 'https' then
-    request = https.request;
-else
-    request = http.request;
-end
 
 
 local function get_talky_core_info(room, occupant_nick)
@@ -71,24 +54,27 @@ local function fetch_info(room, user_id, session_id)
         room_id = room:get_talky_core_id();
     });
 
-    local response = {};
-    local _, code = request({
-        url = user_info_url,
-        method = "POST",
+    local wait, done = async.waiter();
+    local content, code, request, response;
+    local ex = {
+        method = "POST";
         headers = {
             Authorization = "Basic "..base64(userpart..":"..secret);
             ["Content-Type"] = "application/json";
             ["Content-Length"] = string.len(body);
         };
-        sink = ltn12.sink.table(response);
-        source = ltn12.source.string(body);
-    });
+        body = body;
+    };
+    local function cb(content_, code_, request_, response_)
+        content, code, request, response = content_, code_, request_, response_;
+        done();
+    end
+    http.request(user_info_url, ex, cb);
+    wait();
 
-    local data = table.concat(response);
+    module:log("debug", "Received user data %s", content);
 
-    module:log("debug", "Received user data %s", data);
-
-    return json_decode(data);
+    return json_decode(content);
 end
 
 

@@ -3,7 +3,7 @@
 const Config = require('getconfig');
 
 const InflateDomains = require('../lib/domains');
-const BuildUrl = require('../lib/build_url');
+const BuildInternalUrl = require('../lib/build_internal_url');
 const Domains = InflateDomains(Config.talky.domains);
 
 
@@ -79,9 +79,9 @@ log = {
 }
 
 talky_core_api_key = "${Config.auth.secret}"
-talky_core_ice_url = "${BuildUrl('http', Domains.api)}/prosody/ice";
-talky_core_telemetry_url = "${BuildUrl('http', Domains.api)}/prosody/telemetry"
-talky_core_instance_check_url = "${BuildUrl('http', Domains.api)}/instance-check";
+talky_core_ice_url = "${BuildInternalUrl()}/prosody/ice";
+talky_core_telemetry_url = "${BuildInternalUrl()}/prosody/telemetry"
+talky_core_instance_check_url = "${BuildInternalUrl()}/instance-check";
 `);
 
 if (Config.getconfig.env !== 'production' && !Config.isDevTLS) {
@@ -115,7 +115,7 @@ VirtualHost "${Domains.guests}"
 
     authentication = "talky_core";
     talky_core_auth_allow_anonymous = true;
-    talky_core_auth_url = "${BuildUrl('http', Domains.api)}/prosody/auth/guest";
+    talky_core_auth_url = "${BuildInternalUrl()}/prosody/auth/guest";
 
     ${Cert('guests')}
 `);
@@ -123,7 +123,7 @@ VirtualHost "${Domains.guests}"
 console.log(`
 VirtualHost "${Domains.users}"
     authentication = "talky_core";
-    talky_core_auth_url = "${BuildUrl('http', Domains.api)}/prosody/auth/user";
+    talky_core_auth_url = "${BuildInternalUrl()}/prosody/auth/user";
 
     ${Cert('users')}
 `);
@@ -131,7 +131,7 @@ VirtualHost "${Domains.users}"
 console.log(`
 VirtualHost "${Domains.bots}"
     authentication = "talky_core";
-    talky_core_auth_url = "${BuildUrl('http', Domains.api)}/prosody/auth/bot";
+    talky_core_auth_url = "${BuildInternalUrl()}/prosody/auth/bot";
 
     ${Cert('bots')}
 `);
@@ -149,8 +149,8 @@ Component "${Domains.rooms}" "muc"
     };
 
     talky_core_version = "${Config.talky.apiVersion}";
-    talky_core_muc_affiliation_url = "${BuildUrl('http', Domains.api)}/prosody/rooms/affiliation";
-    talky_core_muc_user_info_url = "${BuildUrl('http', Domains.api)}/prosody/rooms/user-info";
+    talky_core_muc_affiliation_url = "${BuildInternalUrl()}/prosody/rooms/affiliation";
+    talky_core_muc_user_info_url = "${BuildInternalUrl()}/prosody/rooms/user-info";
 
 
     muc_config_restricted = {

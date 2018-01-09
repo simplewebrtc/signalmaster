@@ -40,7 +40,6 @@
     "host": "localhost",
     "user": "talky",
     "password": "password",
-    "password": "",
     "database": "talky_api"
   },
   "auth": {

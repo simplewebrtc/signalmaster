@@ -6,10 +6,11 @@ const Schema = require('../../lib/schema');
 module.exports = {
   description: 'Provide ICE servers and credentials',
   tags: ['api', 'ice'],
-  handler: function (request, reply) {
+  handler: function (request, h) {
 
     const session = request.auth.credentials;
-    return reply(FetchICE(session.orgId, session.id));
+    const result = FetchICE(session.orgId, session.id);
+    return result;
   },
   response: {
     status: {

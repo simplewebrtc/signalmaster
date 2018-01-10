@@ -8,7 +8,7 @@ const { promisify } = require('util');
 module.exports = {
   description: 'Ingest metrics from Prosody',
   tags: ['api', 'metrics'],
-  handler: async function (request, reply) {
+  handler: async function (request, h) {
 
     const { eventType, data } = request.payload;
     const { session_id, room_id } = data;
@@ -35,7 +35,7 @@ module.exports = {
     }
 
     await redis_rpush('events', JSON.stringify(event));
-    return reply();
+    return h.response();
   },
   validate: {
     payload: {

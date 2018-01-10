@@ -7,7 +7,7 @@ module.exports = {
   description: 'Dashboard',
   tags: ['web', 'metrics'],
   auth: 'admin',
-  handler: async function (request, reply) {
+  handler: async function (request, h) {
 
     const { id } = request.params;
 
@@ -88,7 +88,7 @@ module.exports = {
       }
     }
 
-    return reply.view('single_room', {
+    return h.view('single_room', {
       resource: id,
       room,
       summary,

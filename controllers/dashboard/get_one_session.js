@@ -7,7 +7,7 @@ module.exports = {
   description: 'Dashboard',
   tags: ['web', 'metrics'],
   auth: 'admin',
-  handler: async function (request, reply) {
+  handler: async function (request, h) {
 
     const { id } = request.params;
     let session = {};
@@ -32,6 +32,6 @@ module.exports = {
     });
 
 
-    return reply.view('single_session', { session, data: events });
+    return h.view('single_session', { session, data: events });
   }
 };

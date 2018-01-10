@@ -16,7 +16,7 @@ const DEFAULT_ORG = 'andyet';
 module.exports = {
   description: 'Auto-configure a bot client session',
   tags: ['api', 'config'],
-  handler: async function (request, reply) {
+  handler: async function (request, h) {
 
     const randomId = UUID.v4();
 
@@ -35,7 +35,7 @@ module.exports = {
       apiVersion: TalkyCoreConfig.apiVersion
     };
 
-    return reply(result);
+    return result;
   },
   response: {
     status: {

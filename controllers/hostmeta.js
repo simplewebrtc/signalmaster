@@ -10,7 +10,7 @@ const Domains = InflateDomains(Config.talky.domains);
 module.exports = {
   description: 'XMPP alternate connection type discovery',
   tags: ['api', 'websocket'],
-  handler: function (request, reply) {
+  handler: function (request, h) {
 
     const result = {
       links: [{
@@ -19,7 +19,7 @@ module.exports = {
       }]
     };
 
-    return reply(result).type('application/json');
+    return h.response(result).type('application/json');
   },
   response: {
     status: {

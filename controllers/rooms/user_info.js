@@ -7,10 +7,10 @@ const UserInfo = require('../../lib/user_info');
 module.exports = {
   description: 'Provide user information for a new room occupant.',
   tags: ['api', 'prosody'],
-  handler: function (request, reply) {
+  handler: function (request, h) {
 
     const info = UserInfo(request.payload.user_id, request.payload.session_id);
-    return reply(info).type('application/json').code(200);
+    return h.response(info).type('application/json').code(200);
   },
   auth: 'internal-api',
   validate: {

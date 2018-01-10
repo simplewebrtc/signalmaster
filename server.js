@@ -94,6 +94,8 @@ exports.Server = server.register(require('hapi-auth-basic')).then(() => {
         }
       }
     }
+  }, {
+    plugin: require('./lib/jwt_authorization')
   }]);
 }).then(async () => {
 

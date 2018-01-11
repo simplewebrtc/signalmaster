@@ -5,7 +5,6 @@ config/local.json
 config/*.pem
 
 env.list
-cm-prosody-config.json
 coverage.html
 
 prosody_docker/certs.pem

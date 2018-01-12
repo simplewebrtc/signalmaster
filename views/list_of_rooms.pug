@@ -42,11 +42,13 @@ block dashboardContent
       thead
         tr
           th Name
+          th Created
           th Duration
       each val in data
         tr
           td
             a(href='/dashboard/rooms/' + val.id) #{val.name}
+          td #{val.created_at}
           td #{val.duration}
     div
       h3 Pages

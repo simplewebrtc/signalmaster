@@ -56,7 +56,7 @@ local function fetch_role(room, jid)
         affiliation_cache[jid] = content;
         return content;
     else
-        module:log("debug", "HTTP API returned status code: "..code);
+        module:log("warn", "HTTP API returned status code: "..code);
     end
 
     return nil, "Affiliation lookup failed: "..content;

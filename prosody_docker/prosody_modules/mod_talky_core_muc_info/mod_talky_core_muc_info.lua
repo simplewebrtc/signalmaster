@@ -74,6 +74,10 @@ local function fetch_info(room, user_id, session_id)
 
     module:log("debug", "Received user data %s", content);
 
+    if code <= 200 or code >= 300 then
+        module:log("warn", "HTTP API returned status code %d", code);
+    end
+
     return json_decode(content);
 end
 

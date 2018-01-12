@@ -24,7 +24,7 @@ local function http_auth(username, password)
         module:log("debug", "HTTP auth provider confirmed valid password");
         return true;
     else
-        module:log("debug", "HTTP auth provider returned status code %d", code);
+        module:log("warn", "HTTP auth provider returned status code %d", code);
     end
     return nil, "Auth failed. Invalid username or password.";
 end

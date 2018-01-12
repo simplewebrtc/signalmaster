@@ -1,6 +1,7 @@
 'use strict';
 
 const Config = require('getconfig');
+const Joi = require('joi');
 const JWT = require('jsonwebtoken');
 const UUID = require('uuid');
 const Boom = require('boom');
@@ -56,7 +57,7 @@ module.exports = {
     const result = {
       id,
       userId: user_id,
-      orgId: DEFAULT_ORG,
+      orgId: request.params.orgId || DEFAULT_ORG,
       signalingUrl: TalkyCoreConfig.overrideGuestSignalingUrl || `${BuildUrl('ws', Domains.signaling)}/ws-bind`,
       telemetryUrl: `${BuildUrl('http', Domains.api)}/telemetry`,
       roomServer: Domains.rooms,
@@ -78,6 +79,11 @@ module.exports = {
     };
 
     return result;
+  },
+  validate: {
+    params: {
+      orgId: Joi.string().example('andyet')
+    }
   },
   response: {
     status: {

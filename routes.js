@@ -17,8 +17,8 @@ module.exports = [
   { method: 'GET', path: '/instance-check', config: Controllers.instance_check },
 
   // Client auto-configuration
-  { method: 'POST', path: '/config/user', config: Controllers.config.user },
-  { method: 'POST', path: '/config/guest', config: Controllers.config.guest },
+  { method: 'POST', path: '/config/user/{orgId?}', config: Controllers.config.user },
+  { method: 'POST', path: '/config/guest/{orgId?}', config: Controllers.config.guest },
   { method: 'POST', path: '/config/bot', config: Controllers.config.bot },
 
   // Telemetry

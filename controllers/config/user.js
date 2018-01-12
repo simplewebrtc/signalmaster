@@ -64,7 +64,7 @@ module.exports = {
     const result = {
       id,
       userId: user_id,
-      orgId: DEFAULT_ORG,
+      orgId: request.params.orgId || DEFAULT_ORG,
       signalingUrl: `${BuildUrl('ws', Domains.signaling)}/ws-bind`,
       telemetryUrl: `${BuildUrl('http', Domains.api)}/telemetry`,
       roomServer: Domains.rooms,
@@ -93,6 +93,9 @@ module.exports = {
     }
   },
   validate: {
+    params: {
+      orgId: Joi.string().example('andyet')
+    },
     payload: {
       token: Joi.string().description('JWT encoded user object').label('UserToken')
     }

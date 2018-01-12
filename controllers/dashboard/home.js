@@ -53,7 +53,7 @@ module.exports = {
 
     request.totalCount = count.count;
 
-    const rooms = await this.db.rooms.all(params);
+    const rooms = await this.db.rooms.reported(params);
     const pagesArr = new Array(Math.ceil(request.totalCount / limit)).fill(0);
 
     for (const room of rooms) {

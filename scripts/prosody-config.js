@@ -74,8 +74,7 @@ http_paths = {
 network_default_read_size = 66560
 
 log = {
-    debug = "*console";
-    verbose = "*console";
+    info = "*console";
 }
 
 talky_core_api_key = "${Config.auth.secret}"

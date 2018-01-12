@@ -53,6 +53,7 @@ modules_enabled = {
     "websocket";
     "talky_core_metrics";
     "talky_core_instance_check";
+    "log_slow_events";
 }
 
 allow_registration = false

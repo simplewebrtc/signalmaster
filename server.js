@@ -30,19 +30,17 @@ if (Config.getconfig.env !== 'production') {
 }
 //$lab:coverage:on$
 
-const server = new Hapi.Server();
+const server = new Hapi.Server(Config.server);
 const db = new Muckraker({ connection: Config.db });
 const redisClient = Redis.createClient(Config.redis.connection);
 const eventWorker = new EventWorker({ db, redis: redisClient });
 const roomReports = new RoomReports({ db, redis: redisClient });
-server.connection(Config.server);
 
 
-server.on('request-error', (err, m) => {
+server.events.on({ name: 'request', channels: ['error'] }, (request, event) => {
 
-  console.log(m.stack);
+  console.log(event.stack || event);
 });
-
 
 const wsPort = Config.getconfig.isDev ? (Config.isDevTLS ? 5281 : 5280) : 5281;
 const wsProxy = Proxy.createProxyServer({ target: `${BuildUrl('ws', Domains.signaling, wsPort)}` });
@@ -58,135 +56,124 @@ exports.redis = redisClient;
 exports.eventWorker = eventWorker;
 exports.roomReports = roomReports;
 
-
-exports.Server = server.register([{ register: require('hapi-auth-basic') }]).then(() => {
+exports.Server = server.register(require('hapi-auth-basic')).then(() => {
 
   server.auth.strategy('admin', 'basic', {
-    validateFunc: (request, username, password, cb) => {
+    validate: (request, username, password, h) => {
 
       const admins = Config.talky.admins || {};
-      return cb(null, admins[username] === password, {});
+      const isValid = (admins[username] === password);
+      return { isValid, credentials: {} };
+    }
+  });
+}).then(async () => {
+
+  await server.register([{
+    plugin: require('good'),
+    options: Config.good
+  }, {
+    plugin: require('@now-ims/hapi-now-auth')
+  }, {
+    plugin: require('vision')
+  }, {
+    plugin: require('inert')
+  }, {
+    plugin: require('hapi-swagger'),
+    options: {
+      auth: 'admin',
+      grouping: 'tags',
+      info: {
+        title: Pkg.description,
+        version: Pkg.version,
+        contact: {
+          name: '&yet',
+          email: 'talky@andyet.com'
+        },
+        license: {
+          name: Pkg.license
+        }
+      }
+    }
+  }, {
+    plugin: require('./lib/jwt_authorization')
+  }]);
+}).then(async () => {
+
+  await ResetDB(db, redisClient);
+
+  server.auth.strategy('prosody-guests', 'basic', {
+    validate: ProsodyAuth('guests')
+  });
+
+  server.auth.strategy('prosody-users', 'basic', {
+    validate: ProsodyAuth('users')
+  });
+
+  server.auth.strategy('prosody-bots', 'basic', {
+    validate: ProsodyAuth('bots')
+  });
+
+  server.auth.strategy('internal-api', 'basic', {
+    validate: InternalAuth
+  });
+
+  server.auth.strategy('client-token', 'hapi-now-auth', {
+    verifyJWT: true,
+    keychain: [Config.auth.secret],
+    verifyOptions: {
+      algorithms: ['HS256'],
+      issuer: [Domains.api]
+    },
+    validate: (request, token, h) => {
+
+      const decoded = token.decodedJWT;
+      return { isValid: true, credentials: decoded };
     }
   });
 
-  return server.register([
-    {
-      register: require('good'),
-      options: Config.good
-    },
-    {
-      register: require('hapi-auth-jwt2')
-    },
-    {
-      register: require('vision')
-    },
-    {
-      register: require('inert')
-    },
-    {
-      register: require('hapi-swagger'),
-      options: {
-        auth: 'admin',
-        grouping: 'tags',
-        info: {
-          title: Pkg.description,
-          version: Pkg.version,
-          contact: {
-            name: '&yet',
-            email: 'talky@andyet.com'
-          },
-          license: {
-            name: Pkg.license
-          }
-        }
-      }
-    }
-  ])
-    .then(() => {
+  server.views({
+    engines: { pug: require('pug') },
+    path: `${__dirname}/views`,
+    isCached: !Config.getconfig.isDev
+  });
 
-      return ResetDB(db, redisClient);
-    })
-    .then(() => {
+  // $lab:coverage:off$
+  server.listener.on('upgrade', (req, socket, head) => {
 
-      server.auth.strategy('prosody-guests', 'basic', {
-        validateFunc: ProsodyAuth('guests')
-      });
+    wsProxy.ws(req, socket, head);
+  });
 
-      server.auth.strategy('prosody-users', 'basic', {
-        validateFunc: ProsodyAuth('users')
-      });
+  if (Config.getconfig.isDev && !Config.noProsody) {
+    const prosody = require('./scripts/start-prosody').startProsody(process);
+    prosody.stdout.pipe(process.stdout);
+  }
+  // $lab:coverage:on$
 
-      server.auth.strategy('prosody-bots', 'basic', {
-        validateFunc: ProsodyAuth('bots')
-      });
+  server.bind({ db, redis: redisClient });
+  server.route(require('./routes'));
+}).then(async () => {
 
-      server.auth.strategy('internal-api', 'basic', {
-        validateFunc: InternalAuth
-      });
+  // coverage disabled because module.parent is always defined in tests
+  // $lab:coverage:off$
+  if (module.parent) {
+    await server.initialize();
+    return server;
+  }
 
-      server.auth.strategy('client-token', 'jwt', {
-        key: Config.auth.secret,
-        validateFunc: (decoded, request, cb) => cb(null, true),
-        verifyOptions: {
-          algorithms: ['HS256'],
-          issuer: Domains.api
-        }
-      });
+  eventWorker.start();
+  roomReports.start();
+  await server.start();
+  server.log(['info', 'startup'], server.info.uri);
+}).catch((err) => {
 
-      server.views({
-        engines: { pug: require('pug') },
-        path: `${__dirname}/views`,
-        isCached: !Config.getconfig.isDev
-      });
-
-      // $lab:coverage:off$
-      server.listener.on('upgrade', (req, socket, head) => {
-
-        wsProxy.ws(req, socket, head);
-      });
-
-
-      if (Config.getconfig.isDev && !Config.noProsody) {
-        const prosody = require('./scripts/start-prosody').startProsody(process);
-        prosody.stdout.pipe(process.stdout);
-      }
-      // $lab:coverage:on$
-
-      server.bind({ db, redis: redisClient });
-      server.route(require('./routes'));
-    }).then(() => {
-
-      // coverage disabled because module.parent is always defined in tests
-      // $lab:coverage:off$
-      if (module.parent) {
-        return server.initialize().then(() => {
-
-          return server;
-        });
-      }
-
-      eventWorker.start();
-      roomReports.start();
-      return server.start().then(() => {
-
-        server.connections.forEach((connection) => {
-
-          server.log(['info', 'startup'], `${connection.info.uri} ${connection.settings.labels}`);
-        });
-      });
-      // $lab:coverage:on$
-    }).catch((err) => {
-
-      // coverage disabled due to difficulty in faking a throw
-      // $lab:coverage:off$
-      console.error(err.stack || err);
-      process.exit(1);
-      // $lab:coverage:on$
-    });
+  // coverage disabled due to difficulty in faking a throw
+  // $lab:coverage:off$
+  console.error(err.stack || err);
+  process.exit(1);
+  // $lab:coverage:on$
 });
 
 // $lab:coverage:off$
-
 process.on('unhandledException', (err) => {
 
   console.error(err.stack);

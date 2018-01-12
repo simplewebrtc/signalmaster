@@ -7,13 +7,13 @@ const Schema = require('../lib/schema');
 module.exports = {
   description: 'Used to verify if a domain is pointed against a specific Talky Core API instance. Are you there, me?',
   tags: ['api', 'instance-check'],
-  handler: function (request, reply) {
+  handler: function (request, h) {
 
-    return reply({
+    return {
       instance: InstanceCheck.getInstanceID(),
       host: Config.talky.domains.api,
       service: 'api'
-    });
+    };
   },
   response: {
     status: {

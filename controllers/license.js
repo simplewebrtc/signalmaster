@@ -11,20 +11,26 @@ module.exports = {
   description: 'Talky License information',
   tags: ['web'],
   auth: 'admin',
-  handler: function (request, reply) {
+  handler: async function (request, h) {
 
-    return CheckLicense().then((license) => {
+    let result;
+    //Need to add hapi-var eslint rule
+    let license;
+    try {
+      license = CheckLicense();
 
-      reply.view('license', {
+      result = h.view('license', {
         apiDomain: Domains.api,
         license
       });
-    }).catch((err) => {
+    }
+    catch (err) {
 
-      reply.view('license', {
+      result = h.view('license', {
         apiDomain: Domains.api,
         licenseError: err.message
       });
-    });
+    }
+    return result;
   }
 };

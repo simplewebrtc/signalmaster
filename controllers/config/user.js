@@ -25,31 +25,18 @@ const DEFAULT_ORG = 'andyet';
 module.exports = {
   description: 'Auto-configure a registered user client session',
   tags: ['api', 'config'],
-  handler: async function (request, reply) {
+  handler: async function (request, h) {
 
-    let license = {};
-    try {
-      license = await CheckLicense();
-    }
-    catch (err) {
-      return reply(err);
-    }
+    const license = await CheckLicense();
 
     // Query DB for the active user count
     const currentUserCount = 0;
     if (license.userLimit !== undefined && (currentUserCount + 1 > license.userLimit)) {
-      return reply(Boom.forbidden('Talky Core active user limit reached'));
+      return Boom.forbidden('Talky Core active user limit reached');
     }
 
 
-    let customerData = {};
-    try {
-      customerData = await ExtractCustomerData(request.payload.token);
-    }
-    catch (err) {
-      return reply(Boom.badRequest('Could not parse user data'));
-    }
-
+    const customerData = await ExtractCustomerData(request.payload.token);
     const { ua, browser, device, os } = UAParser(request.headers['user-agent']);
 
     const id = UUID.v4();
@@ -98,7 +85,7 @@ module.exports = {
       })
     };
 
-    return reply(result);
+    return result;
   },
   response: {
     status: {

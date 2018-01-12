@@ -8,9 +8,9 @@ const Domains = InflateDomains(Config.talky.domains);
 module.exports = {
   description: 'API Homepage',
   tags: ['web'],
-  handler: async function (request, reply) {
+  handler: async function (request, h) {
 
-    reply.view('home', {
+    return h.view('home', {
       domains: Domains,
       iceServer: Config.talky.ice.server,
       screensharingExtensions: Config.talky.screensharingExtensions || {}

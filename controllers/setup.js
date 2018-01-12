@@ -8,7 +8,7 @@ const Domains = InflateDomains(Config.talky.domains);
 module.exports = {
   description: 'API Server Setup Checklist',
   tags: ['web'],
-  handler: function (request, reply) {
+  handler: function (request, h) {
 
     const IceConfig = Config.talky.ice || {};
     const ExtConfig = Config.talky.screensharingExtensions || {};
@@ -24,7 +24,7 @@ module.exports = {
     const hasCustomerSecret = !!Config.talky.apiKey;
 
 
-    reply.view('setup_checklist', {
+    return h.view('setup_checklist', {
       hasIceSecret,
       iceConfigured,
       extsConfigured,

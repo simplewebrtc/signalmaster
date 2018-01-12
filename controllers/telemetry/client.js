@@ -7,7 +7,7 @@ const Schema = require('../../lib/schema');
 module.exports = {
   description: 'Ingest metrics from clients',
   tags: ['api', 'metrics'],
-  handler: async function (request, reply) {
+  handler: async function (request, h) {
 
     const { eventType, peerId, roomId, data } = request.payload;
     const session = request.auth.credentials;
@@ -25,7 +25,7 @@ module.exports = {
     const rpush = promisify(this.redis.rpush.bind(this.redis));
     await rpush('events', JSON.stringify(event));
 
-    return reply();
+    return h.response();
   },
   validate: {
     payload: {

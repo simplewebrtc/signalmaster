@@ -4,8 +4,7 @@
     "module": "redis",
     "connection": {
       "host": "localhost",
-      "port": "6379",
-      "password": ""
+      "port": "6379"
     }
   },
   "talky": {
@@ -40,7 +39,6 @@
     "host": "localhost",
     "user": "talky",
     "password": "password",
-    "password": "",
     "database": "talky_api"
   },
   "auth": {

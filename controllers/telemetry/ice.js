@@ -6,7 +6,7 @@ const Joi = require('joi');
 module.exports = {
   description: 'Ingest traffic usage data from ICE servers',
   tags: ['api', 'ice', 'metrics'],
-  handler: function (request, reply) {
+  handler: function (request, h) {
 
     // Placeholder route to start accepting data until we have the
     // processing & billing side sorted out.
@@ -14,7 +14,7 @@ module.exports = {
     // TODO: save ICE usage metric events
 
     request.log(['ice'], request.payload);
-    return reply();
+    return h.response();
   },
   validate: {
     payload: {

@@ -10,10 +10,11 @@ const Schema = require('../../lib/schema');
 module.exports = {
   description: 'Provide ICE servers and credentials to Prosody',
   tags: ['api', 'ice'],
-  handler: function (request, reply) {
+  handler: function (request, h) {
 
     const user = UserInfo(request.payload.user_id, request.payload.session_id);
-    return reply(FetchICE(user.orgId, user.id));
+    const result = FetchICE(user.orgId, user.id);
+    return result;
   },
   validate: {
     payload: {

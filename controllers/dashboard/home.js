@@ -7,7 +7,7 @@ module.exports = {
   description: 'Dashboard',
   tags: ['web', 'metrics'],
   auth: 'admin',
-  handler: async function (request, reply) {
+  handler: async function (request, h) {
 
     const params = Object.assign({}, request.query);
     const limit = params.limit;
@@ -67,7 +67,7 @@ module.exports = {
       return a.created_at > b.created_at ? -1 : a.created_at < b.created_at ? 1 : 0;
     });
 
-    return reply.view('list_of_rooms', {
+    return h.view('list_of_rooms', {
       pages: pagesArr,
       data: rooms,
       eventClock,

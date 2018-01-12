@@ -110,7 +110,7 @@ exports.adminBasicHeader = function (username) {
 exports.prosodyBasicHeader = function (username) {
 
   const password = Crypto.createHmac('sha1', Buffer.from(Config.auth.secret)).update(username).digest('base64');
-  const header =  `Basic ${new Buffer(`${username  }:${  password}`, 'utf8').toString('base64')}`;
+  const header =  `Basic ${new Buffer(`${username}:${password}`, 'utf8').toString('base64')}`;
   return header;
 };
 

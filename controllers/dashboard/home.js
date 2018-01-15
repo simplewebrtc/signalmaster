@@ -32,6 +32,8 @@ module.exports = {
     const count = await this.db.rooms.count(params);
     const activeCount = await this.db.rooms.count_active();
     const sessionCount = await this.db.sessions.count_active();
+    const sessionMobileCount = await this.db.sessions.count_active_type({ session_type: 'mobile' });
+    const sessionDesktopCount = await this.db.sessions.count_active_type({ session_type: 'desktop' });
 
     const sessionDayCount = await this.db.sessions.count_period({
       ts: new Date(),
@@ -41,6 +43,30 @@ module.exports = {
       ts: new Date(),
       interval: '7 days'
     });
+
+    const sessionMobileDayCount = await this.db.sessions.count_period_type({
+      ts: new Date(),
+      interval: '1 day',
+      session_type: 'mobile'
+    });
+    const sessionMobileWeekCount = await this.db.sessions.count_period_type({
+      ts: new Date(),
+      interval: '7 days',
+      session_type: 'mobile'
+    });
+
+    const sessionDesktopDayCount = await this.db.sessions.count_period_type({
+      ts: new Date(),
+      interval: '1 day',
+      session_type: 'desktop'
+    });
+    const sessionDesktopWeekCount = await this.db.sessions.count_period_type({
+      ts: new Date(),
+      interval: '7 days',
+      session_type: 'desktop'
+    });
+
+
 
     const roomDayCount = await this.db.rooms.count_period({
       ts: new Date(),
@@ -86,12 +112,18 @@ module.exports = {
       roomReportQueue,
       activeRoomCount: activeCount.count,
       activeSessionCount: sessionCount.count,
+      activeMobileSessionCount: sessionMobileCount.count,
+      activeDesktopSessionCount: sessionDesktopCount.count,
       prevDayRoomCount: roomDayCount.count,
       prevWeekRoomCount: roomWeekCount.count,
       prevDaySessionCount: sessionDayCount.count,
       prevWeekSessionCount: sessionWeekCount.count,
       prevDayUniqueRoomCount: roomUniqueDayCount.count,
-      prevWeekUniqueRoomCount: roomUniqueWeekCount.count
+      prevWeekUniqueRoomCount: roomUniqueWeekCount.count,
+      prevDayMobileSessionCount: sessionMobileDayCount.count,
+      prevWeekMobileSessionCount: sessionMobileWeekCount.count,
+      prevDayDesktopSessionCount: sessionDesktopDayCount.count,
+      prevWeekDesktopSessionCount: sessionDesktopWeekCount.count
     });
   },
   validate: {

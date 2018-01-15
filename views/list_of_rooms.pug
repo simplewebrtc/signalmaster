@@ -5,33 +5,38 @@ block dashboardContent
     table
       thead
         tr
-          th
+          th(colspan=2)
           th Active
           th Last 24 hours
           th Last 7 days
       tbody
         tr
-          td Rooms (Total)
+          th Rooms
+          td Total
           td #{activeRoomCount}
           td #{prevDayRoomCount}
           td #{prevWeekRoomCount}
         tr
-          td Rooms (Unique)
+          td
+          td Unique
           td #{activeRoomCount}
           td #{prevDayUniqueRoomCount}
           td #{prevWeekUniqueRoomCount}
         tr
-          td Sessions (Total)
+          th Sessions
+          td Total
           td #{activeSessionCount}
           td #{prevDaySessionCount}
           td #{prevWeekSessionCount}
         tr
-          td Sessions (Mobile)
+          td
+          td Mobile
           td #{activeMobileSessionCount}
           td #{prevDayMobileSessionCount}
           td #{prevWeekMobileSessionCount}
         tr
-          td Sessions (Desktop)
+          td
+          td Web
           td #{activeDesktopSessionCount}
           td #{prevDayDesktopSessionCount}
           td #{prevWeekDesktopSessionCount}

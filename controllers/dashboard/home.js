@@ -51,6 +51,16 @@ module.exports = {
       interval: '7 days'
     });
 
+    const roomUniqueDayCount = await this.db.rooms.count_period_unique({
+      ts: new Date(),
+      interval: '1 day'
+    });
+    const roomUniqueWeekCount = await this.db.rooms.count_period_unique({
+      ts: new Date(),
+      interval: '7 days'
+    });
+
+
     request.totalCount = count.count;
 
     const rooms = await this.db.rooms.reported(params);
@@ -79,7 +89,9 @@ module.exports = {
       prevDayRoomCount: roomDayCount.count,
       prevWeekRoomCount: roomWeekCount.count,
       prevDaySessionCount: sessionDayCount.count,
-      prevWeekSessionCount: sessionWeekCount.count
+      prevWeekSessionCount: sessionWeekCount.count,
+      prevDayUniqueRoomCount: roomUniqueDayCount.count,
+      prevWeekUniqueRoomCount: roomUniqueWeekCount.count
     });
   },
   validate: {

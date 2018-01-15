@@ -11,10 +11,15 @@ block dashboardContent
           th Last 7 days
       tbody
         tr
-          td Rooms
+          td Rooms (Total)
           td #{activeRoomCount}
           td #{prevDayRoomCount}
           td #{prevWeekRoomCount}
+        tr
+          td Rooms (Unique)
+          td #{activeRoomCount}
+          td #{prevDayUniqueRoomCount}
+          td #{prevWeekUniqueRoomCount}
         tr
           td Sessions
           td #{activeSessionCount}

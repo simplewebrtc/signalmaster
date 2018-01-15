@@ -36,13 +36,15 @@ module.exports = {
     const { ua, browser, device, os } = UAParser(request.headers['user-agent']);
 
     const id = UUID.v4();
+    const org_id = request.params.orgId || DEFAULT_ORG;
     const user_id = `${id}@${Domains.guests}`;
-    const ice = FetchICE(DEFAULT_ORG, id);
+    const ice = FetchICE(org_id, id);
 
     const redis_rpush = promisify(this.redis.rpush.bind(this.redis));
     const event = {
       type: 'user_created',
       actor_id: id,
+      org_id,
       user_id,
       device_type: device.type === undefined ? 'desktop' : 'mobile',
       os: JSON.stringify(os),
@@ -57,7 +59,7 @@ module.exports = {
     const result = {
       id,
       userId: user_id,
-      orgId: request.params.orgId || DEFAULT_ORG,
+      orgId: org_id,
       signalingUrl: TalkyCoreConfig.overrideGuestSignalingUrl || `${BuildUrl('ws', Domains.signaling)}/ws-bind`,
       telemetryUrl: `${BuildUrl('http', Domains.api)}/telemetry`,
       roomServer: Domains.rooms,

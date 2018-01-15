@@ -35,7 +35,7 @@ module.exports = {
       return Boom.forbidden('Talky Core active user limit reached');
     }
 
-
+    // TODO: Verify the customer data is signed for the given org.
     const customerData = await ExtractCustomerData(request.payload.token);
     const { ua, browser, device, os } = UAParser(request.headers['user-agent']);
 
@@ -45,13 +45,16 @@ module.exports = {
       scopes: customerData.scopes || []
     }));
     const user_id = `${username}@${Domains.users}`;
-    const ice = FetchICE(DEFAULT_ORG, id);
+    const org_id = request.params.orgId || DEFAULT_ORG;
+    const ice = FetchICE(org_id, id);
+
 
     const redis_rpush = promisify(this.redis.rpush.bind(this.redis));
     const event = {
       type: 'user_created',
       actor_id: id,
       user_id,
+      org_id,
       device_type: device.type === undefined ? 'desktop' : 'mobile',
       os: JSON.stringify(os),
       useragent: ua,

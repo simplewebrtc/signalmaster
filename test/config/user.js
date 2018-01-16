@@ -39,7 +39,7 @@ describe('POST /config/user', () => {
 
         registeredUser = result;
         const user_id = registeredUser.userId;
-        const decodedJid = JSON.parse(Base32.decode(user_id.split('@')[0]));
+        const decodedJid = JSON.parse(Base32.decode(user_id.split('@')[0].split('#')[2]));
 
         expect(registeredUser.iceServers).to.part.include(iceServers);
         expect(registeredUser.iceServers[0]).to.include(['username', 'password']);

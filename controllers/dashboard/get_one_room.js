@@ -65,7 +65,7 @@ module.exports = {
 
     const summary = [];
     summary.push(['Created', room.created_at]);
-    summary.push(['Organization', room.ord_id]);
+    summary.push(['Organization', room.org_id]);
     summary.push(['Room ID', id]);
     summary.push(['Room Name', room.name]);
     summary.push(['Room Duration', room.duration]);

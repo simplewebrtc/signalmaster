@@ -40,12 +40,12 @@ module.exports = {
     const { ua, browser, device, os } = UAParser(request.headers['user-agent']);
 
     const id = UUID.v4();
+    const org_id = request.params.orgId || DEFAULT_ORG;
     const username = Base32.encode(JSON.stringify({
       id: customerData.id,
       scopes: customerData.scopes || []
     }));
-    const user_id = `${username}@${Domains.users}`;
-    const org_id = request.params.orgId || DEFAULT_ORG;
+    const user_id = `${org_id}#${id}#${username}@${Domains.users}`;
     const ice = FetchICE(org_id, id);
 
 

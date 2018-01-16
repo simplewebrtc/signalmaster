@@ -37,7 +37,7 @@ module.exports = {
 
     const id = UUID.v4();
     const org_id = request.params.orgId || DEFAULT_ORG;
-    const user_id = `${id}@${Domains.guests}`;
+    const user_id = `${org_id}#${id}@${Domains.guests}`;
     const ice = FetchICE(org_id, id);
 
     const redis_rpush = promisify(this.redis.rpush.bind(this.redis));
@@ -69,14 +69,14 @@ module.exports = {
       apiVersion: Config.talky.apiVersion,
       credential: JWT.sign({
         id,
-        orgId: DEFAULT_ORG,
+        orgId: org_id,
         registeredUser: false
       }, Config.auth.secret, {
         algorithm: 'HS256',
         expiresIn: '1 day',
         issuer: Domains.api,
         audience: Domains.guests,
-        subject: id
+        subject: `${org_id}#${id}`
       })
     };
 

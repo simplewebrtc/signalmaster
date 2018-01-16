@@ -11,7 +11,7 @@ module.exports = {
   handler: async function (request, h) {
 
     const { eventType, data } = request.payload;
-    const { session_id, room_id } = data;
+    const { session_id, user_id, room_id } = data;
     let { name } = data;
     const now = new Date();
 
@@ -32,6 +32,9 @@ module.exports = {
     if (room_id) {
       event.room_name = name;
       event.room_id = room_id;
+    }
+    if (user_id) {
+      event.user_id = user_id;
     }
 
     await redis_rpush('events', JSON.stringify(event));

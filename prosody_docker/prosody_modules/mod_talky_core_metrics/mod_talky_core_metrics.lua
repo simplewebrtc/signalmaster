@@ -84,7 +84,10 @@ end);
 
 module:hook("muc-room-pre-create", function (event)
     local roomName = jid_split(event.room.jid);
+    local user, domain, session_id = jid_split(event.stanza.attr.from);
     post_event("room_created", {
+        session_id = session_id;
+        user_id = user .. "@" .. domain;
         room_id = event.room:get_talky_core_id();
         name = roomName;
         jid = event.room.jid;

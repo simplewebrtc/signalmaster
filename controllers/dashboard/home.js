@@ -103,6 +103,42 @@ module.exports = {
       return a.created_at > b.created_at ? -1 : a.created_at < b.created_at ? 1 : 0;
     });
 
+    const durationDayHistogramBands = await this.db.rooms.duration_histogram({
+      ts: new Date(),
+      interval: '1day'
+    });
+    const durationDayHistogram = {};
+    for (const band of durationDayHistogramBands) {
+      durationDayHistogram[band.case] = band.count;
+    }
+
+    const durationWeekHistogramBands = await this.db.rooms.duration_histogram({
+      ts: new Date(),
+      interval: '7days'
+    });
+    const durationWeekHistogram = {};
+    for (const band of durationWeekHistogramBands) {
+      durationWeekHistogram[band.case] = band.count;
+    }
+
+    const occupantsDayHistogramBands = await this.db.rooms.occupants_histogram({
+      ts: new Date(),
+      interval: '1day'
+    });
+    const occupantsDayHistogram = {};
+    for (const band of occupantsDayHistogramBands) {
+      occupantsDayHistogram[band.case] = band.count;
+    }
+
+    const occupantsWeekHistogramBands = await this.db.rooms.occupants_histogram({
+      ts: new Date(),
+      interval: '7days'
+    });
+    const occupantsWeekHistogram = {};
+    for (const band of occupantsWeekHistogramBands) {
+      occupantsWeekHistogram[band.case] = band.count;
+    }
+
     return h.view('list_of_rooms', {
       pages: pagesArr,
       data: rooms,
@@ -123,7 +159,11 @@ module.exports = {
       prevDayMobileSessionCount: sessionMobileDayCount.count,
       prevWeekMobileSessionCount: sessionMobileWeekCount.count,
       prevDayDesktopSessionCount: sessionDesktopDayCount.count,
-      prevWeekDesktopSessionCount: sessionDesktopWeekCount.count
+      prevWeekDesktopSessionCount: sessionDesktopWeekCount.count,
+      durationDayHistogram: durationDayHistogram,
+      durationWeekHistogram: durationWeekHistogram,
+      occupantsDayHistogram: occupantsDayHistogram,
+      occupantsWeekHistogram: occupantsWeekHistogram
     });
   },
   validate: {

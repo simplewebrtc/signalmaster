@@ -21,4 +21,10 @@ FROM
   rooms
 WHERE
   created_at > ${ts}::timestamp with time zone - 1 * interval ${interval}
+  AND
+  (${occupant_count} IS NULL OR (
+    reports IS NOT NULL
+    AND
+    reports->'occupants'->>'maxConcurrent' = ${occupant_count}
+  ))
 GROUP BY 1

@@ -105,7 +105,8 @@ module.exports = {
 
     const durationDayHistogramBands = await this.db.rooms.duration_histogram({
       ts: new Date(),
-      interval: '1day'
+      interval: '1day',
+      occupant_count: null
     });
     const durationDayHistogram = {};
     for (const band of durationDayHistogramBands) {
@@ -114,7 +115,8 @@ module.exports = {
 
     const durationWeekHistogramBands = await this.db.rooms.duration_histogram({
       ts: new Date(),
-      interval: '7days'
+      interval: '7days',
+      occupant_count: null
     });
     const durationWeekHistogram = {};
     for (const band of durationWeekHistogramBands) {
@@ -139,6 +141,26 @@ module.exports = {
       occupantsWeekHistogram[band.case] = band.count;
     }
 
+    const singleOccupantDurationDayHistogramBands = await this.db.rooms.duration_histogram({
+      ts: new Date(),
+      interval: '1day',
+      occupant_count: '1'
+    });
+    const singleOccupantDurationDayHistogram = {};
+    for (const band of singleOccupantDurationDayHistogramBands) {
+      singleOccupantDurationDayHistogram[band.case] = band.count;
+    }
+
+    const singleOccupantDurationWeekHistogramBands = await this.db.rooms.duration_histogram({
+      ts: new Date(),
+      interval: '7days',
+      occupant_count: '1'
+    });
+    const singleOccupantDurationWeekHistogram = {};
+    for (const band of singleOccupantDurationWeekHistogramBands) {
+      singleOccupantDurationWeekHistogram[band.case] = band.count;
+    }
+
     return h.view('list_of_rooms', {
       pages: pagesArr,
       data: rooms,
@@ -160,10 +182,12 @@ module.exports = {
       prevWeekMobileSessionCount: sessionMobileWeekCount.count,
       prevDayDesktopSessionCount: sessionDesktopDayCount.count,
       prevWeekDesktopSessionCount: sessionDesktopWeekCount.count,
-      durationDayHistogram: durationDayHistogram,
-      durationWeekHistogram: durationWeekHistogram,
-      occupantsDayHistogram: occupantsDayHistogram,
-      occupantsWeekHistogram: occupantsWeekHistogram
+      durationDayHistogram,
+      durationWeekHistogram,
+      occupantsDayHistogram,
+      occupantsWeekHistogram,
+      singleOccupantDurationDayHistogram,
+      singleOccupantDurationWeekHistogram
     });
   },
   validate: {

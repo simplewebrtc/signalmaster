@@ -59,7 +59,8 @@ block dashboardContent
             td(colspan='3') No usage reported
         each iceServer in iceUsage
           tr
-            td #{iceServer.server}
+            td
+              a(href='https://' + iceServer.server + ':8000') #{iceServer.server}
             td #{iceServer.sent}
             td #{iceServer.received}
 

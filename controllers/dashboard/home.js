@@ -30,7 +30,7 @@ module.exports = {
     }
 
     const iceQueue = await redis_llen('ice_events');
-    const iceClock = await redis_get('ice_events_clock') || '-';
+    const iceClock = await redis_get('ice_events_clock');
     const iceSent = await redis_hgetall('ice_usage_by_server_sent');
     const iceRecv = await redis_hgetall('ice_usage_by_server_recv');
     const iceServers = new Set();
@@ -44,8 +44,8 @@ module.exports = {
     for (const iceServer of iceServers) {
       iceUsage.push({
         server: iceServer,
-        sent: iceSent[iceServer] || 0,
-        received: iceRecv[iceServer] || 0
+        sent: (iceSent || {})[iceServer] || 0,
+        received: (iceRecv || {})[iceServer] || 0
       });
     }
 

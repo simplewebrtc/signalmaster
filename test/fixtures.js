@@ -13,6 +13,7 @@ exports.db = Server.db;
 exports.redis = Server.redis;
 exports.eventWorker = Server.eventWorker;
 exports.roomReports = Server.roomReports;
+exports.iceWorker = Server.iceWorker;
 
 exports.iceServers = function () {
 
@@ -51,6 +52,19 @@ exports.event = function (attrs) {
       defaults.peer_id = Faker.internet.email();
     }
   }
+  return Object.assign(defaults, attrs);
+};
+exports.iceEvent = function (attrs) {
+
+  const now = new Date();
+  const defaults = {
+    created_at: now,
+    server: Faker.random.word(),
+    org_id: Faker.random.word(),
+    bytes_sent: Math.floor(Math.random() * 100),
+    bytes_received: Math.floor(Math.random() * 100)
+  };
+
   return Object.assign(defaults, attrs);
 };
 exports.session = function (attrs) {

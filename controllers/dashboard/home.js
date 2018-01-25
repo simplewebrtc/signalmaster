@@ -15,6 +15,7 @@ module.exports = {
     const redis_llen = promisify(this.redis.llen.bind(this.redis));
     const redis_get = promisify(this.redis.get.bind(this.redis));
     const redis_lindex = promisify(this.redis.lindex.bind(this.redis));
+    const redis_hgetall = promisify(this.redis.hgetall.bind(this.redis));
 
     const eventQueue = await redis_llen('events');
     const roomReportQueue = await redis_llen('rooms_destroyed');
@@ -26,6 +27,26 @@ module.exports = {
     let roomReportClock = '-';
     if (nextReport) {
       roomReportClock = new Date(JSON.parse(nextReport).created_at);
+    }
+
+    const iceQueue = await redis_llen('ice_events');
+    const iceClock = await redis_get('ice_events_clock') || '-';
+    const iceSent = await redis_hgetall('ice_usage_by_server_sent');
+    const iceRecv = await redis_hgetall('ice_usage_by_server_recv');
+    const iceServers = new Set();
+    for (const iceServer of Object.keys(iceSent || {})) {
+      iceServers.add(iceServer);
+    }
+    for (const iceServer of Object.keys(iceRecv || {})) {
+      iceServers.add(iceServer);
+    }
+    const iceUsage = [];
+    for (const iceServer of iceServers) {
+      ice.push({
+        server: iceServer,
+        sent: iceSent[iceServer] || 0,
+        received: iceRecv[iceServer] || 0
+      });
     }
 
     const activeCount = await this.db.rooms.count_active();
@@ -88,8 +109,11 @@ module.exports = {
     return h.view('system_stats', {
       eventClock,
       roomReportClock,
+      iceClock,
       eventQueue,
       roomReportQueue,
+      iceQueue,
+      iceUsage,
       activeRoomCount: activeCount.count,
       activeSessionCount: sessionCount.count,
       activeMobileSessionCount: sessionMobileCount.count,

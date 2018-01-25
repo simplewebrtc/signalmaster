@@ -17,6 +17,7 @@ const ProsodyAuth = require('./lib/prosody_auth');
 
 const EventWorker = require('./lib/event_worker');
 const RoomReports = require('./lib/room_reports_worker');
+const ICEWorker = require('./lib/ice_worker');
 
 const Pkg = require('./package.json');
 
@@ -35,6 +36,7 @@ const db = new Muckraker({ connection: Config.db });
 const redisClient = Redis.createClient(Config.redis.connection);
 const eventWorker = new EventWorker({ db, redis: redisClient });
 const roomReports = new RoomReports({ db, redis: redisClient });
+const iceWorker = new ICEWorker({ db, redis: redisClient });
 
 
 server.events.on({ name: 'request', channels: ['error'] }, (request, event) => {
@@ -55,6 +57,7 @@ exports.db = db;
 exports.redis = redisClient;
 exports.eventWorker = eventWorker;
 exports.roomReports = roomReports;
+exports.iceWorker = iceWorker;
 
 exports.Server = server.register(require('hapi-auth-basic')).then(() => {
 
@@ -162,6 +165,7 @@ exports.Server = server.register(require('hapi-auth-basic')).then(() => {
 
   eventWorker.start();
   roomReports.start();
+  iceWorker.start();
   await server.start();
   server.log(['info', 'startup'], server.info.uri);
 }).catch((err) => {
@@ -194,6 +198,7 @@ process.on('SIGTERM', async () => {
   await server.stop({ timeout: 15000 });
   await eventWorker.stop();
   await roomReports.stop();
+  await iceWorker.stop();
   process.exit(0);
 });
 // $lab:coverage:on$

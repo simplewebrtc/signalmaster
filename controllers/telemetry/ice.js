@@ -1,19 +1,27 @@
 'use strict';
 
 const Joi = require('joi');
+const { promisify } = require('util');
 
 
 module.exports = {
   description: 'Ingest traffic usage data from ICE servers',
   tags: ['api', 'ice', 'metrics'],
-  handler: function (request, h) {
+  handler: async function (request, h) {
 
-    // Placeholder route to start accepting data until we have the
-    // processing & billing side sorted out.
+    const params = request.payload;
+    const now = new Date();
 
-    // TODO: save ICE usage metric events
+    const redis_rpush = promisify(this.redis.rpush.bind(this.redis));
+    const event = {
+      created_at: now,
+      server: params.server,
+      org_id: params.orgId,
+      bytes_sent: params.bytesSent,
+      bytes_received: params.bytesReceived
+    };
 
-    request.log(['ice'], request.payload);
+    await redis_rpush('ice_events', JSON.stringify(event));
     return h.response();
   },
   validate: {

@@ -46,6 +46,23 @@ block dashboardContent
           td #{activeDesktopSessionCount}
           td #{prevDayDesktopSessionCount}
           td #{prevWeekDesktopSessionCount}
+
+    table
+      thead
+        tr
+          th ICE Server
+          th Bytes Sent
+          th Bytes Received
+      tbody
+        if iceUsage.length == 0
+          tr
+            td(colspan='3') No usage reported
+        each iceServer in iceUsage
+          tr
+            td #{iceServer.server}
+            td #{iceServer.sent}
+            td #{iceServer.received}
+
     table
       thead
         tr
@@ -56,9 +73,14 @@ block dashboardContent
         tr
           td Events
           td #{eventQueue}
-          td #{eventClock}
+          td #{eventClock || '-'}
         tr
           td Room Reports
           td #{roomReportQueue}
-          td #{roomReportClock}
+          td #{roomReportClock || '-'}
+        tr
+          td ICE Usage
+          td #{iceQueue}
+          td #{iceEventClock || '-'}
+
 

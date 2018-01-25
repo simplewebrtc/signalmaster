@@ -125,7 +125,9 @@ module.exports = {
 
     const occupantsDayHistogramBands = await this.db.rooms.occupants_histogram({
       ts: new Date(),
-      interval: '1day'
+      interval: '1day',
+      duration_min: null,
+      duration_max: null
     });
     const occupantsDayHistogram = {};
     for (const band of occupantsDayHistogramBands) {
@@ -134,7 +136,9 @@ module.exports = {
 
     const occupantsWeekHistogramBands = await this.db.rooms.occupants_histogram({
       ts: new Date(),
-      interval: '7days'
+      interval: '7days',
+      duration_min: null,
+      duration_max: null
     });
     const occupantsWeekHistogram = {};
     for (const band of occupantsWeekHistogramBands) {
@@ -161,7 +165,7 @@ module.exports = {
       singleOccupantDurationWeekHistogram[band.case] = band.count;
     }
 
-    return h.view('list_of_rooms', {
+    return h.view('system_stats', {
       pages: pagesArr,
       data: rooms,
       eventClock,

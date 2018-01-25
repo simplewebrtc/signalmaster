@@ -1,0 +1,64 @@
+extends layout_dashboard
+
+block dashboardContent
+  section
+    ul
+      li
+        a(href='/dashboard/histograms') Room Stats
+      li
+        a(href='/dashboard/rooms') Recent Rooms
+
+    table
+      thead
+        tr
+          th(colspan=2)
+          th Active
+          th Last 24 hours
+          th Last 7 days
+      tbody
+        tr
+          th Rooms
+          td Total
+          td #{activeRoomCount}
+          td #{prevDayRoomCount}
+          td #{prevWeekRoomCount}
+        tr
+          td
+          td Unique
+          td #{activeRoomCount}
+          td #{prevDayUniqueRoomCount}
+          td #{prevWeekUniqueRoomCount}
+        tr
+          th Sessions
+          td Total
+          td #{activeSessionCount}
+          td #{prevDaySessionCount}
+          td #{prevWeekSessionCount}
+        tr
+          td
+          td Mobile
+          td #{activeMobileSessionCount}
+          td #{prevDayMobileSessionCount}
+          td #{prevWeekMobileSessionCount}
+        tr
+          td
+          td Web
+          td #{activeDesktopSessionCount}
+          td #{prevDayDesktopSessionCount}
+          td #{prevWeekDesktopSessionCount}
+    table
+      thead
+        tr
+          th Workers
+          th Queue Size
+          th Queue Clock
+      tbody
+        tr
+          td Events
+          td #{eventQueue}
+          td #{eventClock}
+        tr
+          td Room Reports
+          td #{roomReportQueue}
+          td #{roomReportClock}
+

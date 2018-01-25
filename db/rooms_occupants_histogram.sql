@@ -19,4 +19,8 @@ WHERE
   reports IS NOT NULL
   AND
   created_at > ${ts}::timestamp with time zone - 1 * interval ${interval}
+  AND
+  ((${duration_min} IS NULL OR ${duration_max} IS NULL) OR (
+    (ended_at - created_at) BETWEEN ${duration_min} AND ${duration_max}
+  ))
 GROUP BY 1

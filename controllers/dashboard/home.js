@@ -42,7 +42,7 @@ module.exports = {
     }
     const iceUsage = [];
     for (const iceServer of iceServers) {
-      ice.push({
+      iceUsage.push({
         server: iceServer,
         sent: iceSent[iceServer] || 0,
         received: iceRecv[iceServer] || 0

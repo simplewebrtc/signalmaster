@@ -30,7 +30,10 @@ module.exports = {
     }
 
     const iceQueue = await redis_llen('ice_events');
-    const iceClock = await redis_get('ice_events_clock');
+    let iceClock = await redis_get('ice_events_clock');
+    if (iceClock) {
+      iceClock = new Date(Number(iceClock));
+    }
     const iceSent = await redis_hgetall('ice_usage_by_server_sent');
     const iceRecv = await redis_hgetall('ice_usage_by_server_recv');
     const iceServers = new Set();

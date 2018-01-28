@@ -1,25 +1,38 @@
 {
-  "name": "signal-master",
+  "name": "signalmaster-v2",
   "description": "Simple signaling server for SimpleWebRTC",
-  "version": "1.0.1",
-  "dependencies": {
-    "getconfig": "2.1.0",
-    "node-uuid": "1.2.0",
-    "socket.io": "1.3.7",
-    "yetify": "0.0.1"
+  "version": "2.0.0",
+  "scripts": {
+    "start": "node ./lib/server.js",
+    "lint": "eslint src --fix",
+    "build": "babel src -d lib",
+    "test": "node ./lib/test.js",
+    "validate": "npm ls"
   },
   "main": "server.js",
   "repository": {
     "type": "git",
     "url": "git@github.com:andyet/signal-master.git"
   },
+  "dependencies": {
+    "getconfig": "2.1.0",
+    "socket.io": "^1.3.7",
+    "uuid": "^3.2.1",
+    "socket.io-client": "^1.3.7",
+    "tape": "^4.8.0"
+  },
   "devDependencies": {
-    "socket.io-client": "1.3.7",
-    "precommit-hook": "0.3.10",
-    "tape": "^2.13.1"
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "eslint": "^4.16.0",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.8.0",
+    "precommit-hook": "^3.0.0"
   },
   "license": "MIT",
-  "scripts": {
-    "test": "node test.js"
-  }
+  "pre-commit": [
+    "lint",
+    "validate",
+    "test"
+  ]
 }

@@ -1,3 +1,5 @@
+module:set_global();
+
 local http = require "net.http";
 local json_encode = require "util.json".encode;
 local jid_split = require "util.jid".split;
@@ -29,80 +31,104 @@ local function post_event(eventType, data)
         };
         body = body;
     };
- 
+
     http.request(telemetry_url, ex, function () end);
 end
 
 
-module:hook("resource-bind", function (event)
-    post_event("user_online", {
-        session_id = event.session.resource;
-        user_id = event.session.username.."@"..event.session.host;
+-- ========================================================================
+-- Global metrics gathering:
+-- ========================================================================
+
+module:hook_global("server-started", function (event)
+    post_event("signaling_server_restart", {
+        server = "default";
     });
 end);
 
 
-module:hook("resource-unbind", function (event)
-    post_event("user_offline", {
-        session_id = event.session.resource;
-        user_id = event.session.username.."@"..event.session.host;
+module:hook_global("server-stopped", function (event)
+    post_event("signaling_server_stop", {
+        server = "default";
     });
 end);
 
 
-module:hook("muc-occupant-session-new", function (event)
-    local user, domain, session_id = jid_split(event.jid);
-    post_event("occupant_joined", {
-        room_id = event.room:get_talky_core_id();
-        user_id = user.."@"..domain;
-        session_id = session_id;
-        in_room_session_id = jid_resource(event.nick);
-    });
-end);
+-- ========================================================================
+-- Per host metrics gathering:
+-- ========================================================================
 
-
-module:hook("muc-occupant-left", function (event)
-    if event.stanza then
-        post_event("occupant_left", {
+function module.add_host(module)
+    module:hook("resource-bind", function (event)
+        post_event("user_online", {
+            session_id = event.session.resource;
+            user_id = event.session.username.."@"..event.session.host;
+        });
+    end);
+    
+    
+    module:hook("resource-unbind", function (event)
+        post_event("user_offline", {
+            session_id = event.session.resource;
+            user_id = event.session.username.."@"..event.session.host;
+        });
+    end);
+    
+    
+    module:hook("muc-occupant-session-new", function (event)
+        local user, domain, session_id = jid_split(event.jid);
+        post_event("occupant_joined", {
             room_id = event.room:get_talky_core_id();
-            user_id = event.occupant.bare_jid;
-            session_id = jid_resource(event.stanza.attr.from);
+            user_id = user.."@"..domain;
+            session_id = session_id;
             in_room_session_id = jid_resource(event.nick);
         });
-    else
-        for real_jid in event.occupant:each_session() do
+    end);
+    
+    
+    module:hook("muc-occupant-left", function (event)
+        if event.stanza then
             post_event("occupant_left", {
                 room_id = event.room:get_talky_core_id();
                 user_id = event.occupant.bare_jid;
-                session_id = jid_resource(real_jid);
+                session_id = jid_resource(event.stanza.attr.from);
                 in_room_session_id = jid_resource(event.nick);
             });
+        else
+            for real_jid in event.occupant:each_session() do
+                post_event("occupant_left", {
+                    room_id = event.room:get_talky_core_id();
+                    user_id = event.occupant.bare_jid;
+                    session_id = jid_resource(real_jid);
+                    in_room_session_id = jid_resource(event.nick);
+                });
+            end
         end
-    end
-end);
-
-
-module:hook("muc-room-pre-create", function (event)
-    local roomName = jid_split(event.room.jid);
-    local user, domain, session_id = jid_split(event.stanza.attr.from);
-    post_event("room_created", {
-        session_id = session_id;
-        user_id = user .. "@" .. domain;
-        room_id = event.room:get_talky_core_id();
-        name = roomName;
-        jid = event.room.jid;
-    });
-end);
-
-
-module:hook("muc-room-destroyed", function (event)
-    local roomName = jid_split(event.room.jid);
-    post_event("room_destroyed", {
-        room_id = event.room:get_talky_core_id();
-        name = roomName;
-        jid = event.room.jid;
-    });
-end);
+    end);
+    
+    
+    module:hook("muc-room-pre-create", function (event)
+        local roomName = jid_split(event.room.jid);
+        local user, domain, session_id = jid_split(event.stanza.attr.from);
+        post_event("room_created", {
+            session_id = session_id;
+            user_id = user .. "@" .. domain;
+            room_id = event.room:get_talky_core_id();
+            name = roomName;
+            jid = event.room.jid;
+        });
+    end);
+    
+    
+    module:hook("muc-room-destroyed", function (event)
+        local roomName = jid_split(event.room.jid);
+        post_event("room_destroyed", {
+            room_id = event.room:get_talky_core_id();
+            name = roomName;
+            jid = event.room.jid;
+        });
+    end);
+end
 
 
 module:log("info", "Loaded mod_talky_core_metrics for %s", module.host or "*");

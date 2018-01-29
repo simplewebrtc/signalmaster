@@ -9,7 +9,6 @@ const FS = require('fs');
 
 const InflateDomains = require('./lib/domains');
 const BuildUrl = require('./lib/build_url');
-const ResetDB = require('./lib/reset_db');
 const Domains = InflateDomains(Config.talky.domains);
 
 const InternalAuth = require('./lib/internal_auth');
@@ -102,8 +101,6 @@ exports.Server = server.register(require('hapi-auth-basic')).then(() => {
   }]);
 }).then(async () => {
 
-  await ResetDB(db, redisClient);
-
   server.auth.strategy('prosody-guests', 'basic', {
     validate: ProsodyAuth('guests')
   });
@@ -145,12 +142,8 @@ exports.Server = server.register(require('hapi-auth-basic')).then(() => {
 
     wsProxy.ws(req, socket, head);
   });
-
-  if (Config.getconfig.isDev && !Config.noProsody) {
-    const prosody = require('./scripts/start-prosody').startProsody(process);
-    prosody.stdout.pipe(process.stdout);
-  }
   // $lab:coverage:on$
+
 
   server.bind({ db, redis: redisClient });
   server.route(require('./routes'));
@@ -168,6 +161,13 @@ exports.Server = server.register(require('hapi-auth-basic')).then(() => {
   iceWorker.start();
   await server.start();
   server.log(['info', 'startup'], server.info.uri);
+
+  // $lab:converage:off$
+  if (Config.getconfig.isDev && !Config.noProsody) {
+    const prosody = require('./scripts/start-prosody').startProsody(process);
+    prosody.stdout.pipe(process.stdout);
+  }
+  // $lab:coverage:on$
 }).catch((err) => {
 
   // coverage disabled due to difficulty in faking a throw

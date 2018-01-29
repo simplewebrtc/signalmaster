@@ -5,6 +5,8 @@ const Crypto = require('crypto');
 const Joi = require('joi');
 const { promisify } = require('util');
 
+const ResetDB = require('../../lib/reset_db');
+
 module.exports = {
   description: 'Ingest metrics from Prosody',
   tags: ['api', 'metrics'],
@@ -15,7 +17,13 @@ module.exports = {
     let { name } = data;
     const now = new Date();
 
+    if (eventType === 'signaling_server_restart') {
+      await ResetDB(this.db, this.redis, data.server);
+      return h.response();
+    }
+
     const redis_rpush = promisify(this.redis.rpush.bind(this.redis));
+
     //$lab:coverage:off$
     if (name && Config.talky.metrics && Config.talky.metrics.maskRoomNames) {
       name = Crypto.createHash('sha1').update(name).digest('base64');
@@ -44,6 +52,7 @@ module.exports = {
     payload: {
       eventType: Joi.string(),
       data: Joi.object({
+        server: Joi.string(),
         room_id: Joi.string(),
         session_id: Joi.string(),
         user_id: Joi.string(),

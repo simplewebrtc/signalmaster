@@ -45,6 +45,9 @@ module.exports = [
   // Internal routes for Prosody
   // ---------------------------------------------------------------------
 
+  // Prosody config
+  { method: 'POST', path: '/prosody/config', config: Controllers.config.prosody },
+
   // Telemetry
   { method: 'POST', path: '/prosody/telemetry', config: Controllers.telemetry.prosody },
 

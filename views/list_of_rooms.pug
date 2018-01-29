@@ -8,13 +8,17 @@ block dashboardContent
         tr
           th Name
           th Created
-          th Duration
+          th Wait Time
+          th Call Time
+          th Size
       each val in data
         tr
           td
             a(href='/dashboard/rooms/' + val.id) #{val.name}
-          td #{val.created_at}
-          td #{val.duration}
+          td #{val.created_at.toLocaleString()}
+          td #{val.initialWaitingTime}
+          td #{val.usableCallTime}
+          td #{val.reports.occupants.maxConcurrent}
     div
       // h3 Pages
       //- each page, index in pages

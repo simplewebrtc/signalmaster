@@ -25,6 +25,8 @@ module.exports = {
       const start = room.created_at.getTime();
 
       room.duration = Duration(end - start);
+      room.initialWaitingTime = room.reports.occupants.initialWaitingTime ? Duration(room.reports.occupants.initialWaitingTime) : '-';
+      room.usableCallTime = room.reports.occupants.usableCallTime ? Duration(room.reports.occupants.usableCallTime) : '-';
     }
     rooms.sort((a, b) => {
 

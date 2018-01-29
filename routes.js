@@ -32,7 +32,7 @@ module.exports = [
   { method: 'GET', path: '/setup', config: Controllers.setup },
   { method: 'GET', path: '/license', config: Controllers.license },
   { method: 'GET', path: '/dashboard', config: Controllers.dashboard.home },
-  { method: 'GET', path: '/dashboard/histograms', config: Controllers.dashboard.histograms },
+  { method: 'GET', path: '/dashboard/histograms/{histogram_type}', config: Controllers.dashboard.histograms },
   { method: 'GET', path: '/dashboard/sessions/{id}', config: Controllers.dashboard.get_one_session },
   { method: 'GET', path: '/dashboard/rooms', config: Controllers.dashboard.get_list_of_rooms },
   { method: 'GET', path: '/dashboard/rooms/{id}', config: Controllers.dashboard.get_one_room },

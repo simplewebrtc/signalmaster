@@ -65,6 +65,14 @@ block dashboardContent
               a(href='https://' + iceServer.server + ':8000') #{iceServer.server}
             td #{iceServer.sent}
             td #{iceServer.received}
+        tr
+          th Organization
+          th(colspan='2')
+        each iceOrg in iceOrgUsage
+          tr
+            td #{iceOrg.org}
+            td #{iceOrg.sent}
+            td #{iceOrg.received}
 
     table
       thead

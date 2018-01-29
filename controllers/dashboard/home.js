@@ -52,6 +52,25 @@ module.exports = {
       });
     }
 
+    const iceOrgSent = await redis_hgetall('ice_usage_by_org_sent');
+    const iceOrgRecv = await redis_hgetall('ice_usage_by_org_recv');
+    const iceOrgs = new Set();
+    for (const iceOrg of Object.keys(iceOrgSent || {})) {
+      iceOrgs.add(iceOrg);
+    }
+    for (const iceOrg of Object.keys(iceOrgRecv || {})) {
+      iceOrgs.add(iceOrg);
+    }
+    const iceOrgUsage = [];
+    for (const iceOrg of iceOrgs) {
+      iceOrgUsage.push({
+        org: iceOrg,
+        sent: (iceOrgSent || {})[iceOrg] || 0,
+        received: (iceOrgRecv || {})[iceOrg] || 0
+      });
+    }
+
+
     const activeCount = await this.db.rooms.count_active();
     const sessionCount = await this.db.sessions.count_active();
     const sessionMobileCount = await this.db.sessions.count_active_type({ session_type: 'mobile' });
@@ -117,6 +136,7 @@ module.exports = {
       roomReportQueue,
       iceQueue,
       iceUsage,
+      iceOrgUsage,
       activeRoomCount: activeCount.count,
       activeSessionCount: sessionCount.count,
       activeMobileSessionCount: sessionMobileCount.count,

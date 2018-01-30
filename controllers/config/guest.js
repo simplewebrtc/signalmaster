@@ -33,7 +33,7 @@ module.exports = {
       return Boom.forbidden('Talky Core active user limit reached');
     }
 
-    const { ua, browser, device, os } = UAParser(request.headers['user-agent']);
+    const { ua, browser, os } = UAParser(request.headers['user-agent']);
 
     const id = UUID.v4();
     const org_id = request.params.orgId || DEFAULT_ORG;
@@ -46,7 +46,7 @@ module.exports = {
       actor_id: id,
       org_id,
       user_id,
-      device_type: device.type === undefined ? 'desktop' : 'mobile',
+      device_type: ua.indexOf('Mozilla') >= 0 ? 'desktop' : 'mobile',
       os: JSON.stringify(os),
       useragent: ua,
       browser: JSON.stringify(browser),

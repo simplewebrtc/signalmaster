@@ -37,7 +37,7 @@ module.exports = {
 
     // TODO: Verify the customer data is signed for the given org.
     const customerData = await ExtractCustomerData(request.payload.token);
-    const { ua, browser, device, os } = UAParser(request.headers['user-agent']);
+    const { ua, browser, os } = UAParser(request.headers['user-agent']);
 
     const id = UUID.v4();
     const org_id = request.params.orgId || DEFAULT_ORG;
@@ -55,7 +55,7 @@ module.exports = {
       actor_id: id,
       user_id,
       org_id,
-      device_type: device.type === undefined ? 'desktop' : 'mobile',
+      device_type: ua.indexOf('Mozilla') >= 0 ? 'desktop' : 'mobile',
       os: JSON.stringify(os),
       useragent: ua,
       browser: JSON.stringify(browser),

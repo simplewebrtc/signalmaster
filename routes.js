@@ -20,7 +20,7 @@ module.exports = [
   { method: 'POST', path: '/config/user/{orgId?}', config: Controllers.config.user },
   { method: 'POST', path: '/config/guest/{orgId?}', config: Controllers.config.guest },
   { method: 'POST', path: '/config/bot', config: Controllers.config.bot },
-  { method: 'POST', path: '/config/prosody', config: Controllers.config.prosody },
+  { method: 'POST', path: '/prosody/config', config: Controllers.config.prosody },
 
   // Telemetry
   { method: 'POST', path: '/telemetry', config: Controllers.telemetry.client },

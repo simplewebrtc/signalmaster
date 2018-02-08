@@ -62,24 +62,27 @@ block dashboardContent
           th ICE Server
           th Bytes Sent
           th Bytes Received
+          th Session Count
       tbody
         if iceUsage.length == 0
           tr
-            td(colspan='3') No usage reported
+            td(colspan='4') No usage reported
         each iceServer in iceUsage
           tr
             td
               a(href='https://' + iceServer.server + ':8000') #{iceServer.server}
-            td #{iceServer.sent}
-            td #{iceServer.received}
+            td #{(parseInt(iceServer.sent, 10) / 1024 / 1024 / 1024).toFixed(3)} Gb
+            td #{(parseInt(iceServer.received, 10) / 1024 / 1024 / 1024).toFixed(3)} Gb
+            td #{iceServer.count}
         tr
           th Organization
-          th(colspan='2')
+          th(colspan='3')
         each iceOrg in iceOrgUsage
           tr
-            td #{iceOrg.org}
-            td #{iceOrg.sent}
+            td #{(parseInt(iceOrg.sent, 10) / 1024 / 1024 / 1024).toFixed(3)} Gb
+            td #{(parseInt(iceOrg.received, 10) / 1024 / 1024 / 1024).toFixed(3)} Gb
             td #{iceOrg.received}
+            td #{iceOrg.count}
 
     table
       thead
@@ -99,6 +102,6 @@ block dashboardContent
         tr
           td ICE Usage
           td #{iceQueue}
-          td #{iceEventClock || '-'}
+          td #{iceClock || '-'}
 
 

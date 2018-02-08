@@ -36,6 +36,7 @@ module.exports = {
     }
     const iceSent = await redis_hgetall('ice_usage_by_server_sent');
     const iceRecv = await redis_hgetall('ice_usage_by_server_recv');
+    const iceCount = await redis_hgetall('ice_count_by_server');
     const iceServers = new Set();
     for (const iceServer of Object.keys(iceSent || {})) {
       iceServers.add(iceServer);
@@ -48,12 +49,14 @@ module.exports = {
       iceUsage.push({
         server: iceServer,
         sent: (iceSent || {})[iceServer] || 0,
-        received: (iceRecv || {})[iceServer] || 0
+        received: (iceRecv || {})[iceServer] || 0,
+        count: (iceCount || {})[iceServer] || 0
       });
     }
 
     const iceOrgSent = await redis_hgetall('ice_usage_by_org_sent');
     const iceOrgRecv = await redis_hgetall('ice_usage_by_org_recv');
+    const iceOrgCount = await redis_hgetall('ice_count_by_org');
     const iceOrgs = new Set();
     for (const iceOrg of Object.keys(iceOrgSent || {})) {
       iceOrgs.add(iceOrg);
@@ -66,57 +69,66 @@ module.exports = {
       iceOrgUsage.push({
         org: iceOrg,
         sent: (iceOrgSent || {})[iceOrg] || 0,
-        received: (iceOrgRecv || {})[iceOrg] || 0
+        received: (iceOrgRecv || {})[iceOrg] || 0,
+        count: (iceOrgCount || {})[iceOrg] || 0
       });
     }
 
 
     const activeCount = await this.db.rooms.count_active();
     const sessionCount = await this.db.sessions.count_active();
-    const sessionMobileCount = await this.db.sessions.count_active_type({ session_type: 'mobile' });
-    const sessionWebCount = await this.db.sessions.count_active_type({ session_type: 'desktop' });
-    const sessionLegacyCount = await this.db.sessions.count_active_type({ session_type: 'legacy' });
+    const sessionMobileCount = await this.db.sessions.count_active_type({ session_type: 'mobile', activated: true });
+    const sessionWebCount = await this.db.sessions.count_active_type({ session_type: 'desktop', activated: true });
+    const sessionLegacyCount = await this.db.sessions.count_active_type({ session_type: 'legacy', activated: true });
 
     const sessionDayCount = await this.db.sessions.count_period({
       ts: new Date(),
-      interval: '1 day'
+      interval: '1 day',
+      activated: true
     });
     const sessionWeekCount = await this.db.sessions.count_period({
       ts: new Date(),
-      interval: '7 days'
+      interval: '7 days',
+      activated: true
     });
 
     const sessionMobileDayCount = await this.db.sessions.count_period_type({
       ts: new Date(),
       interval: '1 day',
-      session_type: 'mobile'
+      session_type: 'mobile',
+      activated: true
     });
     const sessionMobileWeekCount = await this.db.sessions.count_period_type({
       ts: new Date(),
       interval: '7 days',
-      session_type: 'mobile'
+      session_type: 'mobile',
+      activated: true
     });
 
     const sessionWebDayCount = await this.db.sessions.count_period_type({
       ts: new Date(),
       interval: '1 day',
-      session_type: 'desktop'
+      session_type: 'desktop',
+      activated: true
     });
     const sessionWebWeekCount = await this.db.sessions.count_period_type({
       ts: new Date(),
       interval: '7 days',
-      session_type: 'desktop'
+      session_type: 'desktop',
+      activated: true
     });
 
     const sessionLegacyDayCount = await this.db.sessions.count_period_type({
       ts: new Date(),
       interval: '1 day',
-      session_type: 'legacy'
+      session_type: 'legacy',
+      activated: true
     });
     const sessionLegacyWeekCount = await this.db.sessions.count_period_type({
       ts: new Date(),
       interval: '7 days',
-      session_type: 'legacy'
+      session_type: 'legacy',
+      activated: true
     });
 
     const roomDayCount = await this.db.rooms.count_period({

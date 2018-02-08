@@ -1,11 +1,13 @@
 'use strict';
 
 const Config = require('getconfig');
+const Joi = require('joi');
 
 const InflateDomains = require('../../lib/domains');
 const BuildInternalUrl = require('../../lib/build_internal_url');
 const Domains = InflateDomains(Config.talky.domains);
 
+const ResetDB = require('../../lib/reset_db');
 
 module.exports = {
   description: 'Auto-configure a registered user client session',
@@ -79,7 +81,14 @@ module.exports = {
       }
     };
 
+    await ResetDB(this.db, this.redis, request.payload.server);
+
     return prosodyConfig;
   },
-  auth: 'internal-api'
+  auth: 'internal-api',
+  validate: {
+    payload: {
+      server: Joi.string()
+    }
+  }
 };

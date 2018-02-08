@@ -71,16 +71,16 @@ block dashboardContent
           tr
             td
               a(href='https://' + iceServer.server + ':8000') #{iceServer.server}
-            td #{(parseInt(iceServer.sent, 10) / 1024 / 1024 / 1024).toFixed(3)} Gb
-            td #{(parseInt(iceServer.received, 10) / 1024 / 1024 / 1024).toFixed(3)} Gb
+            td #{(parseInt(iceServer.sent, 10) / 1024 / 1024 / 1024).toFixed(3)} GB
+            td #{(parseInt(iceServer.received, 10) / 1024 / 1024 / 1024).toFixed(3)} GB
             td #{iceServer.count}
         tr
           th Organization
           th(colspan='3')
         each iceOrg in iceOrgUsage
           tr
-            td #{(parseInt(iceOrg.sent, 10) / 1024 / 1024 / 1024).toFixed(3)} Gb
-            td #{(parseInt(iceOrg.received, 10) / 1024 / 1024 / 1024).toFixed(3)} Gb
+            td #{(parseInt(iceOrg.sent, 10) / 1024 / 1024 / 1024).toFixed(3)} GB
+            td #{(parseInt(iceOrg.received, 10) / 1024 / 1024 / 1024).toFixed(3)} GB
             td #{iceOrg.received}
             td #{iceOrg.count}
 

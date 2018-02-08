@@ -32,6 +32,11 @@ module.exports = {
     migrations: {
       tableName: 'knex_migrations'
     }
+  },
+
+  migrate: {
+    client: 'postgresql',
+    connection: Config.db
   }
 
 };

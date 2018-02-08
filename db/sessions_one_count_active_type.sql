@@ -5,4 +5,6 @@ FROM
 WHERE
     sessions.ended_at IS NULL
     AND
-    sessions.type = ${session_type}::text
+    sessions.activated IS TRUE
+    AND
+    (${session_type} IS NULL OR sessions.type = ${session_type}::text)

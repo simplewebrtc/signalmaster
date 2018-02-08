@@ -5,8 +5,6 @@ const Crypto = require('crypto');
 const Joi = require('joi');
 const { promisify } = require('util');
 
-const ResetDB = require('../../lib/reset_db');
-
 module.exports = {
   description: 'Ingest metrics from Prosody',
   tags: ['api', 'metrics'],
@@ -16,11 +14,6 @@ module.exports = {
     const { session_id, user_id, room_id } = data;
     let { name } = data;
     const now = new Date();
-
-    if (eventType === 'signaling_server_restart') {
-      await ResetDB(this.db, this.redis, data.server);
-      return h.response();
-    }
 
     const redis_rpush = promisify(this.redis.rpush.bind(this.redis));
 

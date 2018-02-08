@@ -4,10 +4,8 @@ MAINTAINER Heather Young heather@andyet.net
 
 USER root
 
-
-RUN apt-get update
-RUN apt-get install -y --no-install-recommends \
-    dnsutils net-tools
+RUN apt-get update \
+    && rm -rf /var/lib/apt/lists/*
 
 ADD prosody_modules /etc/prosody_modules
 ADD certs.key /etc/prosody_certs/certs.key

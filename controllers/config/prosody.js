@@ -24,6 +24,8 @@ module.exports = {
         'talky_core_instance_check'
       ],
 
+      log_level: 'debug',
+
       talky_core_ice_url: `${BuildInternalUrl()}/prosody/ice`,
       talky_core_telemetry_url: `${BuildInternalUrl()}/prosody/telemetry`,
       talky_core_instance_check_url: `${BuildInternalUrl()}/instance-check`,

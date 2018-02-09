@@ -13,6 +13,7 @@ local configmanager = require "core.configmanager";
 
 local api_key = module:get_option_string("talky_core_api_key", "");
 local config_url = module:get_option_string("talky_core_config_url",  "");
+local server_name = module:get_option_string("talky_core_server_name", "default");
 
 
 local function apply_config(config)
@@ -76,7 +77,7 @@ local function fetch_config()
     module:log("info", "Fetching Prosody config with URL %s", config_url);
 
     local body = json_encode({
-        server = "default";
+        server = server_name;
     });
     local ex = {
         method = "POST";

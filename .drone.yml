@@ -7,7 +7,7 @@ pipeline:
       - ${DRONE_TAG##v}
     secrets: [ docker_username, docker_password ]
     when:
-      event: [ tag, deployment ]
+      event: [ tag ]
   build_docker_prod:
     image: plugins/docker
     repo: andyet/talky-api
@@ -16,7 +16,7 @@ pipeline:
       - latest
     secrets: [ docker_username, docker_password ]
     when:
-      event: [ tag, deployment ]
+      event: [ deployment ]
   deploy_api_stage:
     image: quay.io/honestbee/drone-kubernetes
     kubernetes_server: ${KUBERNETES_SERVER}

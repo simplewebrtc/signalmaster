@@ -20,14 +20,16 @@ module.exports = {
     }
 
     const session = request.auth.credentials;
-    const now = new Date();
+    let now = Date.now();
     const rpush = promisify(this.redis.rpush.bind(this.redis));
 
     const updates = [];
     for (const item of batch) {
+      // Hacky forcing of sort order until we have a better seq series
+      const time = new Date(now++);
       const event = {
-        created_at: now,
-        updated_at: now,
+        created_at: time,
+        updated_at: time,
         type: item.eventType,
         peer_id: item.peerId,
         room_id: item.roomId,

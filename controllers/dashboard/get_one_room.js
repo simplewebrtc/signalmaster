@@ -85,9 +85,17 @@ module.exports = {
         speaker.duration = Duration(speaker.duration);
       }
 
-      for (const session of report.jingle) {
+      for (const session of report.jingle.sessions) {
         session.duration = Duration(session.duration);
       }
+    }
+
+    if (request.query.json) {
+      return {
+        report: room.reports,
+        similarPrev,
+        similarNext
+      };
     }
 
     return h.view('single_room', {

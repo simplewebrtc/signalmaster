@@ -81,10 +81,12 @@ block dashboardContent
         th Audio
         th Video
         th Connected
+        th Time to Connect/Fail
+        th Connection Type
         th Duration
       tbody
-        if report.jingle.length
-          each session in report.jingle
+        if report.jingle.sessions && report.jingle.sessions.length
+          each session in report.jingle.sessions 
             tr
               td
                 a(href='/dashboard/sessions/' + session.initiator) #{shortSessions[session.initiator]} 
@@ -93,6 +95,8 @@ block dashboardContent
               td #{session.audio ? 'Yes' : 'No'}
               td #{session.video ? 'Yes' : 'No'}
               td #{session.connected ? 'Yes' : 'No'}
+              td #{session.connected ? session.connectionTime : session.failedTime}
+              td #{session.localCandidateType || '-'} : #{session.remoteCandidateType || '-'} #{session.turnType ? ` : ${session.turnType}` : ''}
               td #{session.duration}
         else
           tr

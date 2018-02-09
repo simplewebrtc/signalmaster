@@ -8,8 +8,8 @@ pipeline:
       - latest
     secrets: [ docker_username, docker_password ]
     when:
-      event: tag
-  deploy_stage:
+      event: [ tag, deployment ]
+  deploy_api_stage:
     image: quay.io/honestbee/drone-kubernetes
     kubernetes_server: ${KUBERNETES_SERVER}
     kubernetes_cert: ${KUBERNETES_CERT}

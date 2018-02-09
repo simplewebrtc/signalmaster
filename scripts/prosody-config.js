@@ -14,6 +14,10 @@ plugin_paths = {
 daemonize = false
 use_libevent = true
 
+log = {
+    debug = "*console";
+}
+
 modules_enabled = {
     "posix";
     "talky_core_config";

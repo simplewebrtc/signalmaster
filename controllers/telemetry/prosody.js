@@ -13,7 +13,11 @@ module.exports = {
     const { eventType, data } = request.payload;
     const { session_id, user_id, room_id } = data;
     let { name } = data;
-    const now = new Date();
+    let now = new Date();
+
+    if (data.created_at) {
+      now = new Date(data.created_at);
+    }
 
     const redis_rpush = promisify(this.redis.rpush.bind(this.redis));
 
@@ -43,9 +47,10 @@ module.exports = {
   },
   validate: {
     payload: {
+      server: Joi.string(),
       eventType: Joi.string(),
       data: Joi.object({
-        server: Joi.string(),
+        created_at: Joi.number(),
         room_id: Joi.string(),
         session_id: Joi.string(),
         user_id: Joi.string(),

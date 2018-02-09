@@ -11,15 +11,24 @@ local os_time = os.time;
 
 local api_key = module:get_option_string("talky_core_api_key", "");
 local telemetry_url = module:get_option_string("talky_core_telemetry_url", "");
+local server_name = module:get_option_string("talky_core_server_name", "default");
 
 
 local function post_event(eventType, data)
+    if not data then
+        data = {}
+    end
+
+    data.created_at = os.time() * 1000;
+
     local userpart = tostring(os_time());
     local secret = base64(hmac_sha1(api_key, userpart, false))
+
 
     module:log("debug", "Posting %s telemetry with URL %s", eventType, telemetry_url);
     local body = json_encode({
         eventType = eventType;
+        server = server_name;
         data = data;
     });
     local ex = {
@@ -41,16 +50,12 @@ end
 -- ========================================================================
 
 module:hook_global("server-started", function (event)
-    post_event("signaling_server_restart", {
-        server = "default";
-    });
+    post_event("signaling_server_restart");
 end);
 
 
 module:hook_global("server-stopped", function (event)
-    post_event("signaling_server_stop", {
-        server = "default";
-    });
+    post_event("signaling_server_stop");
 end);
 
 

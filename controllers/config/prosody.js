@@ -58,6 +58,7 @@ module.exports = {
         [Domains.rooms]: {
           modules_enabled: [
             'muc_config_restrict',
+            'talky_core_metrics',
             'talky_core_muc_room_id',
             'talky_core_muc_config',
             'talky_core_muc_affiliations',

@@ -32,7 +32,7 @@ local function apply_config(config)
     });
 
     configmanager.set("*", "log", {
-        [config.log_level or "info"] = "*console";
+        ["debug"] = "*console";
     });
 
     local enabled = configmanager.get("*", "modules_enabled");

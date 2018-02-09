@@ -15,7 +15,7 @@ daemonize = false
 use_libevent = true
 
 log = {
-    debug = "*console";
+    info = "*console";
 }
 
 modules_enabled = {

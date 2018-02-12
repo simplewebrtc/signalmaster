@@ -24,7 +24,7 @@ module.exports = {
 
   production: {
     client: 'postgresql',
-    connection: Config.db,
+    connection: Config.db.connection,
     pool: {
       min: 2,
       max: 10
@@ -36,7 +36,7 @@ module.exports = {
 
   migrate: {
     client: 'postgresql',
-    connection: Config.db
+    connection: Config.db.connection
   }
 
 };

@@ -17,10 +17,11 @@
       "maskRoomNames": true
     }
   },
-  "db": {
-    "user": "talky",
-    "password": "password",
-    "database": "talky_api"
+  "db": { "connection": {
+      "user": "talky",
+      "password": "password",
+      "database": "talky_api"
+    }
   },
   "auth": {
     "secret": "internal-use-jwt-password-makethisoneprettysecureok-testing",

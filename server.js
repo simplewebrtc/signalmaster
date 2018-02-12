@@ -31,7 +31,7 @@ if (Config.getconfig.env !== 'production') {
 //$lab:coverage:on$
 
 const server = new Hapi.Server(Config.server);
-const db = new Muckraker({ connection: Config.db });
+const db = new Muckraker(Config.db);
 const redisClient = Redis.createClient(Config.redis.connection);
 const eventWorker = new EventWorker({ db, redis: redisClient });
 const roomReports = new RoomReports({ db, redis: redisClient });

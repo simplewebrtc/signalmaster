@@ -10,7 +10,7 @@ WORKDIR /app
 RUN apk update \
  && apk upgrade \
  && apk add --no-cache wget \
- && npm i -q \
+ && npm i \
  && mkdir -p /etc/prosody \
  && chmod +x  ./scripts/post-prosody-config.sh
 

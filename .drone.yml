@@ -3,7 +3,7 @@ pipeline:
     image: node:8
     commands:
       - export DATABASE_URL=$${DATABASE_URL}
-      - touch /thisfileshouldnotbehere
+      - npm i
       - NODE_ENV=migrate npm run migrate
     when:
       event: tag

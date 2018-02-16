@@ -6,6 +6,7 @@ const JWT = require('jsonwebtoken');
 const Config = require('getconfig');
 const Crypto = require('crypto');
 const InflateDomains = require('../lib/domains');
+const LookupOrg = require('../lib/lookup_org');
 const Domains = InflateDomains(Config.talky.domains);
 
 exports.Server = Server.Server;
@@ -78,7 +79,7 @@ exports.session = function (attrs) {
   return Object.assign(defaults, attrs);
 };
 
-exports.apiToken = function (unsigned, attrs) {
+exports.apiToken = async function (unsigned, attrs, org) {
 
   const defaults = {
     algorithm: 'HS256',
@@ -86,8 +87,9 @@ exports.apiToken = function (unsigned, attrs) {
   };
 
   const tokenAttrs = Object.assign(defaults, attrs);
+  const orgData = await LookupOrg(org);
 
-  return JWT.sign(unsigned, Config.talky.apiKey, tokenAttrs);
+  return JWT.sign(unsigned, orgData.secret, tokenAttrs);
 };
 
 exports.clientToken = function (unsigned, attrs) {

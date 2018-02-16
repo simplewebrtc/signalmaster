@@ -34,6 +34,10 @@
       "cors": true
     }
   },
+  "billing": {
+    "ice": true,
+    "roomReports": false 
+  },
   "talky": {
     "apiVersion": "2.0.0",
 
@@ -61,6 +65,17 @@
 
     "screensharingExtensions": {
       "chrome": "$CHROME_EXTENSION_ID"
+    },
+
+    "orgs": {
+      "andyet": {
+        "secret": "$CUSTOMER_API_KEY",
+        "maskRoomNames": true
+      },
+      "talky": {
+        "secret": "$CUSTOMER_API_KEY",
+        "maskRoomNames": true
+      }
     }
   },
   "good": {

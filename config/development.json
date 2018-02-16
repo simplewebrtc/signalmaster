@@ -7,6 +7,10 @@
       "port": "6379"
     }
   },
+  "billing": {
+    "ice": false,
+    "roomReports": false 
+  },
   "talky": {
     "apiVersion": "2.0.0",
 
@@ -15,8 +19,6 @@
     },
 
     "license": { "roomLimit": 5, "userLimit": 5, "expiresIn": "30d" },
-
-    "apiKey": "customer-api-shared-jwt-password-makethisoneprettysecureok",
 
     "domains": {
       "api": "localhost"
@@ -33,13 +35,28 @@
 
     "screensharingExtensions": {
       "chrome": "ikljcimogjdaoojhmkbioipmffflodgk"
+    },
+
+    "defaultOrg": "andyet",
+
+    "orgs": {
+      "andyet": {
+        "enabled": true,
+        "secret": "customer-api-shared-jwt-password-makethisoneprettysecureok"
+      },
+      "talky": {
+        "enabled": true,
+        "secret": "customer-api-shared-jwt-password-makethisoneprettysecureok"
+      }
     }
   },
   "db": {
-    "host": "localhost",
-    "user": "talky",
-    "password": "password",
-    "database": "talky_api"
+    "connection": {
+      "host": "localhost",
+      "user": "talky",
+      "password": "password",
+      "database": "talky_api"
+    }
   },
   "auth": {
     "secret": "internal-use-jwt-password-makethisoneprettysecureok",

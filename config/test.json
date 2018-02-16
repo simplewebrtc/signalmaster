@@ -1,11 +1,14 @@
 {
   "isDevTLS": false,
+  "billing": {
+    "ice": false,
+    "roomReports": false
+  },
   "talky": {
     "admins": {
       "testAdmin": "testing"
     },
     "license": { "roomLimit": 5, "userLimit": 5, "expiresIn": "30d" },
-    "apiKey": "testkey",
     "domains": {
       "api": "localhost"
     },
@@ -15,6 +18,12 @@
     },
     "metrics": {
       "maskRoomNames": true
+    },
+    "orgs": {
+      "testorg": {
+        "enabled": true,
+        "secret": "testkey"
+      }
     }
   },
   "db": { "connection": {

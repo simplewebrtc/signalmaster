@@ -22,15 +22,15 @@ describe('POST /config/user', () => {
     server = await Server;
   });
 
-  it('Should return proper data for user route and log it ', () => {
+  it('Should return proper data for user route and log it ', async () => {
 
     const iceServers = Fixtures.iceServers();
     const session = Fixtures.session();
-    const token = Fixtures.apiToken(session);
+    const token = await Fixtures.apiToken(session, {}, 'testorg');
 
     let registeredUser;
 
-    return server.inject({ method: 'POST', url: '/config/user', payload: { token } })
+    return server.inject({ method: 'POST', url: '/config/user/testorg', payload: { token } })
       .then((res) => {
 
         expect(res.statusCode).to.equal(200);

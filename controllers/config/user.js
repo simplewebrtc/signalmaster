@@ -15,11 +15,12 @@ const FetchICE = require('../../lib/fetch_ice');
 const InflateDomains = require('../../lib/domains');
 const CheckLicense = require('../../lib/licensing');
 const ExtractCustomerData = require('../../lib/customer_data');
+const LookupOrg = require('../../lib/lookup_org');
 
 const TalkyCoreConfig = require('getconfig').talky;
 const Domains = InflateDomains(TalkyCoreConfig.domains);
 
-const DEFAULT_ORG = 'andyet';
+const DEFAULT_ORG = Config.talky.defaultOrg;
 
 
 module.exports = {
@@ -29,6 +30,11 @@ module.exports = {
 
     const license = await CheckLicense();
 
+    const org = await LookupOrg(request.params.orgId || DEFAULT_ORG, this.redis);
+    if (!org) {
+      return Boom.forbidden('Account not enabled');
+    }
+
     // Query DB for the active user count
     const currentUserCount = 0;
     if (license.userLimit !== undefined && (currentUserCount + 1 > license.userLimit)) {
@@ -36,7 +42,7 @@ module.exports = {
     }
 
     // TODO: Verify the customer data is signed for the given org.
-    const customerData = await ExtractCustomerData(request.payload.token);
+    const customerData = await ExtractCustomerData(request.payload.token, org.secret);
     const { ua, browser, os } = UAParser(request.headers['user-agent']);
 
     const id = UUID.v4();

@@ -1,5 +1,5 @@
 {
   "db": {
-  	"connection": "$DATABASE_URL_STAGE"
+  	"connection": "$DATABASE_URL"
   }
 }

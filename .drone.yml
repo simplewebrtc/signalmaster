@@ -2,7 +2,17 @@ pipeline:
   migratedb_stage:
     image: node:8
     commands:
-      - export DATABASE_URL=$${DATABASE_URL}
+      - export DATABASE_URL=$${DATABASE_URL_STAGE}
+      - npm i
+      - NODE_ENV=migrate npm run migrate
+    when:
+      event: tag
+    secrets:
+      - database_url
+  migratedb_stage:
+    image: node:8
+    commands:
+      - export DATABASE_URL=$${DATABASE_URL_PROD}
       - npm i
       - NODE_ENV=migrate npm run migrate
     when:

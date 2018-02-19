@@ -8,17 +8,17 @@ pipeline:
     when:
       event: tag
     secrets:
-      - database_url
-  migratedb_stage:
+      - database_url_stage
+  migratedb_prod:
     image: node:8
     commands:
       - export DATABASE_URL=$${DATABASE_URL_PROD}
       - npm i
       - NODE_ENV=migrate npm run migrate
     when:
-      event: tag
+      event: deployment
     secrets:
-      - database_url
+      - database_url_prod
   build_docker_stage:
     image: plugins/docker
     repo: andyet/talky-api

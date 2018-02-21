@@ -28,6 +28,7 @@ module.exports = {
       orgId: DEFAULT_ORG,
       signalingUrl: `${BuildUrl('ws', Domains.signaling)}/ws-bind`,
       telemetryUrl: `${BuildUrl('http', Domains.api)}/telemetry`,
+      roomConfigUrl: `${BuildUrl('http', Domains.api)}/config/room`,
       roomServer: Domains.rooms,
       iceServers: ice,
       screensharingExtensions: TalkyCoreConfig.screensharingExtensions || {},

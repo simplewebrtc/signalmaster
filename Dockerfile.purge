@@ -10,6 +10,6 @@ ADD db /app/db
 ADD package.json /app/package.json
 WORKDIR /app
 
-RUN npm i -q muckraker minimist getconfig
+RUN npm i -q muckraker minimist getconfig pg
 
 CMD ["npm", "run", "purge-pii"]

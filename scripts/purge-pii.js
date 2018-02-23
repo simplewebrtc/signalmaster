@@ -3,7 +3,7 @@
 const Config = require('getconfig');
 const Muckraker = require('muckraker');
 
-const db = new Muckraker({ connection: Config.db });
+const db = new Muckraker(Config.db);
 
 
 const purge = async (interval = '7 days') => {

@@ -69,10 +69,12 @@
 
     "orgs": {
       "andyet": {
+        "enabled": true,
         "secret": "$CUSTOMER_API_KEY",
         "maskRoomNames": true
       },
       "talky": {
+        "enabled": true,
         "secret": "$CUSTOMER_API_KEY",
         "maskRoomNames": true
       }

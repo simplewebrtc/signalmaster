@@ -1,12 +1,7 @@
 {
-  "isDev": false,
+  "isDev": true,
   "server": {
-    "port": 8888,
-    "/* secure */": "/* whether this connects via https */",
-    "secure": true,
-    "key": "config/sslcerts/key.pem",
-    "cert": "config/sslcerts/cert.pem",
-    "password": null
+    "port": 8888
   },
   "rooms": {
     "/* maxClients */": "/* maximum number of clients per room. 0 = no limit */",
@@ -14,13 +9,13 @@
   },
   "stunservers": [
     {
-      "urls": "stun:stun.l.google.com:19302"
+      "urls": "$STUNSERVER_URL"
     }
   ],
   "turnservers": [
     {
-      "urls": ["turn:your.turn.servers.here"],
-      "secret": "turnserversharedsecret",
+      "urls": ["$TURNSERVER_URL"],
+      "secret": "$TURNSERVER_SECRET",
       "expiry": 86400
     }
   ]

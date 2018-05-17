@@ -3,7 +3,7 @@
   "description": "Simple signaling server for SimpleWebRTC",
   "version": "1.0.1",
   "dependencies": {
-    "getconfig": "2.1.0",
+    "getconfig": "^4.3.0",
     "node-uuid": "1.2.0",
     "socket.io": "1.3.7",
     "yetify": "0.0.1"

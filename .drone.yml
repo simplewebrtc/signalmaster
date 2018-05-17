@@ -1,0 +1,27 @@
+pipeline:
+  build_docker:
+    image: plugins/docker
+    repo: andyet/signalmaster-sandbox
+    tags:
+      - latest
+    secrets: [ docker_username, docker_password ]
+    when:
+      event: deployment
+  deploy:
+    image: quay.io/honestbee/drone-kubernetes
+    kubernetes_server: ${KUBERNETES_SERVER}
+    kubernetes_cert: ${KUBERNETES_CERT}
+    kubernetes_token: ${KUBERNETES_TOKEN}
+    deployment: signalmaster-sandbox
+    repo: andyet/signalmaster-sandbox
+    container: signalmaster-sandbox
+    namespace: default
+    tag: ${DRONE_COMMIT_SHA:0:8}
+    when:
+      event: deployment
+    secrets: [ kubernetes_cert, kubernetes_server, kubernetes_token ]
+  slack:
+    image: plugins/slack
+    username: drone
+    channel: alerts
+    secrets: [ slack_webhook ]

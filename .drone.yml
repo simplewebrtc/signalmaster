@@ -4,6 +4,7 @@ pipeline:
     repo: andyet/signalmaster-sandbox
     tags:
       - latest
+      - ${DRONE_COMMIT_SHA:0:8}
     secrets: [ docker_username, docker_password ]
     when:
       event: deployment

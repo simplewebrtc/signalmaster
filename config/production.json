@@ -12,11 +12,5 @@
       "urls": "$STUNSERVER_URL"
     }
   ],
-  "turnservers": [
-    {
-      "urls": ["$TURNSERVER_URL"],
-      "secret": "$TURNSERVER_SECRET",
-      "expiry": 86400
-    }
-  ]
+  "turnservers": []
 }

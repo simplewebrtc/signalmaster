@@ -1,3 +1,7 @@
+# Deprecated
+
+The open-source version of SimpleWebRTC has been deprecated. This repository will remain as-is but is no longer actively maintained.
+Read more about the "new" SimpleWebRTC (which is an entirely different thing) on https://simplewebrtc.com
 # signalmaster
 
 A simple signaling server for clients to connect and do signaling for WebRTC.

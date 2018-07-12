@@ -17,7 +17,6 @@ local room_mt = muc_service.room_mt;
 local api_key = module:get_option_string("talky_core_api_key", "");
 local user_info_url = module:get_option_string("talky_core_muc_user_info_url",  "");
 
-
 local function get_talky_core_info(room, occupant_nick)
     if not room._data.talky_core_info then
         return {};
@@ -115,12 +114,14 @@ end
 
 module:hook("muc-occupant-pre-join", function (event)
     local data = fetch_info(event.room, event.occupant.bare_jid, jid_resource(event.stanza.attr.from));
-    event.room:set_talky_core_info(event.occupant.nick, data);
+    event.occupant.nick = event.room.jid.."/"..data.id; -- lock down MUC nicks
 
+    event.room:set_talky_core_info(event.occupant.nick, data);
     stamp_info(event);
 end);
 
 module:hook("muc-occupant-pre-change", function (event)
+    event.dest_occupant.nick = event.occupant.nick; -- lock down MUC nicks
     stamp_info(event);
 end);
 

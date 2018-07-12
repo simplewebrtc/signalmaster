@@ -16,6 +16,7 @@ use_libevent = true
 
 log = {
     info = "*console";
+    warn = "/dev/stderr";
 }
 
 modules_enabled = {

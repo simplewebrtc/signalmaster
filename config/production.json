@@ -64,19 +64,25 @@
     },
 
     "screensharingExtensions": {
-      "chrome": "$CHROME_EXTENSION_ID"
+      "chrome": "ikljcimogjdaoojhmkbioipmffflodgk"
     },
 
     "orgs": {
       "andyet": {
         "enabled": true,
         "secret": "$CUSTOMER_API_KEY",
-        "maskRoomNames": true
+        "maskRoomNames": true,
+        "screensharingExtensions": {
+          "chrome": "$CHROME_EXTENSION_ID"
+        }
       },
       "talky": {
         "enabled": true,
         "secret": "$CUSTOMER_API_KEY",
-        "maskRoomNames": true
+        "maskRoomNames": true,
+        "screensharingExtensions": {
+          "chrome": "$CHROME_EXTENSION_ID"
+        }
       }
     }
   },

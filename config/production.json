@@ -44,8 +44,7 @@
 
     "domains": {
       "api": "$API_DOMAIN",
-      "api_private": "$$API_PRIVATE_DOMAIN",
-      "rooms": "$ROOMS_DOMAIN"
+      "api_private": "$$API_PRIVATE_DOMAIN"
     },
 
     "ice": {

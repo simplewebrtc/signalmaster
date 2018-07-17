@@ -44,7 +44,7 @@ pipeline:
     kubernetes_token: ${KUBERNETES_TOKEN}
     deployment: talky-api-stage
     repo: andyet/talky-api
-    container: api
+    container: api-stage
     namespace: default
     tag: 
     - ${DRONE_TAG##v}
@@ -58,7 +58,7 @@ pipeline:
     kubernetes_token: ${KUBERNETES_TOKEN}
     deployment: talky-api-prod
     repo: andyet/talky-api
-    container: api
+    container: api-prod
     namespace: default
     tag: ${DRONE_COMMIT_SHA:0:8}
     when:

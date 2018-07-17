@@ -12,12 +12,7 @@
     "*": {
       "pemFile": "$PATH_TO_STAR_PEM",
       "keyFile": "$PATH_TO_STAR_KEY"
-    },
-    "guests": {
-      "pemFile": "$PATH_TO_GUESTS_PEM",
-      "keyFile": "$PATH_TO_GUESTS_KEY"
     }
-
   },
   "auth": {
     "secret": "$INTERNAL_API_KEY",
@@ -63,19 +58,25 @@
     },
 
     "screensharingExtensions": {
-      "chrome": "$CHROME_EXTENSION_ID"
+      "chrome": "ikljcimogjdaoojhmkbioipmffflodgk"
     },
 
     "orgs": {
       "andyet": {
         "enabled": true,
         "secret": "$CUSTOMER_API_KEY",
-        "maskRoomNames": true
+        "maskRoomNames": true,
+        "screensharingExtensions": {
+          "chrome": "$CHROME_EXTENSION_ID"
+        }
       },
       "talky": {
         "enabled": true,
         "secret": "$CUSTOMER_API_KEY",
-        "maskRoomNames": true
+        "maskRoomNames": true,
+        "screensharingExtensions": {
+          "chrome": "$CHROME_EXTENSION_ID"
+        }
       }
     }
   },

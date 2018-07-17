@@ -12,12 +12,7 @@
     "*": {
       "pemFile": "$PATH_TO_STAR_PEM",
       "keyFile": "$PATH_TO_STAR_KEY"
-    },
-    "guests": {
-      "pemFile": "$PATH_TO_GUESTS_PEM",
-      "keyFile": "$PATH_TO_GUESTS_KEY"
     }
-
   },
   "auth": {
     "secret": "$INTERNAL_API_KEY",
@@ -50,7 +45,6 @@
     "domains": {
       "api": "$API_DOMAIN",
       "api_private": "$$API_PRIVATE_DOMAIN",
-      "guests": "$GUESTS_DOMAIN",
       "rooms": "$ROOMS_DOMAIN"
     },
 

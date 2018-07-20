@@ -1,0 +1,43 @@
+FROM ubuntu:xenial
+
+MAINTAINER Heather Young heather@andyet.net
+
+COPY prosody.list /etc/apt/sources.list.d/
+ADD https://prosody.im/files/prosody-debian-packages.key /tmp/prosody-key
+RUN cat /tmp/prosody-key | apt-key add -
+
+RUN set -x \
+    && apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -qy \
+        lsb-base \
+        apt-utils \
+        adduser \
+        libidn11 \
+        libssl1.0.0 \
+        lua-bitop \
+        lua-dbi-mysql \
+        lua-dbi-postgresql \
+        lua-dbi-sqlite3 \
+        lua-event \
+        lua-expat \
+        lua-filesystem \
+        lua-redis \
+        lua-sec \
+        lua-socket \
+        lua-zlib \
+        lua5.1 \
+        openssl \
+        ca-certificates \
+        ssl-cert \
+        prosody-trunk \
+    && apt-get purge apt-utils -qy \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY --chown=prosody:prosody prosody_modules /etc/prosody_modules
+COPY --chown=prosody:prosody certs.key /etc/prosody_certs/certs.key
+COPY --chown=prosody:prosody certs.pem /etc/prosody_certs/certs.pem
+RUN chown -R prosody:prosody /etc/prosody
+
+USER prosody
+
+CMD ["prosody"]

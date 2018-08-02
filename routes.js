@@ -7,9 +7,6 @@ module.exports = [
   // Signaling
   { method: 'GET', path: '/ws-bind', config: Controllers.signaling },
 
-  // Alternate connection discovery method for XMPP clients
-  { method: 'GET', path: '/.well-known/host-meta.json', config: Controllers.hostmeta },
-
   // Fetch ICE servers
   { method: 'GET', path: '/ice', config: Controllers.ice.client },
 

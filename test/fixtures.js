@@ -119,14 +119,14 @@ exports.room = function (attrs) {
 exports.adminBasicHeader = function (username) {
 
   const password = (Config.talky.admins || {})[username];
-  const header = `Basic ${new Buffer(`${username}:${password}`, 'utf8').toString('base64')}`;
+  const header = `Basic ${Buffer.from(`${username}:${password}`, 'utf8').toString('base64')}`;
   return header;
 };
 
 exports.prosodyBasicHeader = function (username) {
 
   const password = Crypto.createHmac('sha1', Buffer.from(Config.auth.secret)).update(username).digest('base64');
-  const header =  `Basic ${new Buffer(`${username}:${password}`, 'utf8').toString('base64')}`;
+  const header =  `Basic ${Buffer.from(`${username}:${password}`, 'utf8').toString('base64')}`;
   return header;
 };
 
@@ -143,7 +143,7 @@ exports.prosodyTokenHeader = function (unsigned, kind, attrs) {
 
   const token = JWT.sign(unsigned, Config.auth.secret, tokenAttrs);
 
-  const header =  `Basic ${new Buffer(`${unsigned.id}:${token}`, 'utf8').toString('base64')}`;
+  const header =  `Basic ${Buffer.from(`${unsigned.id}:${token}`, 'utf8').toString('base64')}`;
   return header;
 };
 

@@ -66,7 +66,7 @@ module.exports = {
       id,
       userId: user_id,
       orgId: org_id,
-      signalingUrl: TalkyCoreConfig.overrideGuestSignalingUrl || `${BuildUrl('ws', Domains.signaling)}/ws-bind`,
+      signalingUrl: `${BuildUrl('ws', Domains.signaling)}/ws-bind`,
       telemetryUrl: `${BuildUrl('http', Domains.api)}/telemetry`,
       roomConfigUrl: `${BuildUrl('http', Domains.api)}/config/room`,
       roomServer: Domains.rooms,

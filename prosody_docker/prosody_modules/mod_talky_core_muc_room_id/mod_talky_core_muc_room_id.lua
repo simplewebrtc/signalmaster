@@ -1,3 +1,5 @@
+local uuid_gen = require "util.uuid".generate;
+
 local muc_service = module:depends("muc");
 local room_mt = muc_service.room_mt;
 
@@ -34,6 +36,12 @@ local function add_form_option(event)
     });
 end
 module:hook("muc-disco#info", add_form_option);
+
+
+local function configure_room(event)
+    event.room:set_talky_core_id(uuid_gen());
+end
+module:hook("muc-room-pre-create", configure_room, 10);
 
 
 module:log("info", "Loaded mod_talky_core_muc_room_id for %s", module.host);

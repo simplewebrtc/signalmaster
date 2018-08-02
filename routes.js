@@ -50,9 +50,6 @@ module.exports = [
   // Telemetry
   { method: 'POST', path: '/prosody/telemetry', config: Controllers.telemetry.prosody },
 
-  // Legacy ICE requests
-  { method: 'POST', path: '/prosody/ice', config: Controllers.ice.prosody },
-
   // Authentication
   { method: 'GET', path: '/prosody/auth/user', config: Controllers.auth.user },
   { method: 'GET', path: '/prosody/auth/guest', config: Controllers.auth.guest },

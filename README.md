@@ -119,25 +119,6 @@ $ npm start
 
 If HTTPS is used, you will need to load the API home page in your browser to approve using the generated certificate.
 
-## Using Production Talky Prosody Service
-
-*Interim: Until we change the domains used by Talky.io*
-
-For now, running local clients against the production Talky.io service can be done by setting the `domains` and `overrideGuestSignalingUrl` fields of the config:
-
-```json
-{
-  "talky": {
-    "domains": {
-      "api": "localhost",
-      "rooms": "talky.io",
-      "guests": "anon.talky.me"
-    },
-    "overrideGuestSignalingUrl": "wss://anon.talky.me/xmpp-websocket"
-  }
-}
-```
-
 ## Schema
 
 ### Rooms

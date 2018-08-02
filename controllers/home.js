@@ -12,8 +12,7 @@ module.exports = {
 
     return h.view('home', {
       domains: Domains,
-      iceServer: Config.talky.ice.server,
-      screensharingExtensions: Config.talky.screensharingExtensions || {}
+      iceServer: Config.talky.ice.server
     });
   }
 };

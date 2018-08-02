@@ -20,14 +20,12 @@ module.exports = {
         'ping',
         'websocket',
         'log_slow_events',
-        'talky_core_metrics',
-        'talky_core_instance_check'
+        'talky_core_metrics'
       ],
 
       log_level: 'info',
 
       talky_core_telemetry_url: `${BuildInternalUrl()}/prosody/telemetry`,
-      talky_core_instance_check_url: `${BuildInternalUrl()}/instance-check`,
 
       hosts: {
         [Domains.api]: {},
@@ -58,7 +56,6 @@ module.exports = {
             'talky_core_muc_affiliations',
             'talky_core_muc_info'
           ],
-          talky_core_version: Config.talky.apiVersion,
           talky_core_muc_affiliation_url: `${BuildInternalUrl()}/prosody/rooms/affiliation`,
           talky_core_muc_user_info_url: `${BuildInternalUrl()}/prosody/rooms/user-info`,
           muc_room_allow_public: false,

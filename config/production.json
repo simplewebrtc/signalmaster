@@ -40,8 +40,6 @@
       "admin": "$ADMIN_PASSWORD"
     },
 
-    "apiKey": "$CUSTOMER_API_KEY",
-
     "domains": {
       "api": "$API_DOMAIN",
       "api_private": "$$API_PRIVATE_DOMAIN"
@@ -54,10 +52,6 @@
 
     "metrics": {
       "maskRoomNames": true
-    },
-
-    "screensharingExtensions": {
-      "chrome": "ikljcimogjdaoojhmkbioipmffflodgk"
     },
 
     "orgs": {

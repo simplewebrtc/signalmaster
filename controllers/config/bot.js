@@ -31,7 +31,7 @@ module.exports = {
       roomConfigUrl: `${BuildUrl('http', Domains.api)}/config/room`,
       roomServer: Domains.rooms,
       iceServers: ice,
-      screensharingExtensions: TalkyCoreConfig.screensharingExtensions || {},
+      screensharingExtensions: {},
       credential: 'some-signed-jwt-token', //TODO
       apiVersion: TalkyCoreConfig.apiVersion
     };

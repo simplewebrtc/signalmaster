@@ -31,20 +31,24 @@
       "maskRoomNames": true
     },
 
-    "screensharingExtensions": {
-      "chrome": "ikljcimogjdaoojhmkbioipmffflodgk"
-    },
+
 
     "defaultOrg": "andyet",
 
     "orgs": {
       "andyet": {
         "enabled": true,
-        "secret": "customer-api-shared-jwt-password-makethisoneprettysecureok"
+        "secret": "customer-api-shared-jwt-password-makethisoneprettysecureok",
+        "screensharingExtensions": {
+          "chrome": "ikljcimogjdaoojhmkbioipmffflodgk"
+        }
       },
       "talky": {
         "enabled": true,
-        "secret": "customer-api-shared-jwt-password-makethisoneprettysecureok"
+        "secret": "customer-api-shared-jwt-password-makethisoneprettysecureok",
+        "screensharingExtensions": {
+          "chrome": "ikljcimogjdaoojhmkbioipmffflodgk"
+        }
       }
     }
   },

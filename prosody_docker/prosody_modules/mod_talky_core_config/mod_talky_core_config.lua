@@ -17,9 +17,7 @@ local server_name = module:get_option_string("talky_core_server_name", "default"
 
 
 local function apply_config(config)
-    configmanager.set("*", "talky_core_ice_url", config.talky_core_ice_url);
     configmanager.set("*", "talky_core_telemetry_url", config.talky_core_telemetry_url);
-    configmanager.set("*", "talky_core_instance_check_url", config.talky_core_instance_check_url);
 
     configmanager.set("*", "allow_registration", false);
     configmanager.set("*", "consider_websocket_secure", true);

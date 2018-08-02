@@ -42,7 +42,7 @@ pipeline:
     kubernetes_server: ${KUBERNETES_SERVER}
     kubernetes_cert: ${KUBERNETES_CERT}
     kubernetes_token: ${KUBERNETES_TOKEN}
-    deployment: talky-api-stage
+    deployment: swrtc-api-stage
     repo: andyet/talky-api
     container: api-stage
     namespace: default
@@ -56,7 +56,7 @@ pipeline:
     kubernetes_server: ${KUBERNETES_SERVER}
     kubernetes_cert: ${KUBERNETES_CERT}
     kubernetes_token: ${KUBERNETES_TOKEN}
-    deployment: talky-api-prod
+    deployment: swrtc-api-prod
     repo: andyet/talky-api
     container: api-prod
     namespace: default

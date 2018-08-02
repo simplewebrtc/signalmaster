@@ -2,6 +2,21 @@ extends layout_dashboard
 
 block dashboardContent
   section
+    div
+      script
+        | function handleSubmit(e) {
+        |   e.preventDefault();
+        |   window.location = '/dashboard/rooms/' + e.target[0].value;
+        |   return false;
+        | }
+      form.roomSearch.form-inline.form-no-labels(onsubmit='return handleSubmit(...arguments);')
+        .form-element
+          input.form-input#room-search(type='text', placeholder='Room ID')
+        .form-element
+          input.button.button-outlined(type='submit', value='Find Room')
+      br
+      br
+
     ul
       li
         a(href='/dashboard/histograms/duration') Room Duration Stats

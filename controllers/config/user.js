@@ -63,7 +63,7 @@ module.exports = {
       userId: user_id,
       orgId: request.params.orgId,
       customerData,
-      signalingUrl: `${BuildUrl('ws', Domains.signaling)}/ws-bind`,
+      signalingUrl: `${BuildUrl('ws', Domains.signaling, Config.getconfig.isDev ? 5280 : 80)}/ws-bind`,
       telemetryUrl: `${BuildUrl('http', Domains.api)}/telemetry`,
       roomConfigUrl: `${BuildUrl('http', Domains.api)}/config/room`,
       roomServer: Domains.rooms,

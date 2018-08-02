@@ -7,13 +7,6 @@
       "password": "$REDIS_PASSWORD"
     }
   },
-  "isDevTLS": false,
-  "tls": {
-    "*": {
-      "pemFile": "$PATH_TO_STAR_PEM",
-      "keyFile": "$PATH_TO_STAR_KEY"
-    }
-  },
   "auth": {
     "secret": "$INTERNAL_API_KEY",
     "options": {

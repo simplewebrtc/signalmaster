@@ -1,5 +1,4 @@
 {
-  "isDevTLS": false,
   "redis": {
     "module": "redis",
     "connection": {

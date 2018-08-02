@@ -1,5 +1,4 @@
 {
-  "isDevTLS": false,
   "billing": {
     "ice": false,
     "roomReports": false

@@ -31,10 +31,6 @@
       "maskRoomNames": true
     },
 
-
-
-    "defaultOrg": "andyet",
-
     "orgs": {
       "andyet": {
         "enabled": true,

@@ -16,7 +16,6 @@ module.exports = [
   // Client auto-configuration
   { method: 'POST', path: '/config/user/{orgId?}', config: Controllers.config.user },
   { method: 'POST', path: '/config/guest/{orgId?}', config: Controllers.config.guest },
-  { method: 'POST', path: '/config/bot', config: Controllers.config.bot },
   { method: 'POST', path: '/config/room', config: Controllers.config.room },
 
   // Telemetry

@@ -17,15 +17,13 @@ const LookupOrg = require('../../lib/lookup_org');
 const TalkyCoreConfig = require('getconfig').talky;
 const Domains = InflateDomains(TalkyCoreConfig.domains);
 
-const DEFAULT_ORG = Config.talky.defaultOrg;
-
 
 module.exports = {
   description: 'Auto-configure a registered user client session',
   tags: ['api', 'config'],
   handler: async function (request, h) {
 
-    const org = await LookupOrg(request.params.orgId || DEFAULT_ORG, this.redis);
+    const org = await LookupOrg(request.params.orgId, this.redis);
     if (!org) {
       return Boom.forbidden('Account not enabled');
     }

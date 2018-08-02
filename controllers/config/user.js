@@ -19,15 +19,13 @@ const LookupOrg = require('../../lib/lookup_org');
 const TalkyCoreConfig = require('getconfig').talky;
 const Domains = InflateDomains(TalkyCoreConfig.domains);
 
-const DEFAULT_ORG = Config.talky.defaultOrg;
-
 
 module.exports = {
   description: 'Auto-configure a registered user client session',
   tags: ['api', 'config'],
   handler: async function (request, h) {
 
-    const org = await LookupOrg(request.params.orgId || DEFAULT_ORG, this.redis);
+    const org = await LookupOrg(request.params.orgId, this.redis);
     if (!org) {
       return Boom.forbidden('Account not enabled');
     }
@@ -39,7 +37,7 @@ module.exports = {
     const encodedCustomerData = Base32.encode(JSON.stringify(customerData));
 
     const id = UUID.v4();
-    const org_id = request.params.orgId || DEFAULT_ORG;
+    const org_id = request.params.orgId;
     const username = `${org_id}#${id}#${encodedCustomerData}`;
     const user_id = `${username}@${Domains.users}`;
     const ice = FetchICE(org_id, id);
@@ -63,7 +61,7 @@ module.exports = {
     const result = {
       id,
       userId: user_id,
-      orgId: request.params.orgId || DEFAULT_ORG,
+      orgId: request.params.orgId,
       customerData,
       signalingUrl: `${BuildUrl('ws', Domains.signaling)}/ws-bind`,
       telemetryUrl: `${BuildUrl('http', Domains.api)}/telemetry`,
@@ -75,7 +73,7 @@ module.exports = {
       screensharingExtensions: org.screensharingExtensions || {},
       credential: JWT.sign({
         id,
-        orgId: DEFAULT_ORG,
+        orgId: request.params.orgId,
         registeredUser: true
       }, Config.auth.secret, {
         algorithm: 'HS256',

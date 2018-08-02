@@ -18,8 +18,6 @@
       "admin": "admin"
     },
 
-    "license": { "roomLimit": 5, "userLimit": 5, "expiresIn": "30d" },
-
     "domains": {
       "api": "localhost"
     },

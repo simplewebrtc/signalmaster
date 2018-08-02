@@ -12,7 +12,6 @@ const { promisify } = require('util');
 const BuildUrl = require('../../lib/build_url');
 const FetchICE = require('../../lib/fetch_ice');
 const InflateDomains = require('../../lib/domains');
-const CheckLicense = require('../../lib/licensing');
 const LookupOrg = require('../../lib/lookup_org');
 
 const TalkyCoreConfig = require('getconfig').talky;
@@ -26,17 +25,9 @@ module.exports = {
   tags: ['api', 'config'],
   handler: async function (request, h) {
 
-    const license = await CheckLicense();
-
     const org = await LookupOrg(request.params.orgId || DEFAULT_ORG, this.redis);
     if (!org) {
       return Boom.forbidden('Account not enabled');
-    }
-
-    // Query DB for the active user count
-    const currentUserCount = 0;
-    if (license.userLimit !== undefined && (currentUserCount + 1 > license.userLimit)) {
-      return Boom.forbidden('Talky Core active user limit reached');
     }
 
     const { ua, browser, os } = UAParser(request.headers['user-agent']);

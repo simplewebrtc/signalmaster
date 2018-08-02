@@ -19,7 +19,6 @@ module.exports = {
 
     const extsConfigured = !!ExtConfig.chrome;
 
-    const hasLicense = !!Config.talky.license;
     const hasInternalSecret = !!Config.auth.secret;
     const hasCustomerSecret = !!Config.talky.apiKey;
 
@@ -30,7 +29,6 @@ module.exports = {
       extsConfigured,
       hasInternalSecret,
       hasCustomerSecret,
-      hasLicense,
       config: Config,
       domains: Domains
     });

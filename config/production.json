@@ -39,7 +39,7 @@
     "admins": {
       "admin": "$ADMIN_PASSWORD"
     },
-    "license": "$TALKY_LICENSE",
+
     "apiKey": "$CUSTOMER_API_KEY",
 
     "domains": {

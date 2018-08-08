@@ -44,7 +44,7 @@ pipeline:
     kubernetes_token: ${KUBERNETES_TOKEN}
     deployment: swrtc-api-stage
     repo: andyet/talky-api
-    container: api-stage
+    container: swrtc-api-stage
     namespace: default
     tag: 
     - ${DRONE_TAG##v}

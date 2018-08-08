@@ -1,5 +1,4 @@
 {
-  "isDevTLS": false,
   "billing": {
     "ice": false,
     "roomReports": false
@@ -8,7 +7,6 @@
     "admins": {
       "testAdmin": "testing"
     },
-    "license": { "roomLimit": 5, "userLimit": 5, "expiresIn": "30d" },
     "domains": {
       "api": "localhost"
     },

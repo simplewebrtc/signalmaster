@@ -1,7 +1,7 @@
 'use strict';
 
-const FetchICE = require('../../lib/fetch_ice');
-const Schema = require('../../lib/schema');
+const FetchICE = require('../lib/fetch_ice');
+const Schema = require('../lib/schema');
 
 module.exports = {
   description: 'Provide ICE servers and credentials',

@@ -4,11 +4,8 @@ const Hapi = require('hapi');
 const Muckraker = require('muckraker');
 const Config = require('getconfig');
 const Redis = require(Config.redis.module);
-const Proxy = require('http-proxy');
-const FS = require('fs');
 
 const InflateDomains = require('./lib/domains');
-const BuildUrl = require('./lib/build_url');
 const Domains = InflateDomains(Config.talky.domains);
 
 const InternalAuth = require('./lib/internal_auth');
@@ -19,16 +16,6 @@ const RoomReports = require('./lib/room_reports_worker');
 const ICEWorker = require('./lib/ice_worker');
 
 const Pkg = require('./package.json');
-
-//$lab:coverage:off$
-if (Config.getconfig.env !== 'production') {
-  if (FS.existsSync('config/key.pem') && FS.existsSync('config/cert.pem')) {
-    const key = FS.readFileSync('config/key.pem');
-    const cert = FS.readFileSync('config/cert.pem');
-    Config.server.tls = { key, cert };
-  }
-}
-//$lab:coverage:on$
 
 const server = new Hapi.Server(Config.server);
 const db = new Muckraker(Config.db);
@@ -43,14 +30,6 @@ server.events.on({ name: 'request', channels: ['error'] }, (request, event) => {
   console.log(event.stack || event);
 });
 
-const wsPort = Config.getconfig.isDev ? (Config.isDevTLS ? 5281 : 5280) : 5281;
-const wsProxy = Proxy.createProxyServer({ target: `${BuildUrl('ws', Domains.signaling, wsPort)}` });
-wsProxy.on('error', (err) => {
-
-  server.log(err, 'Prosody not responding');
-});
-
-//$lab:coverage:on$
 
 exports.db = db;
 exports.redis = redisClient;
@@ -136,14 +115,6 @@ exports.Server = server.register(require('hapi-auth-basic')).then(() => {
     path: `${__dirname}/views`,
     isCached: !Config.getconfig.isDev
   });
-
-  // $lab:coverage:off$
-  server.listener.on('upgrade', (req, socket, head) => {
-
-    wsProxy.ws(req, socket, head);
-  });
-  // $lab:coverage:on$
-
 
   server.bind({ db, redis: redisClient });
   server.route(require('./routes'));

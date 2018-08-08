@@ -7,13 +7,6 @@
       "password": "$REDIS_PASSWORD"
     }
   },
-  "isDevTLS": false,
-  "tls": {
-    "*": {
-      "pemFile": "$PATH_TO_STAR_PEM",
-      "keyFile": "$PATH_TO_STAR_KEY"
-    }
-  },
   "auth": {
     "secret": "$INTERNAL_API_KEY",
     "options": {
@@ -39,8 +32,6 @@
     "admins": {
       "admin": "$ADMIN_PASSWORD"
     },
-    "license": "$TALKY_LICENSE",
-    "apiKey": "$CUSTOMER_API_KEY",
 
     "domains": {
       "api": "$API_DOMAIN",
@@ -54,10 +45,6 @@
 
     "metrics": {
       "maskRoomNames": true
-    },
-
-    "screensharingExtensions": {
-      "chrome": "ikljcimogjdaoojhmkbioipmffflodgk"
     },
 
     "orgs": {

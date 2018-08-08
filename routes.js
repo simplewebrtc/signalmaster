@@ -7,21 +7,16 @@ module.exports = [
   // Signaling
   { method: 'GET', path: '/ws-bind', config: Controllers.signaling },
 
-  // Alternate connection discovery method for XMPP clients
-  { method: 'GET', path: '/.well-known/host-meta.json', config: Controllers.hostmeta },
+  // Health Check
+  { method: 'GET', path: '/healthcheck', config: Controllers.healthcheck },
 
   // Fetch ICE servers
-  { method: 'GET', path: '/ice', config: Controllers.ice.client },
-
-  // Domain verificiation
-  { method: 'GET', path: '/instance-check', config: Controllers.instance_check },
+  { method: 'GET', path: '/ice', config: Controllers.ice },
 
   // Client auto-configuration
   { method: 'POST', path: '/config/user/{orgId?}', config: Controllers.config.user },
   { method: 'POST', path: '/config/guest/{orgId?}', config: Controllers.config.guest },
-  { method: 'POST', path: '/config/bot', config: Controllers.config.bot },
   { method: 'POST', path: '/config/room', config: Controllers.config.room },
-  { method: 'POST', path: '/prosody/config', config: Controllers.config.prosody },
 
   // Telemetry
   { method: 'POST', path: '/telemetry', config: Controllers.telemetry.client },
@@ -31,8 +26,6 @@ module.exports = [
   // ---------------------------------------------------------------------
 
   { method: 'GET', path: '/', config: Controllers.home },
-  { method: 'GET', path: '/setup', config: Controllers.setup },
-  { method: 'GET', path: '/license', config: Controllers.license },
   { method: 'GET', path: '/dashboard', config: Controllers.dashboard.home },
   { method: 'GET', path: '/dashboard/histograms/{histogram_type}', config: Controllers.dashboard.histograms },
   { method: 'GET', path: '/dashboard/sessions/{id}', config: Controllers.dashboard.get_one_session },
@@ -47,11 +40,11 @@ module.exports = [
   // Internal routes for Prosody
   // ---------------------------------------------------------------------
 
+  // Config
+  { method: 'POST', path: '/prosody/config', config: Controllers.config.prosody },
+
   // Telemetry
   { method: 'POST', path: '/prosody/telemetry', config: Controllers.telemetry.prosody },
-
-  // Legacy ICE requests
-  { method: 'POST', path: '/prosody/ice', config: Controllers.ice.prosody },
 
   // Authentication
   { method: 'GET', path: '/prosody/auth/user', config: Controllers.auth.user },

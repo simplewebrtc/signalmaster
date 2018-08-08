@@ -13,14 +13,11 @@ const { promisify } = require('util');
 const BuildUrl = require('../../lib/build_url');
 const FetchICE = require('../../lib/fetch_ice');
 const InflateDomains = require('../../lib/domains');
-const CheckLicense = require('../../lib/licensing');
 const ExtractCustomerData = require('../../lib/customer_data');
 const LookupOrg = require('../../lib/lookup_org');
 
 const TalkyCoreConfig = require('getconfig').talky;
 const Domains = InflateDomains(TalkyCoreConfig.domains);
-
-const DEFAULT_ORG = Config.talky.defaultOrg;
 
 
 module.exports = {
@@ -28,17 +25,9 @@ module.exports = {
   tags: ['api', 'config'],
   handler: async function (request, h) {
 
-    const license = await CheckLicense();
-
-    const org = await LookupOrg(request.params.orgId || DEFAULT_ORG, this.redis);
+    const org = await LookupOrg(request.params.orgId, this.redis);
     if (!org) {
       return Boom.forbidden('Account not enabled');
-    }
-
-    // Query DB for the active user count
-    const currentUserCount = 0;
-    if (license.userLimit !== undefined && (currentUserCount + 1 > license.userLimit)) {
-      return Boom.forbidden('Talky Core active user limit reached');
     }
 
     // TODO: Verify the customer data is signed for the given org.
@@ -48,7 +37,7 @@ module.exports = {
     const encodedCustomerData = Base32.encode(JSON.stringify(customerData));
 
     const id = UUID.v4();
-    const org_id = request.params.orgId || DEFAULT_ORG;
+    const org_id = request.params.orgId;
     const username = `${org_id}#${id}#${encodedCustomerData}`;
     const user_id = `${username}@${Domains.users}`;
     const ice = FetchICE(org_id, id);
@@ -72,19 +61,19 @@ module.exports = {
     const result = {
       id,
       userId: user_id,
-      orgId: request.params.orgId || DEFAULT_ORG,
+      orgId: request.params.orgId,
       customerData,
-      signalingUrl: `${BuildUrl('ws', Domains.signaling)}/ws-bind`,
+      signalingUrl: `${BuildUrl('ws', Domains.signaling, Config.getconfig.isDev ? 5280 : 80)}/ws-bind`,
       telemetryUrl: `${BuildUrl('http', Domains.api)}/telemetry`,
       roomConfigUrl: `${BuildUrl('http', Domains.api)}/config/room`,
       roomServer: Domains.rooms,
       iceServers: ice,
       displayName: customerData.displayName || '',
       apiVersion: Config.talky.apiVersion,
-      screensharingExtensions: TalkyCoreConfig.screensharingExtensions || {},
+      screensharingExtensions: org.screensharingExtensions || {},
       credential: JWT.sign({
         id,
-        orgId: DEFAULT_ORG,
+        orgId: request.params.orgId,
         registeredUser: true
       }, Config.auth.secret, {
         algorithm: 'HS256',

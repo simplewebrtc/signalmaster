@@ -79,7 +79,6 @@ module.exports = {
     const sessionCount = await this.db.sessions.count_active();
     const sessionMobileCount = await this.db.sessions.count_active_type({ session_type: 'mobile', activated: true });
     const sessionWebCount = await this.db.sessions.count_active_type({ session_type: 'desktop', activated: true });
-    const sessionLegacyCount = await this.db.sessions.count_active_type({ session_type: 'legacy', activated: true });
 
     const sessionDayCount = await this.db.sessions.count_period({
       ts: new Date(),
@@ -118,19 +117,6 @@ module.exports = {
       activated: true
     });
 
-    const sessionLegacyDayCount = await this.db.sessions.count_period_type({
-      ts: new Date(),
-      interval: '1 day',
-      session_type: 'legacy',
-      activated: true
-    });
-    const sessionLegacyWeekCount = await this.db.sessions.count_period_type({
-      ts: new Date(),
-      interval: '7 days',
-      session_type: 'legacy',
-      activated: true
-    });
-
     const roomDayCount = await this.db.rooms.count_period({
       ts: new Date(),
       interval: '1 day'
@@ -163,7 +149,6 @@ module.exports = {
       activeSessionCount: sessionCount.count,
       activeMobileSessionCount: sessionMobileCount.count,
       activeWebSessionCount: sessionWebCount.count,
-      activeLegacySessionCount: sessionLegacyCount.count,
       prevDayRoomCount: roomDayCount.count,
       prevWeekRoomCount: roomWeekCount.count,
       prevDaySessionCount: sessionDayCount.count,
@@ -173,9 +158,7 @@ module.exports = {
       prevDayMobileSessionCount: sessionMobileDayCount.count,
       prevWeekMobileSessionCount: sessionMobileWeekCount.count,
       prevDayWebSessionCount: sessionWebDayCount.count,
-      prevWeekWebSessionCount: sessionWebWeekCount.count,
-      prevDayLegacySessionCount: sessionLegacyDayCount.count,
-      prevWeekLegacySessionCount: sessionLegacyWeekCount.count
+      prevWeekWebSessionCount: sessionWebWeekCount.count
     });
   },
   validate: {

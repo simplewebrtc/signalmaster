@@ -1,5 +1,4 @@
 {
-  "isDevTLS": false,
   "redis": {
     "module": "redis",
     "connection": {
@@ -18,8 +17,6 @@
       "admin": "admin"
     },
 
-    "license": { "roomLimit": 5, "userLimit": 5, "expiresIn": "30d" },
-
     "domains": {
       "api": "localhost"
     },
@@ -33,20 +30,20 @@
       "maskRoomNames": true
     },
 
-    "screensharingExtensions": {
-      "chrome": "ikljcimogjdaoojhmkbioipmffflodgk"
-    },
-
-    "defaultOrg": "andyet",
-
     "orgs": {
       "andyet": {
         "enabled": true,
-        "secret": "customer-api-shared-jwt-password-makethisoneprettysecureok"
+        "secret": "customer-api-shared-jwt-password-makethisoneprettysecureok",
+        "screensharingExtensions": {
+          "chrome": "ikljcimogjdaoojhmkbioipmffflodgk"
+        }
       },
       "talky": {
         "enabled": true,
-        "secret": "customer-api-shared-jwt-password-makethisoneprettysecureok"
+        "secret": "customer-api-shared-jwt-password-makethisoneprettysecureok",
+        "screensharingExtensions": {
+          "chrome": "ikljcimogjdaoojhmkbioipmffflodgk"
+        }
       }
     }
   },

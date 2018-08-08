@@ -27,19 +27,3 @@ block content
           th ICE
           td
             a(href=iceServer) #{iceServer.replace(/https?:\/\//, '').replace(/:[0-9]+/, '')}
-
-    h4 Browser Screensharing Extensions
-    table
-      tbody
-        tr
-          th Chrome
-          td
-            if screensharingExtensions.chrome
-              a(href='https://chrome.google.com/webstore/detail/' + screensharingExtensions.chrome) #{screensharingExtensions.chrome}
-            else
-              span Not configured
-        if screensharingExtensions.firefox
-          tr
-            th Firefox (Obsolete)
-            td
-              a(href='https://addons.mozilla.org/en-US/firefox/addon/' + screensharingExtensions.firefox) #{screensharingExtensions.firefox}

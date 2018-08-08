@@ -10,7 +10,7 @@ const lab = exports.lab = Lab.script();
 const { describe, it, before } = lab;
 const { expect } = Code;
 
-describe('GET /.well-known/host-meta.json', () => {
+describe('GET /healthcheck', () => {
 
   let server;
 
@@ -21,7 +21,7 @@ describe('GET /.well-known/host-meta.json', () => {
 
   it('works', () => {
 
-    return server.inject({ method: 'GET', url: '/.well-known/host-meta.json' })
+    return server.inject({ method: 'GET', url: '/healthcheck' })
       .then((res) => {
 
         expect(res.statusCode).to.equal(200);

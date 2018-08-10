@@ -104,4 +104,24 @@ module:hook_global("server-started", function(event)
     fetch_config();
 end);
 
+
+function module.add_host(module)
+    module:depends("http");
+    module:provides("http", {
+        default_path = "/";
+        route = {
+            ["GET /"] = function (event)
+                event.response.statusCode = 200;
+                return "ok";
+            end;
+    
+            ["HEAD /"] = function (event)
+                event.response.statusCode = 200;
+                return "";
+            end;
+        };
+    });
+end
+
+
 module:log("info", "Loaded mod_talky_core_config");

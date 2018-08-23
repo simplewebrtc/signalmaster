@@ -126,11 +126,11 @@ module.exports = function (server, config) {
 
     function describeRoom(name) {
         var adapter = io.nsps['/'].adapter;
-        var clients = adapter.rooms[name] || {};
+        var room = adapter.rooms[name] || {sockets: {}, length: 0};
         var result = {
             clients: {}
         };
-        Object.keys(clients).forEach(function (id) {
+        Object.keys(room.sockets).forEach(function (id) {
             result.clients[id] = adapter.nsp.connected[id].resources;
         });
         return result;

@@ -57,10 +57,10 @@
     "eslint-config-andyet": "^2.1.0",
     "faker": "^4.1.0",
     "git-validate": "^2.2.4",
-    "lab": "^15.5.0",
+    "lab": "^16.0.0",
     "nock": "^9.4.4",
     "readline-sync": "^1.4.9",
-    "redis-mock": "^0.29.0"
+    "redis-mock": "^0.32.0"
   },
   "pre-commit": [
     "lint",

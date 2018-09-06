@@ -1,5 +1,7 @@
 # Talky Core API
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/andyet/simplewebrtc-api.svg?token=1f1234b0a1eeb79dbac9aadb9de4a8e70383f7b70650e55129830090f469d3b7&ts=1536271630878)](https://greenkeeper.io/)
+
 ## Getting started
 
 ### 1. Set up Postgres

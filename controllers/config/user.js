@@ -37,7 +37,7 @@ module.exports = {
     const encodedCustomerData = Base32.encode(JSON.stringify(customerData));
 
     const id = UUID.v4();
-    const org_id = request.params.orgId;
+    const org_id = org.id;
     const username = `${org_id}#${id}#${encodedCustomerData}`;
     const user_id = `${username}@${Domains.users}`;
     const ice = FetchICE(org_id, id);
@@ -61,7 +61,7 @@ module.exports = {
     const result = {
       id,
       userId: user_id,
-      orgId: request.params.orgId,
+      orgId: org_id,
       customerData,
       signalingUrl: `${BuildUrl('ws', Domains.signaling, Config.getconfig.isDev ? 5280 : 80)}/ws-bind`,
       telemetryUrl: `${BuildUrl('http', Domains.api)}/telemetry`,
@@ -73,7 +73,7 @@ module.exports = {
       screensharingExtensions: org.screensharingExtensions || {},
       credential: JWT.sign({
         id,
-        orgId: request.params.orgId,
+        orgId: org_id,
         registeredUser: true
       }, Config.auth.secret, {
         algorithm: 'HS256',

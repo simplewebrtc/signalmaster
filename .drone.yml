@@ -22,7 +22,7 @@ pipeline:
   build_docker_stage:
     image: plugins/docker
     repo: andyet/talky-api
-    tags: 
+    tags:
       - ${DRONE_COMMIT_SHA:0:8}
       - ${DRONE_TAG##v}
     secrets: [ docker_username, docker_password ]
@@ -31,7 +31,7 @@ pipeline:
   build_docker_prod:
     image: plugins/docker
     repo: andyet/talky-api
-    tags: 
+    tags:
       - ${DRONE_COMMIT_SHA:0:8}
       - latest
     secrets: [ docker_username, docker_password ]
@@ -46,7 +46,7 @@ pipeline:
     repo: andyet/talky-api
     container: swrtc-api-stage
     namespace: default
-    tag: 
+    tag:
     - ${DRONE_TAG##v}
     when:
       event: tag
@@ -67,5 +67,8 @@ pipeline:
   slack:
     image: plugins/slack
     username: drone
-    channel: alerts
+    channel: io-alerts
     secrets: [ slack_webhook ]
+    when:
+      status: [ success, failure ]
+branches: master

@@ -58,7 +58,7 @@
     "faker": "^4.1.0",
     "git-validate": "^2.2.4",
     "lab": "^16.0.0",
-    "nock": "^9.4.4",
+    "nock": "^10.0.0",
     "readline-sync": "^1.4.9",
     "redis-mock": "^0.32.0"
   },

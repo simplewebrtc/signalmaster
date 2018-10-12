@@ -16,7 +16,7 @@ module.exports = {
     const session = request.auth.credentials;
     const orgId = session.orgId;
 
-    const providedName = request.payload.name.toLowerCase();
+    const providedName = request.payload.name;
 
     // TODO: Drop compatibility for talky org once mobile app upgrades to use
     //       the SWRTC SDK with room configuration api
@@ -32,7 +32,7 @@ module.exports = {
   },
   validate: {
     payload: {
-      name: Joi.string().example('castle-of-lions')
+      name: Joi.string().lowercase().example('castle-of-lions')
     }
   },
   response: {

@@ -2,9 +2,7 @@ var socketIO = require('socket.io'),
     uuid = require('node-uuid'),
     crypto = require('crypto');
 
-module.exports = function (server, config) {
-    var io = socketIO.listen(server);
-
+module.exports = function (io, config) {
     io.sockets.on('connection', function (client) {
         client.resources = {
             screen: false,
@@ -126,7 +124,7 @@ module.exports = function (server, config) {
 
     function describeRoom(name) {
         var adapter = io.nsps['/'].adapter;
-        var clients = adapter.rooms[name] || {};
+        var clients = io.nsps['/'].connected || {};
         var result = {
             clients: {}
         };
@@ -137,7 +135,7 @@ module.exports = function (server, config) {
     }
 
     function clientsInRoom(name) {
-        return io.sockets.clients(name).length;
+        return Object.keys(io.nsps['/'].adapter.rooms[name] || {}).length;
     }
 
 };

@@ -31,7 +31,9 @@ describe('POST /config/room', () => {
   it('works', () => {
 
     const headers = {
-      authorization: Fixtures.clientToken(Fixtures.session())
+      authorization: Fixtures.clientToken(Fixtures.session({
+        orgId: 'testing'
+      }))
     };
     const payload = {
       name: 'FOO'
@@ -41,7 +43,7 @@ describe('POST /config/room', () => {
       .then((res) => {
 
         expect(res.statusCode).to.equal(200);
-        expect(res.result.roomAddress).to.equal('foo@rooms.localhost');
+        expect(res.result.roomAddress).to.equal('testing#foo@rooms.localhost');
       });
   });
 });

@@ -13,13 +13,26 @@ module.exports = {
   tags: ['api', 'config'],
   handler: function (request, h) {
 
+    const session = request.auth.credentials;
+    const orgId = session.orgId;
+
+    const providedName = request.payload.name;
+
+    // TODO: Drop compatibility for talky org once mobile app upgrades to use
+    //       the SWRTC SDK with room configuration api
+    if (orgId === 'talky') {
+      return {
+        roomAddress: `${providedName}@${Domains.rooms}`
+      };
+    }
+
     return {
-      roomAddress: `${request.payload.name.toLowerCase()}@${Domains.rooms}`
+      roomAddress: `${orgId}#${providedName}@${Domains.rooms}`
     };
   },
   validate: {
     payload: {
-      name: Joi.string().example('castle-of-lions')
+      name: Joi.string().lowercase().example('castle-of-lions')
     }
   },
   response: {

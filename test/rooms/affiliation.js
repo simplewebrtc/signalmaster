@@ -13,12 +13,13 @@ const { expect } = Code;
 describe('POST /prosody/rooms/affiliation', () => {
 
   let server;
-  const session = Fixtures.session();
+  const session = Fixtures.session({
+    orgId: 'testorg'
+  });
 
   before(async () => {
 
-    server = await Server;
-    await db.sessions.insert(session);
+    server = await Server; await db.sessions.insert(session);
   });
 
   after(async () => {
@@ -43,8 +44,8 @@ describe('POST /prosody/rooms/affiliation', () => {
         expect(res.statusCode).to.equal(200);
 
         const affiliationPayload = {
-          room_id: newRoom.id,
-          user_id: session.userId
+          room_id: 'testorg#room-name@rooms.test',
+          user_id: 'testorg#user-id@guests.test'
         };
 
         return server.inject({ method: 'post', url: '/prosody/rooms/affiliation', payload: affiliationPayload, headers });
@@ -58,6 +59,28 @@ describe('POST /prosody/rooms/affiliation', () => {
         return db.rooms.destroy({ id: newRoom.id });
       });
   });
+
+  it('returns "outcast"', () => {
+
+    const headers = {
+      authorization: Fixtures.prosodyBasicHeader('testUser')
+    };
+    const affiliationPayload = {
+      room_id: 'differentorg#room-name@rooms.test',
+      user_id: 'testorg#user-id@guests.test'
+    };
+
+    return server.inject({ method: 'post', url: '/prosody/rooms/affiliation', payload: affiliationPayload, headers }).then((res) => {
+
+      expect(res.statusCode).to.equal(200);
+      return res.result;
+    }).then((result) => {
+
+      expect(result).to.equal('outcast');
+    });
+  });
+
+
 
   it('401', () => {
 

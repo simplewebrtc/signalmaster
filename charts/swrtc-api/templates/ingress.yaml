@@ -1,0 +1,30 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ template "swrtc-api.name" . }}
+  labels:
+    chart: {{ template "swrtc-api.chart" . }}
+  annotations:
+    {{ toYaml .Values.ingress.annotations | trimSuffix "\n" }}
+    {{- if eq .Values.ingress.tls.enabled true }}
+    kubernetes.io/tls-acme: "true"
+    certmanager.k8s.io/acme-http01-edit-in-place: "true"
+    {{- end }}
+spec:
+  {{- if eq .Values.ingress.tls.enabled true }}
+  tls:
+    - hosts:
+      - {{ printf "api.%s" .Values.global.baseDomain }}
+      secretName: {{ .Values.ingress.tls.secret }}
+  {{- end }}
+  rules:
+  - host: {{ printf "api.%s" .Values.global.baseDomain }}
+    http:
+      paths:
+      - backend:
+          serviceName: {{ template "swrtc-api.name" . }}
+          servicePort: {{ .Values.global.apiServicePort }}
+      - backend:
+          serviceName: {{ printf "prosody-%s" .Values.global.environment }}
+          servicePort: {{ .Values.global.prosodyPort }}
+        path: /ws-bind

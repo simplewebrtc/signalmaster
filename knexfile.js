@@ -7,7 +7,7 @@ module.exports = {
 
   development: {
     client: 'postgresql',
-    connection: Config.db
+    connection: Config.db.connection
   },
 
   staging: {

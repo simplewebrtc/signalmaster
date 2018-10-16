@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "prosody.name" . }}
+  labels:
+    chart: {{ template "prosody.chart" . }}
+spec:
+  type: {{ default "NodePort" .Values.service.type }}
+  ports:
+  {{- range .Values.deployment.ports }}
+  - port: {{ .containerPort }}
+    protocol: TCP
+    name: {{ .name }}
+    {{- if .protocol }}
+    protocol: {{ .protocol }}
+    {{- else }}
+    protocol: TCP
+    {{- end }}
+  {{- end }}
+  selector:
+    name: {{ template "prosody.name" . }}

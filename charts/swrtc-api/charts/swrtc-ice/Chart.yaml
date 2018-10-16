@@ -1,0 +1,4 @@
+apiVersion: v1
+description: A Helm chart for an ICE server
+name: swrtc-ice
+version: v0.1.6

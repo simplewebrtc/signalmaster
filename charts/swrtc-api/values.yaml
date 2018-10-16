@@ -1,0 +1,41 @@
+# Default values for simplewebrtc API
+serviceAccountName: swrtc-api-sa
+deployment:
+  image:
+    repository: andyet/talky-api
+    tag: <tag>
+  imagePullSecrets: andyetops
+  lifecycle:
+    postStart:
+      exec:
+        command:
+        - /usr/local/bin/node
+        - /app/scripts/create-configmap.js
+service:
+  type: NodePort
+  port:
+    protocol: TCP
+ingress:
+  tls:
+    enabled: true
+    secret: stagesimplewebrtc-com-tls
+  annotations:
+    kubernetes.io/ingress.class: gce
+secrets:
+  data:
+    REDIS_PASSWORD: dGVzdC10b2tlbg==
+    DATABASE_URL: dGVzdC10b2tlbg==
+    TURN_SECRET: dGVzdC10b2tlbg==
+    ADMIN_PASSWORD: dGVzdC10b2tlbg==
+    CUSTOMER_API_KEY: dGVzdC10b2tlbg==
+    INTERNAL_API_KEY: dGVzdC10b2tlbg==
+    TALKY_LICENSE: dGVzdC10b2tlbg==
+config:
+  data:
+    REDIS_HOST: "10.128.0.8"
+    REDIS_PORT: "6379"
+    CHROME_EXTENSION_ID: kochadnnpmbkfdhlaajaemgjmkjfhfkb
+global:
+  apiServicePort: 8003
+  prosodyPort: 5280
+  imagePullSecrets: andyetops

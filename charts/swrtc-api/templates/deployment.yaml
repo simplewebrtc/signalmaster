@@ -1,0 +1,74 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "swrtc-api.name" . }}
+  labels:
+    chart: {{ template "swrtc-api.chart" . }}
+    name: {{ template "swrtc-api.name" . }}
+spec:
+  replicas: {{ default 1 .Values.deployment.replicaCount }}
+  revisionHistoryLimit: {{ default 3 .Values.deployment.revisionHistoryLimit }}
+  selector:
+    matchLabels:
+      name: {{ template "swrtc-api.name" . }}
+      chart: {{ template "swrtc-api.chart" . }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        name: {{ template "swrtc-api.name" . }}
+        chart: {{ template "swrtc-api.chart" . }}
+      name: {{ template "swrtc-api.name" . }}
+    spec:
+      serviceAccountName: {{ .Values.serviceAccountName }}
+      dnsPolicy: {{ default "ClusterFirst" .Values.deployment.dnsPolicy }}
+      imagePullSecrets: 
+      - name: {{ required "You must provide imagePullSecrets!" .Values.deployment.imagePullSecrets }}
+      restartPolicy: {{ default "Always" .Values.deployment.restartPolicy }}
+      {{- if .Values.nodeSelector }}
+      nodeSelector:
+        {{ toYaml .Values.nodeSelector | trimSuffix "\n" }}
+      {{- end }}
+      containers:
+      - name: {{ template "swrtc-api.name" . }}
+        image: {{ printf "%s:%s" .Values.deployment.image.repository .Values.deployment.image.tag }}
+        imagePullPolicy: {{ default "Always" .Values.deployment.image.pullPolicy }}
+        {{- if .Values.deployment.lifecycle }}
+        lifecycle:
+{{ toYaml .Values.deployment.lifecycle | trimSuffix "\n" | indent 10 }}
+        {{- end }}
+        ports:
+        - containerPort: {{ .Values.global.apiServicePort }}
+          name: {{ template "swrtc-api.name" . }}
+        readinessProbe:
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          successThreshold: 1
+          failureThreshold: 3
+          timeoutSeconds: 5
+          httpGet:
+            path: /
+            port: {{ .Values.global.apiServicePort }}
+        livenessProbe:
+          initialDelaySeconds: 5
+          periodSeconds: 30
+          successThreshold: 1
+          failureThreshold: 3
+          timeoutSeconds: 5
+          httpGet:
+            path: /
+            port: {{ .Values.global.apiServicePort }}
+        {{- if or .Values.config.data .Values.secrets.data }}
+        envFrom:
+          {{- if .Values.config.data }}
+          - configMapRef:
+              name: {{ template "swrtc-api.name" . }}
+          {{- end }}
+          {{- if .Values.secrets.data }}
+          - secretRef:
+              name: {{ template "swrtc-api.name" . }}
+          {{- end }}
+        {{- end }}
+
+      

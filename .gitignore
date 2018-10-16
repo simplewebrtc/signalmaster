@@ -4,7 +4,7 @@ config/*.lua
 config/local.json
 config/*.pem
 
-.env
+*.env
 cm-prosody-config.json
 coverage.html
 
@@ -13,4 +13,5 @@ prosody_docker/certs.key
 
 build-prosody.sh
 
-k8s/
+secrets.yaml
+drone-secrets.sh

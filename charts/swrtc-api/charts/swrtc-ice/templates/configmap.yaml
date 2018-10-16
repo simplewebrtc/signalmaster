@@ -1,0 +1,13 @@
+{{- if .Values.config.data }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "swrtc-ice.name" . }}
+data:
+  {{- range $key, $val := .Values.config.data }}
+  {{ $key }}: {{ $val | quote }}
+  {{- end }}
+  API_URL: {{ printf "http://%s.default.svc.cluster.local:%s" ( include "swrtc-api.name" . ) ( .Values.global.apiServicePort | toString )  }} 
+  GLOBAL_DOMAIN: {{ printf "ice.%s" .Values.global.baseDomain }}
+  REGION_DOMAIN: {{ printf "us-central1-a.%s" .Values.global.baseDomain }}
+{{- end }}

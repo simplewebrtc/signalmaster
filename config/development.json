@@ -8,7 +8,7 @@
   },
   "billing": {
     "ice": false,
-    "roomReports": false 
+    "roomReports": false
   },
   "talky": {
     "apiVersion": "2.0.0",
@@ -49,11 +49,13 @@
   },
   "db": {
     "connection": {
-      "host": "localhost",
       "user": "talky",
       "password": "password",
       "database": "talky_api"
-    }
+    },
+    "user": "talky",
+    "password": "password",
+    "database": "talky_api"
   },
   "auth": {
     "secret": "internal-use-jwt-password-makethisoneprettysecureok",

@@ -60,7 +60,7 @@ pipeline:
     prefix: staging
     recreate_pods: true
     release: swrtc-api-stage
-    values: deployment.image.tag=${DRONE_TAG##v},nodeSelector.swrtc-api-stage=true,global.baseDomain=stagesimplewebrtc.com,global.environment=stage,swrtc-ice.nodeSelector.ice-stage=true,swrtc-ice.deployment.image.tag=0.21,prosody.nodeSelector.prosody-stage=true,prosody.deployment.image.tag=latest-081018,secrets.data.REDIS_PASSWORD=$${REDIS_PASSWORD},secrets.data.DATABASE_URL=$${DATABASE_URL},secrets.data.TURN_SECRET=$${TURN_SECRET},secrets.data.ADMIN_PASSWORD=$${ADMIN_PASSWORD},secrets.data.CUSTOMER_API_KEY=$${CUSTOMER_API_KEY},secrets.data.INTERNAL_API_KEY=$${INTERNAL_API_KEY},secrets.data.TALKY_LICENSE=$${TALKY_LICENSE}
+    values: secrets.data.REDIS_PASSWORD=$${REDIS_PASSWORD},secrets.data.DATABASE_URL=$${DATABASE_URL},secrets.data.TURN_SECRET=$${TURN_SECRET},secrets.data.ADMIN_PASSWORD=$${ADMIN_PASSWORD},secrets.data.CUSTOMER_API_KEY=$${CUSTOMER_API_KEY},secrets.data.INTERNAL_API_KEY=$${INTERNAL_API_KEY},secrets.data.TALKY_LICENSE=$${TALKY_LICENSE}
     secrets: [ staging_REDIS_PASSWORD, staging_DATABASE_URL, staging_TURN_SECRET, staging_ADMIN_PASSWORD, staging_CUSTOMER_API_KEY, staging_INTERNAL_API_KEY, staging_TALKY_LICENSE, staging_TAG=${DRONE_TAG##v},staging_KUBERNETES_CERTIFICATE, staging_KUBERNETES_TOKEN, staging_API_SERVER ]
     when:
       event: tag

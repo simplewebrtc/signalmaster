@@ -15,10 +15,21 @@ spec:
   tls:
     - hosts:
       - {{ printf "api.%s" .Values.global.baseDomain }}
+      - {{ printf "api.%s" .Values.secondaryDomain }}
       secretName: {{ .Values.ingress.tls.secret }}
   {{- end }}
   rules:
   - host: {{ printf "api.%s" .Values.global.baseDomain }}
+    http:
+      paths:
+      - backend:
+          serviceName: {{ template "swrtc-api.name" . }}
+          servicePort: {{ .Values.global.apiServicePort }}
+      - backend:
+          serviceName: {{ printf "prosody-%s" .Values.global.environment }}
+          servicePort: {{ .Values.global.prosodyPort }}
+        path: /ws-bind
+  - host: {{ printf "api.%s" .Values.secondaryDomain }}
     http:
       paths:
       - backend:

@@ -18,7 +18,7 @@ service:
 ingress:
   tls:
     enabled: true
-    secret: simplewebrtc-com-tls
+    secret: stagesimplewebrtc-com-tls
   annotations:
     kubernetes.io/ingress.class: gce
 secrets:

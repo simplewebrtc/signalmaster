@@ -24,5 +24,3 @@ global:
   baseDomain: stagesimplewebrtc.com
   prosodyPort: 5280
   imagePullSecrets: andyetops
-nodeSelector:
-  ice-stage: "true"

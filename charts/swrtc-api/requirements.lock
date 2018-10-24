@@ -4,6 +4,6 @@ dependencies:
   version: v0.1.2
 - name: swrtc-ice
   repository: gs://andyet-helm-charts
-  version: v0.1.6
-digest: sha256:bb42720129339f689de72d68b0842209e42d080a86cbe19d86df4eb58405cf82
-generated: 2018-08-09T16:13:06.133838468-07:00
+  version: v0.1.7
+digest: sha256:54ae5f2a1e32f66efef873596a97a5f4a3774ce8435af6d4c04ee1c94629b53c
+generated: 2018-10-24T10:18:49.544123289-07:00

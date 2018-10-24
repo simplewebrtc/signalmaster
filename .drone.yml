@@ -54,6 +54,7 @@ pipeline:
     skip_tls_verify: false
     chart: ./charts/swrtc-api
     prefix: prod
+    debug: true
     recreate_pods: true
     release: swrtc-api-prod
     values: deployment.image.tag=latest,secondaryDomain=talky.io,global.baseDomain=simplewebrtc.com,global.environment=prod,swrtc-ice.deployment.image.tag=0.21,prosody.deployment.image.tag=latest-081018,secrets.data.REDIS_PASSWORD=$${REDIS_PASSWORD},secrets.data.DATABASE_URL=$${DATABASE_URL},secrets.data.TURN_SECRET=$${TURN_SECRET},secrets.data.ADMIN_PASSWORD=$${ADMIN_PASSWORD},secrets.data.CUSTOMER_API_KEY=$${CUSTOMER_API_KEY},secrets.data.INTERNAL_API_KEY=$${INTERNAL_API_KEY},secrets.data.TALKY_LICENSE=$${TALKY_LICENSE}

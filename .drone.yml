@@ -38,7 +38,7 @@ pipeline:
     when:
       event: [ deployment ]
   drone_helm_stage:
-    image: ipedrazas/drone-helm
+    image: andyet/drone-helm
     pull: true
     skip_tls_verify: false
     chart: ./charts/swrtc-api
@@ -51,7 +51,7 @@ pipeline:
     when:
       event: tag
   drone_helm_prod:
-    image: ipedrazas/drone-helm
+    image: andyet/drone-helm
     pull: true
     skip_tls_verify: false
     chart: ./charts/swrtc-api

@@ -30,7 +30,7 @@ local function fetch_role(room, jid)
 
     local body = json_encode({
         user_id = jid;
-        room_id = room:get_talky_core_id();
+        room_id = room.jid;
     });
 
     local wait, done = async.waiter();

@@ -114,16 +114,16 @@ end
 
 module:hook("muc-occupant-pre-join", function (event)
     local data = fetch_info(event.room, event.occupant.bare_jid, jid_resource(event.stanza.attr.from));
-    event.occupant.nick = event.room.jid.."/"..data.id; -- lock down MUC nicks
+    -- event.occupant.nick = event.room.jid.."/"..data.id; -- lock down MUC nicks
 
     event.room:set_talky_core_info(event.occupant.nick, data);
     stamp_info(event);
 end);
 
 module:hook("muc-occupant-pre-change", function (event)
-    if event.occupant and event.dest_occupant then
-        event.dest_occupant.nick = event.occupant.nick; -- lock down MUC nicks
-    end
+    -- if event.occupant and event.dest_occupant then
+    --     event.dest_occupant.nick = event.occupant.nick; -- lock down MUC nicks
+    -- end
 
     stamp_info(event);
 end);

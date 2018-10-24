@@ -24,5 +24,3 @@ global:
   baseDomain: simplewebrtc.com
   prosodyPort: 5280
   imagePullSecrets: andyetops
-nodeSelector:
-  ice-prod: "true"

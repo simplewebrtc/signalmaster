@@ -15,8 +15,6 @@ deployment:
         name: prosody-config-prod
 service:
   type: NodePort
-nodeSelector:
-  prosody-prod: "true"
 global:
   environment: prod
   apiServicePort: "8003"

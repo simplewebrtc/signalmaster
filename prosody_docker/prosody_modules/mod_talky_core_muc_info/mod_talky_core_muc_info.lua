@@ -121,7 +121,10 @@ module:hook("muc-occupant-pre-join", function (event)
 end);
 
 module:hook("muc-occupant-pre-change", function (event)
-    event.dest_occupant.nick = event.occupant.nick; -- lock down MUC nicks
+    if event.occupant and event.dest_occupant then
+        event.dest_occupant.nick = event.occupant.nick; -- lock down MUC nicks
+    end
+
     stamp_info(event);
 end);
 

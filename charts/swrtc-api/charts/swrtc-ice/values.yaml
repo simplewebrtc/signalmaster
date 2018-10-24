@@ -10,7 +10,7 @@ deployment:
     mountPath: /opt/talky-core-ice/certs
     spec:
       secret:
-        secretName: ice-stagesimplewebrtc-com-tls
+        secretName: ice-prod-simplewebrtc-com-tls
 config:
   data:
     TURN_SECRET: U338ub6hyp7Y95UeZHem2U8y4KxS2j5N
@@ -18,9 +18,11 @@ config:
     NODE_ENV: production
     PUBLIC_IP: 35.202.210.1
 global:
-  environment: stage
-  apiServiceName: swrtc-api-stage
+  environment: prod
+  apiServiceName: swrtc-api-prod
   apiServicePort: 8003
-  baseDomain: stagesimplewebrtc.com
+  baseDomain: simplewebrtc.com
   prosodyPort: 5280
   imagePullSecrets: andyetops
+nodeSelector:
+  ice-prod: "true"

@@ -12,14 +12,14 @@ deployment:
     name: prosody-config
     spec:
       configMap:
-        name: prosody-config-stage
+        name: prosody-config-prod
 service:
   type: NodePort
 nodeSelector:
-  prosody-stage: "true"
+  prosody-prod: "true"
 global:
-  environment: stage
+  environment: prod
   apiServicePort: "8003"
-  baseDomain: stagesimplewebrtc.com
+  baseDomain: simplewebrtc.com
   prosodyPort: 5280
   imagePullSecrets: andyetops

@@ -31,8 +31,8 @@ spec:
       volumes:
       {{- range .Values.deployment.volumes }}
       - name: {{ .name }}
-        secretName:
-          name: {{ printf "ice-%s-simplewebrtc-com-tls" $.Values.global.environment }}
+        secret:
+          secretName: {{ printf "ice-%s-simplewebrtc-com-tls" $.Values.global.environment }}
       {{- end }}
       {{- end }}
       hostNetwork: true

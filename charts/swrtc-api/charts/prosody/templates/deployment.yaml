@@ -20,7 +20,7 @@ spec:
       name: {{ template "prosody.name" . }}
     spec:
       dnsPolicy: {{ default "ClusterFirst" .Values.deployment.dnsPolicy }}
-      imagePullSecrets: 
+      imagePullSecrets:
       - name: {{ required "You must provide imagePullSecrets!" .Values.global.imagePullSecrets }}
       restartPolicy: {{ default "Always" .Values.deployment.restartPolicy }}
       {{- if .Values.nodeSelector }}
@@ -31,7 +31,8 @@ spec:
       volumes:
       {{- range .Values.deployment.volumes }}
       - name: {{ .name }}
-{{ toYaml .spec | trimSuffix "\n" | indent 8 }}
+        configMap:
+          name: {{ printf "prosody-config-%s" $.Values.global.environment }}
       {{- end }}
       {{- end }}
       containers:

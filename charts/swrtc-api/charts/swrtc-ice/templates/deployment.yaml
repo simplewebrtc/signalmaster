@@ -20,7 +20,7 @@ spec:
       name: {{ template "swrtc-ice.name" . }}
     spec:
       dnsPolicy: ClusterFirstWithHostNet
-      imagePullSecrets: 
+      imagePullSecrets:
       - name: {{ required "You must provide imagePullSecrets!" .Values.global.imagePullSecrets }}
       restartPolicy: {{ default "Always" .Values.deployment.restartPolicy }}
       {{- if .Values.nodeSelector }}
@@ -31,7 +31,8 @@ spec:
       volumes:
       {{- range .Values.deployment.volumes }}
       - name: {{ .name }}
-{{ toYaml .spec | trimSuffix "\n" | indent 8 }}
+        secretName:
+          name: {{ printf "ice-%s-simplewebrtc-com-tls" $.Values.global.environment }}
       {{- end }}
       {{- end }}
       hostNetwork: true
@@ -58,4 +59,4 @@ spec:
         envFrom:
           - configMapRef:
               name: {{ template "swrtc-ice.name" . }}
-        {{- end }}  
+        {{- end }}

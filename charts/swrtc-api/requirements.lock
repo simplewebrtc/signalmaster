@@ -1,9 +1,9 @@
 dependencies:
 - name: prosody
   repository: gs://andyet-helm-charts
-  version: v0.1.4
+  version: v0.1.5
 - name: swrtc-ice
   repository: gs://andyet-helm-charts
-  version: v0.1.9
-digest: sha256:5efcb211dc82b92e78cd6079ce5144040b528d31a126ddd93c389045a2600da5
-generated: 2018-10-24T16:07:34.083024368-07:00
+  version: v0.2.0
+digest: sha256:850f1624c6197c72e0725e392a32d3e867b9b7ae17f6437190d2512103c9160c
+generated: 2018-10-24T22:43:19.23687902-07:00

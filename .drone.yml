@@ -41,7 +41,6 @@ pipeline:
     image: andyet/drone-helm
     pull: true
     skip_tls_verify: false
-    debug: true
     chart: ./charts/swrtc-api
     prefix: staging
     recreate_pods: true
@@ -56,7 +55,6 @@ pipeline:
     skip_tls_verify: false
     chart: ./charts/swrtc-api
     prefix: prod
-    debug: true
     recreate_pods: true
     release: swrtc-api-prod
     values: nodeSelector.swrtc-api-prod=yes,swrtc-ice.nodeSelector.ice-prod=yes,prosody.nodeSelector.prosody-prod=yes,deployment.image.tag=latest,secondaryDomain=talky.io,global.baseDomain=simplewebrtc.com,global.environment=prod,swrtc-ice.deployment.image.tag=0.21,swrtc-ice.volumes[0].spec.secret.secretName=ice-prod-simplewebrtc-com-tls,swrtc-ice.config.data.PUBLIC_IP=35.193.222.116,prosody.deployment.image.tag=latest-102418,prosody.volumes[0].spec.configMap.name=prosody-config-prod,secrets.data.REDIS_PASSWORD=$${REDIS_PASSWORD},secrets.data.DATABASE_URL=$${DATABASE_URL},secrets.data.TURN_SECRET=$${TURN_SECRET},secrets.data.ADMIN_PASSWORD=$${ADMIN_PASSWORD},secrets.data.CUSTOMER_API_KEY=$${CUSTOMER_API_KEY},secrets.data.INTERNAL_API_KEY=$${INTERNAL_API_KEY},secrets.data.TALKY_LICENSE=$${TALKY_LICENSE}

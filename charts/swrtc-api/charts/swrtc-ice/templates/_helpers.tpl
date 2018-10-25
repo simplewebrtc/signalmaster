@@ -7,7 +7,7 @@ Expand the name of the chart.
 {{- printf "%s-%s" ( default .Chart.Name .Values.nameOverride ) .Values.global.environment | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
-{{- define "swrtc-api.name" -}}
+{{- define "swrtc-api.ice-name" -}}
 {{- printf "%s-%s" "swrtc-api" .Values.global.environment | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 

@@ -4,4 +4,4 @@ dependencies:
     version: 0.1.5
   - name: swrtc-ice
     repository: gs://andyet-helm-charts
-    version: 0.2.0
+    version: 0.2.1

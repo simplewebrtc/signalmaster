@@ -27,7 +27,7 @@ pipeline:
       - ${DRONE_TAG##v}
     secrets: [ docker_username, docker_password ]
     when:
-      event: [ tag ]
+      event: [ push ]
   build_docker_prod:
     image: plugins/docker
     repo: andyet/talky-api

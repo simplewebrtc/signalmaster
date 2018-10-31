@@ -23,8 +23,8 @@ pipeline:
     image: plugins/docker
     repo: andyet/talky-api
     tags:
-      - ${DRONE_COMMIT_SHA:0:8}
-      - ${DRONE_TAG##v}
+      - "${DRONE_COMMIT_SHA:0:8}"
+      - "${DRONE_TAG##v}"
     secrets: [ docker_username, docker_password ]
     when:
       event: [ tag ]
@@ -32,7 +32,7 @@ pipeline:
     image: plugins/docker
     repo: andyet/talky-api
     tags:
-      - ${DRONE_COMMIT_SHA:0:8}
+      - "${DRONE_COMMIT_SHA:0:8}"
       - latest
     secrets: [ docker_username, docker_password ]
     when:

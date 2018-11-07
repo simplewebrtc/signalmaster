@@ -2,6 +2,7 @@ local async = require "util.async";
 local http = require "net.http";
 local json_encode = require "util.json".encode;
 local jid_split = require "util.jid".split;
+local jid_bare = require "util.jid".bare;
 local hmac_sha1 = require "util.hashes".hmac_sha1;
 local base64 = require "util.encodings".base64.encode;
 local serialize = require "util.serialization".serialize;
@@ -15,8 +16,7 @@ local muc_affiliation_url = module:get_option_string("talky_core_muc_affiliation
 
 local affiliation_cache = {};
 
-
-local function fetch_role(room, jid)
+local function fetch_affiliation(room, jid)
     module:log("debug", "Testing room affiliation for user %s in room %s with URL %s", jid, room.jid, muc_affiliation_url);
 
     local cached = affiliation_cache[jid];
@@ -62,25 +62,36 @@ local function fetch_role(room, jid)
     return nil, "Affiliation lookup failed: "..content;
 end
 
-
-room_mt.get_affiliation = function (room, jid)
-    local role, err = fetch_role(room, jid);
-
+local function apply_api_affiliation(room, stanza)
+    local jid = jid_bare(stanza.attr.from);
+    local affiliation, err = fetch_affiliation(room, jid);
     if err then
-        module:log("error", err);
-        return "none";
+        affiliation = "outcast";
     end
 
-    module:log("debug", "Using affiliation %s", role);
-
-    return role;
+    room:set_affiliation(true, jid, affiliation);
 end
 
+module:hook("muc-room-pre-create", function (event)
+    apply_api_affiliation(event.room, event.stanza);
+end, -100);
+
+-- ////////////////////////////////////////////////////////////////////
+-- This hook needs to run _after_ the password check handler in the
+-- built-in Prosody muc/password.lib.lua. That hook has its priority
+-- set to -20.
+--
+-- Otherwise, we will have set the user affiliation before password
+-- checks have completed, possibly granting the user an owner
+-- affiliation that would allow changing the password.
+-- ////////////////////////////////////////////////////////////////////
+module:hook("muc-occupant-pre-join", function (event)
+    apply_api_affiliation(event.room, event.stanza);
+end, -100);
 
 module:hook("muc-occupant-left", function (event)
     local jid = event.occupant.bare_jid;
     affiliation_cache[jid] = nil;
 end);
-
 
 module:log("info", "Loaded mod_talky_core_muc_affiliations for %s", module.host);

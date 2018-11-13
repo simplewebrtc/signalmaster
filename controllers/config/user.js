@@ -96,6 +96,7 @@ module.exports = {
       orgId: Joi.string().example('andyet')
     },
     payload: {
+      clientVersion: Joi.string().optional().description('Client SDK version').example('1.7.3'),
       token: Joi.string().description('JWT encoded user object').label('UserToken')
     }
   }

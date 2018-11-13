@@ -82,9 +82,9 @@ module.exports = {
     params: {
       orgId: Joi.string().example('andyet')
     },
-    payload: {
+    payload: Joi.object({
       clientVersion: Joi.string().optional().description('Client SDK version').example('1.7.3')
-    }
+    }).unknown()
   },
   response: {
     status: {

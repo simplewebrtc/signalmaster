@@ -45,8 +45,18 @@ pipeline:
     prefix: staging
     recreate_pods: true
     release: swrtc-api-stage
-    values: nodeSelector.swrtc-api-stage=yes,swrtc-ice.nodeSelector.ice-stage=yes,prosody.nodeSelector.prosody-stage=yes,deployment.image.tag=${DRONE_TAG##v},secondaryDomain=stagetalky.io,global.baseDomain=stagesimplewebrtc.com,global.environment=stage,swrtc-ice.deployment.image.tag=0.21,swrtc-ice.config.data.PUBLIC_IP=35.202.210.1,prosody.deployment.image.tag=latest-110718,secrets.data.REDIS_PASSWORD=$${REDIS_PASSWORD},secrets.data.DATABASE_URL=$${DATABASE_URL},secrets.data.TURN_SECRET=$${TURN_SECRET},secrets.data.ADMIN_PASSWORD=$${ADMIN_PASSWORD},secrets.data.CUSTOMER_API_KEY=$${CUSTOMER_API_KEY},secrets.data.INTERNAL_API_KEY=$${INTERNAL_API_KEY},secrets.data.TALKY_LICENSE=$${TALKY_LICENSE}
-    secrets: [ staging_REDIS_PASSWORD, staging_DATABASE_URL, staging_TURN_SECRET, staging_ADMIN_PASSWORD, staging_CUSTOMER_API_KEY, staging_INTERNAL_API_KEY, staging_TALKY_LICENSE, staging_KUBERNETES_CERTIFICATE, staging_KUBERNETES_TOKEN, staging_API_SERVER ]
+    values: nodeSelector.swrtc-api-stage=yes,swrtc-ice.nodeSelector.ice-stage=yes,prosody.nodeSelector.prosody-stage=yes,deployment.image.tag=${DRONE_TAG##v},secondaryDomain=stagetalky.io,global.baseDomain=stagesimplewebrtc.com,global.environment=stage,swrtc-ice.deployment.image.tag=0.21,swrtc-ice.config.data.PUBLIC_IP=35.202.210.1,prosody.deployment.image.tag=latest-110718,secrets.data.REDIS_PASSWORD=$${REDIS_PASSWORD},secrets.data.DATABASE_URL=$${DATABASE_URL},secrets.data.TURN_SECRET=$${TURN_SECRET},secrets.data.ADMIN_PASSWORD=$${ADMIN_PASSWORD},secrets.data.CUSTOMER_API_KEY=$${CUSTOMER_API_KEY},secrets.data.INTERNAL_API_KEY=$${INTERNAL_API_KEY},secrets.data.TALKY_LICENSE=$${TALKY_LICENSE},config.data.REDIS_HOST=10.128.0.6
+    secrets:
+      - staging_ADMIN_PASSWORD
+      - staging_API_SERVER
+      - staging_CUSTOMER_API_KEY
+      - staging_DATABASE_URL
+      - staging_INTERNAL_API_KEY
+      - staging_KUBERNETES_CERTIFICATE
+      - staging_KUBERNETES_TOKEN
+      - staging_REDIS_PASSWORD
+      - staging_TALKY_LICENSE
+      - staging_TURN_SECRET
     when:
       event: tag
   drone_helm_prod:
@@ -57,8 +67,18 @@ pipeline:
     prefix: prod
     recreate_pods: true
     release: swrtc-api-prod
-    values: nodeSelector.swrtc-api-prod=yes,swrtc-ice.nodeSelector.ice-prod=yes,prosody.nodeSelector.prosody-prod=yes,deployment.image.tag=latest,secondaryDomain=talky.io,global.baseDomain=simplewebrtc.com,global.environment=prod,swrtc-ice.deployment.image.tag=0.21,swrtc-ice.config.data.PUBLIC_IP=35.193.222.116,prosody.deployment.image.tag=latest-110718,secrets.data.REDIS_PASSWORD=$${REDIS_PASSWORD},secrets.data.DATABASE_URL=$${DATABASE_URL},secrets.data.TURN_SECRET=$${TURN_SECRET},secrets.data.ADMIN_PASSWORD=$${ADMIN_PASSWORD},secrets.data.CUSTOMER_API_KEY=$${CUSTOMER_API_KEY},secrets.data.INTERNAL_API_KEY=$${INTERNAL_API_KEY},secrets.data.TALKY_LICENSE=$${TALKY_LICENSE}
-    secrets: [ prod_REDIS_PASSWORD, prod_DATABASE_URL, prod_TURN_SECRET, prod_ADMIN_PASSWORD, prod_CUSTOMER_API_KEY, prod_INTERNAL_API_KEY, prod_TALKY_LICENSE, prod_KUBERNETES_CERTIFICATE, prod_KUBERNETES_TOKEN, prod_API_SERVER ]
+    values: nodeSelector.swrtc-api-prod=yes,swrtc-ice.nodeSelector.ice-prod=yes,prosody.nodeSelector.prosody-prod=yes,deployment.image.tag=latest,secondaryDomain=talky.io,global.baseDomain=simplewebrtc.com,global.environment=prod,swrtc-ice.deployment.image.tag=0.21,swrtc-ice.config.data.PUBLIC_IP=35.193.222.116,prosody.deployment.image.tag=latest-110718,secrets.data.REDIS_PASSWORD=$${REDIS_PASSWORD},secrets.data.DATABASE_URL=$${DATABASE_URL},secrets.data.TURN_SECRET=$${TURN_SECRET},secrets.data.ADMIN_PASSWORD=$${ADMIN_PASSWORD},secrets.data.CUSTOMER_API_KEY=$${CUSTOMER_API_KEY},secrets.data.INTERNAL_API_KEY=$${INTERNAL_API_KEY},secrets.data.TALKY_LICENSE=$${TALKY_LICENSE},config.data.REDIS_HOST=10.128.0.8
+    secrets:
+      - prod_ADMIN_PASSWORD
+      - prod_API_SERVER
+      - prod_CUSTOMER_API_KEY
+      - prod_DATABASE_URL
+      - prod_INTERNAL_API_KEY
+      - prod_KUBERNETES_CERTIFICATE
+      - prod_KUBERNETES_TOKEN
+      - prod_REDIS_PASSWORD
+      - prod_TALKY_LICENSE
+      - prod_TURN_SECRET
     when:
       event: deployment
   slack:

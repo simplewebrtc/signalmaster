@@ -41,7 +41,7 @@
     "inert": "^5.1.0",
     "jsonwebtoken": "^8.3.0",
     "keyfob": "^1.0.0",
-    "knex": "^0.16.0",
+    "knex": "^0.15.2",
     "minimist": "^1.2.0",
     "muckraker": "^4.0.1",
     "pg": "^7.4.3",

@@ -5,13 +5,10 @@ config/local.json
 config/*.pem
 
 *.env
-cm-prosody-config.json
 coverage.html
 
 prosody_docker/certs.pem
 prosody_docker/certs.key
 
 build-prosody.sh
-
-secrets.yaml
 drone-secrets.sh

@@ -1,0 +1,29 @@
+nodeSelector:
+  swrtc-api-prod: 'yes'
+swrtc-ice:
+  nodeSelector:
+    ice-prod: 'yes'
+  deployment:
+    image:
+      tag: 0.21
+  config:
+    data:
+      PUBLIC_IP: 35.193.222.116
+prosody:
+  nodeSelector:
+    prosody-prod: 'yes'
+  deployment:
+    image:
+      tag: latest-110718
+secondaryDomain: talky.io
+global:
+  baseDomain: simplewebrtc.com
+  environment: prod
+config:
+  data:
+    REDIS_HOST: "10.128.0.8"
+    REDIS_PORT: "6379"
+    CHROME_EXTENSION_ID: kochadnnpmbkfdhlaajaemgjmkjfhfkb
+ingress:
+  tls:
+    secret: simplewebrtc-com-tls

@@ -1,0 +1,29 @@
+nodeSelector:
+  swrtc-api-stage: 'yes'
+swrtc-ice:
+  nodeSelector:
+    ice-stage: 'yes'
+  deployment:
+    image:
+      tag: 0.21
+  config:
+    data:
+      PUBLIC_IP: 35.202.210.1
+prosody:
+  nodeSelector:
+    prosody-stage: 'yes'
+  deployment:
+    image:
+      tag: latest-110718
+secondaryDomain: stagetalky.io
+global:
+  baseDomain: stagesimplewebrtc.com
+  environment: stage
+config:
+  data:
+    REDIS_HOST: "10.128.0.8"
+    REDIS_PORT: "6379"
+    CHROME_EXTENSION_ID: kochadnnpmbkfdhlaajaemgjmkjfhfkb
+ingress:
+  tls:
+    secret: stagesimplewebrtc-com-tls

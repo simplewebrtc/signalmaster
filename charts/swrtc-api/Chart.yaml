@@ -1,4 +1,0 @@
-apiVersion: v1
-description: A Helm chart for simpleWebRTC API
-name: swrtc-api
-version: v0.2.4

@@ -41,13 +41,12 @@ pipeline:
     image: andyet/drone-helm
     pull: true
     skip_tls_verify: false
-    chart: ./charts/swrtc-api
+    chart: andyet/swrtc-api
     prefix: staging
     recreate_pods: true
     helm_repos: andyet=https://andyet-helm-charts.storage.googleapis.com/
     release: swrtc-api-stage
     values_files: values-stage.yaml
-    debug: true
     values: deployment.image.respository=andyet/talky-api:${DRONE_TAG##v}, secrets.data.REDIS_PASSWORD=$${REDIS_PASSWORD},secrets.data.DATABASE_URL=$${DATABASE_URL},secrets.data.TURN_SECRET=$${TURN_SECRET},secrets.data.ADMIN_PASSWORD=$${ADMIN_PASSWORD},secrets.data.CUSTOMER_API_KEY=$${CUSTOMER_API_KEY},secrets.data.INTERNAL_API_KEY=$${INTERNAL_API_KEY},secrets.data.TALKY_LICENSE=$${TALKY_LICENSE}
     secrets:
       - staging_ADMIN_PASSWORD
@@ -66,7 +65,7 @@ pipeline:
     image: andyet/drone-helm
     pull: true
     skip_tls_verify: false
-    chart: ./charts/swrtc-api
+    chart: andyet/swrtc-api
     prefix: prod
     recreate_pods: true
     helm_repos: andyet=https://andyet-helm-charts.storage.googleapis.com/

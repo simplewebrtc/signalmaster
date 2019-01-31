@@ -31,9 +31,10 @@ module.exports = {
     };
   },
   validate: {
-    payload: {
-      name: Joi.string().lowercase().example('castle-of-lions')
-    }
+    payload: Joi.object({
+      clientVersion: Joi.string().optional().description('Client SDK version').example('1.7.3'),
+      name: Joi.string().lowercase().description('User provided name of a room').example('castle-of-lions')
+    }).unknown()
   },
   response: {
     status: {

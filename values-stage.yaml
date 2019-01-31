@@ -21,7 +21,7 @@ global:
   environment: stage
 config:
   data:
-    REDIS_HOST: "10.128.0.8"
+    REDIS_HOST: "10.128.0.6"
     REDIS_PORT: "6379"
     CHROME_EXTENSION_ID: kochadnnpmbkfdhlaajaemgjmkjfhfkb
 ingress:

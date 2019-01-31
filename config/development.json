@@ -32,14 +32,14 @@
 
     "orgs": {
       "andyet": {
-        "enabled": true,
+        "active": true,
         "secret": "customer-api-shared-jwt-password-makethisoneprettysecureok",
         "screensharingExtensions": {
           "chrome": "ikljcimogjdaoojhmkbioipmffflodgk"
         }
       },
       "talky": {
-        "enabled": true,
+        "active": true,
         "secret": "customer-api-shared-jwt-password-makethisoneprettysecureok",
         "screensharingExtensions": {
           "chrome": "ikljcimogjdaoojhmkbioipmffflodgk"

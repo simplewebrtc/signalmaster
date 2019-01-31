@@ -19,7 +19,7 @@
     },
     "orgs": {
       "testorg": {
-        "enabled": true,
+        "active": true,
         "secret": "testkey"
       }
     }

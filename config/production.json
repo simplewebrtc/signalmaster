@@ -49,7 +49,7 @@
 
     "orgs": {
       "andyet": {
-        "enabled": true,
+        "active": true,
         "secret": "$CUSTOMER_API_KEY",
         "maskRoomNames": true,
         "screensharingExtensions": {
@@ -57,7 +57,7 @@
         }
       },
       "talky": {
-        "enabled": true,
+        "active": true,
         "secret": "$CUSTOMER_API_KEY",
         "maskRoomNames": true,
         "screensharingExtensions": {

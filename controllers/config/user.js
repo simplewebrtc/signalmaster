@@ -37,7 +37,7 @@ module.exports = {
     const encodedCustomerData = Base32.encode(JSON.stringify(customerData));
 
     const id = UUID.v4();
-    const org_id = org.id;
+    const org_id = org.key;
     const username = `${org_id}#${id}#${encodedCustomerData}`;
     const user_id = `${username}@${Domains.users}`;
     const ice = FetchICE(org_id, id);

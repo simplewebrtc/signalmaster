@@ -31,7 +31,7 @@ module.exports = {
     const { ua, browser, os } = UAParser(request.headers['user-agent']);
 
     const id = UUID.v4();
-    const org_id = org.id;
+    const org_id = org.key;
     const user_id = `${org_id}#${id}@${Domains.guests}`;
     const ice = FetchICE(org_id, id);
 

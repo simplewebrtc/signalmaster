@@ -26,7 +26,7 @@ describe('Guest account', () => {
     let guestUser;
     const iceServers = Fixtures.iceServers();
 
-    return server.inject({ method: 'POST', url: '/config/guest/testorg', payload: {} })
+    return server.inject({ method: 'POST', url: '/config/guest/testorg' })
       .then((res) => {
 
         expect(res.statusCode).to.equal(200);

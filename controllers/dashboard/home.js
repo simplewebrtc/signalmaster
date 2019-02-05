@@ -8,7 +8,7 @@ module.exports = {
   auth: 'admin',
   handler: async function (request, h) {
 
-    const params = Object.assign({}, request.query);
+    const params = { ...request.query };
     const limit = params.limit;
     params.offset = (params.page - 1) * limit;
 

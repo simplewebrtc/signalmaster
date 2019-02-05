@@ -70,7 +70,7 @@ describe('POST /telemetry', () => {
       .then((res) => {
 
         expect(res.statusCode).to.equal(200);
-        return server.inject({ method: 'POST', url: '/telemetry', payload: clientPayload, credentials: session });
+        return server.inject({ method: 'POST', url: '/telemetry', payload: clientPayload, auth: { credentials: session, strategy: 'client-token' } });
       }).then(async (res) => {
 
         expect(res.statusCode).to.equal(200);

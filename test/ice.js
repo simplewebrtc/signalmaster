@@ -31,7 +31,7 @@ describe('GET /ice', () => {
   it('works', () => {
 
     const session = Fixtures.session();
-    return server.inject({ method: 'GET', url: '/ice', credentials: session })
+    return server.inject({ method: 'GET', url: '/ice', auth: { credentials: session, strategy: 'client-token' } })
       .then((res) => {
 
         expect(res.statusCode).to.equal(200);

@@ -86,10 +86,11 @@ pipeline:
     when:
       event: deployment
   slack:
-    image: plugins/slack
+    image: andyet/drone-slack:stable
     username: drone
+    pull: true
     channel: io-alerts
-    secrets: [ slack_webhook ]
+    secrets: [ slack_webhook, github_access_token, github_slack_lookup ]
     when:
       status: [ success, failure ]
 branches: master

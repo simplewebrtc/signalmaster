@@ -43,7 +43,7 @@ I think it's safe for us to just work out of the [initial migrations]('./migrati
     ```sh
     $ npm run prosody-config-install-local
     ```
-    
+
     The Prosody config file is not regenerated automatically, so this step will need to be run any time you change the service configuration.
 
 #### Linux (Debian based)
@@ -96,14 +96,14 @@ I think it's safe for us to just work out of the [initial migrations]('./migrati
 To run the API with HTTPS (needed for local testing clients), run:
 
 ```sh
-$ npm run create-key-pair 
+$ npm run create-key-pair
 ```
 
 You will be prompted to fill in information for the certificate. The `Common Name` setting MUST be set to the domain/port you are using:
 
 ```sh
 Country Name (2 letter code) [AU]:US
-State or Province Name (full name) [Some-State]:WA 
+State or Province Name (full name) [Some-State]:WA
 Locality Name (eg, city) []:
 Organization Name (eg, company) [Internet Widgits Pty Ltd]:
 Organizational Unit Name (eg, section) []:
@@ -168,3 +168,18 @@ If HTTPS is used, you will need to load the API home page in your browser to app
 - `video_resumed`
 - `audio_paused`
 - `audio_resumed`
+
+# Environment Variables
+
+If you are running this in a container these environment variables are needed
+```
+- ADMIN_PASSWORD            # Admin password for the api montioring dashboard
+- CUSTOMER_API_KEY          # API Secret Key for a default account
+- DATABASE_URL              # A connection string in the format postgres://<user>:<password>@<endpoint>/<database>
+- INTERNAL_API_KEY          # API Key for internal authentication with the API, used by swrtc-ice
+- REDIS_HOST
+- REDIS_PASSWORD
+- REDIS_PASSWORD
+- TALKY_LICENSE
+- TURN_SECRET               # Auth secret used to connect to TURN
+```

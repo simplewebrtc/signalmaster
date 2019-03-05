@@ -174,7 +174,7 @@ If HTTPS is used, you will need to load the API home page in your browser to app
 If you are running this in a container these environment variables are needed
 ```
 - ADMIN_PASSWORD            # Admin password for the api montioring dashboard
-- CUSTOMER_API_KEY          # API Secret Key for a default account
+- CUSTOMER_API_KEY          # API Secret Key for defaults account
 - DATABASE_URL              # A connection string in the format postgres://<user>:<password>@<endpoint>/<database>
 - INTERNAL_API_KEY          # API Key for internal authentication with the API, used by swrtc-ice
 - REDIS_HOST

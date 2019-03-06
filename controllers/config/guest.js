@@ -34,6 +34,7 @@ module.exports = {
     const org_id = org.key;
     const user_id = `${org_id}#${id}@${Domains.guests}`;
     const ice = FetchICE(org_id, id);
+    const sdkVersion = request.payload.clientVersion;
 
     const redis_rpush = promisify(this.redis.rpush.bind(this.redis));
     const event = {
@@ -45,6 +46,7 @@ module.exports = {
       os: JSON.stringify(os),
       useragent: ua,
       browser: JSON.stringify(browser),
+      sdk_version: sdkVersion,
       created_at: new Date(),
       updated_at: new Date()
     };
@@ -66,7 +68,8 @@ module.exports = {
       credential: JWT.sign({
         id,
         orgId: org_id,
-        registeredUser: false
+        registeredUser: false,
+        sdkVersion
       }, Config.auth.secret, {
         algorithm: 'HS256',
         expiresIn: '1 day',
@@ -83,8 +86,10 @@ module.exports = {
       orgId: Joi.string().example('andyet')
     },
     payload: Joi.object({
-      clientVersion: Joi.string().optional().description('Client SDK version').example('1.7.3')
-    }).empty(null).default({}).unknown()
+      clientVersion: Joi.string().optional().default('').description('Client SDK version').example('1.7.3')
+    }).empty(null).default({
+      clientVersion: ''
+    }).unknown()
   },
   response: {
     status: {

@@ -41,7 +41,7 @@ module.exports = {
     const username = `${org_id}#${id}#${encodedCustomerData}`;
     const user_id = `${username}@${Domains.users}`;
     const ice = FetchICE(org_id, id);
-    const sdkVersion = request.payload.clientVersion || '';
+    const sdkVersion = request.payload.clientVersion;
 
 
     const redis_rpush = promisify(this.redis.rpush.bind(this.redis));
@@ -99,7 +99,7 @@ module.exports = {
       orgId: Joi.string().example('andyet')
     },
     payload: Joi.object({
-      clientVersion: Joi.string().optional().description('Client SDK version').example('1.7.3'),
+      clientVersion: Joi.string().optional().default('').description('Client SDK version').example('1.7.3'),
       token: Joi.string().description('JWT encoded user object').label('UserToken')
     }).default({}).unknown()
   }

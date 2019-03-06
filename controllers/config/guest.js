@@ -34,7 +34,7 @@ module.exports = {
     const org_id = org.key;
     const user_id = `${org_id}#${id}@${Domains.guests}`;
     const ice = FetchICE(org_id, id);
-    const sdkVersion = request.payload.clientVersion || '';
+    const sdkVersion = request.payload.clientVersion;
 
     const redis_rpush = promisify(this.redis.rpush.bind(this.redis));
     const event = {
@@ -86,8 +86,10 @@ module.exports = {
       orgId: Joi.string().example('andyet')
     },
     payload: Joi.object({
-      clientVersion: Joi.string().optional().description('Client SDK version').example('1.7.3')
-    }).empty(null).default({}).unknown()
+      clientVersion: Joi.string().optional().default('').description('Client SDK version').example('1.7.3')
+    }).empty(null).default({
+      clientVersion: ''
+    }).unknown()
   },
   response: {
     status: {

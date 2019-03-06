@@ -30,8 +30,16 @@ module.exports = {
       return Boom.forbidden('Account not enabled');
     }
 
-    // TODO: Verify the customer data is signed for the given org.
-    const customerData = await ExtractCustomerData(request.payload.token, org.secret);
+    // Handle both org.secrets and org.secret until org.secret is discontinued
+    let orgSecrets = [];
+    if (org.secrets && org.secrets.length) {
+      orgSecrets = org.secrets;
+    }
+    else if (org.secret) {
+      orgSecrets = [org.secret];
+    }
+
+    const customerData = await ExtractCustomerData(request.payload.token, orgSecrets);
     const { ua, browser, os } = UAParser(request.headers['user-agent']);
 
     const encodedCustomerData = Base32.encode(JSON.stringify(customerData));

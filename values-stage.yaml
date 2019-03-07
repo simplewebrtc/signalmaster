@@ -5,7 +5,7 @@ swrtc-ice:
     ice-stage: 'yes'
   deployment:
     image:
-      tag: 0.21
+      repository: andyet/talky-core-ice:0.25
   config:
     data:
       PUBLIC_IP: 35.202.210.1

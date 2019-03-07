@@ -5,7 +5,7 @@ swrtc-ice:
     ice-prod: 'yes'
   deployment:
     image:
-      tag: 0.25
+      repository: andyet/talky-core-ice:0.25
   config:
     data:
       PUBLIC_IP: 35.193.222.116

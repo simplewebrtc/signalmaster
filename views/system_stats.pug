@@ -63,7 +63,12 @@ block dashboardContent
           td #{activeWebSessionCount}
           td #{prevDayWebSessionCount}
           td #{prevWeekWebSessionCount}
-
+        tr
+          td
+          td Used TURN
+          td -
+          td #{prevDayTurnSessionCount} (#{(prevDayTurnSessionCount / (prevDaySessionCount || 1)).toFixed(1)}%)
+          td #{prevWeekTurnSessionCount} (#{(prevWeekTurnSessionCount / (prevWeekSessionCount || 1)).toFixed(1)}%)
 
     table
       thead

@@ -74,67 +74,91 @@ module.exports = {
       });
     }
 
-
-    const activeCount = await this.db.rooms.count_active();
-    const sessionCount = await this.db.sessions.count_active();
-    const sessionMobileCount = await this.db.sessions.count_active_type({ session_type: 'mobile', activated: true });
-    const sessionWebCount = await this.db.sessions.count_active_type({ session_type: 'desktop', activated: true });
-
-    const sessionDayCount = await this.db.sessions.count_period({
-      ts: new Date(),
-      interval: '1 day',
-      activated: true
-    });
-    const sessionWeekCount = await this.db.sessions.count_period({
-      ts: new Date(),
-      interval: '7 days',
-      activated: true
-    });
-
-    const sessionMobileDayCount = await this.db.sessions.count_period_type({
-      ts: new Date(),
-      interval: '1 day',
-      session_type: 'mobile',
-      activated: true
-    });
-    const sessionMobileWeekCount = await this.db.sessions.count_period_type({
-      ts: new Date(),
-      interval: '7 days',
-      session_type: 'mobile',
-      activated: true
-    });
-
-    const sessionWebDayCount = await this.db.sessions.count_period_type({
-      ts: new Date(),
-      interval: '1 day',
-      session_type: 'desktop',
-      activated: true
-    });
-    const sessionWebWeekCount = await this.db.sessions.count_period_type({
-      ts: new Date(),
-      interval: '7 days',
-      session_type: 'desktop',
-      activated: true
-    });
-
-    const roomDayCount = await this.db.rooms.count_period({
-      ts: new Date(),
-      interval: '1 day'
-    });
-    const roomWeekCount = await this.db.rooms.count_period({
-      ts: new Date(),
-      interval: '7 days'
-    });
-
-    const roomUniqueDayCount = await this.db.rooms.count_period_unique({
-      ts: new Date(),
-      interval: '1 day'
-    });
-    const roomUniqueWeekCount = await this.db.rooms.count_period_unique({
-      ts: new Date(),
-      interval: '7 days'
-    });
-
+    const [
+      activeCount,
+      sessionCount,
+      sessionMobileCount,
+      sessionWebCount,
+      sessionDayCount,
+      sessionWeekCount,
+      sessionMobileDayCount,
+      sessionMobileWeekCount,
+      sessionWebDayCount,
+      sessionWebWeekCount,
+      roomDayCount,
+      roomWeekCount,
+      roomUniqueDayCount,
+      roomUniqueWeekCount,
+      sessionTurnDayCount,
+      sessionTurnWeekCount
+    ] = await Promise.all([
+      this.db.rooms.count_active(),
+      this.db.sessions.count_active(),
+      this.db.sessions.count_active_type({ session_type: 'mobile', activated: true }),
+      this.db.sessions.count_active_type({ session_type: 'desktop', activated: true }),
+      this.db.sessions.count_period({
+        ts: new Date(),
+        interval: '1 day',
+        activated: true
+      }),
+      this.db.sessions.count_period({
+        ts: new Date(),
+        interval: '7 days',
+        activated: true
+      }),
+      this.db.sessions.count_period_type({
+        ts: new Date(),
+        interval: '1 day',
+        session_type: 'mobile',
+        activated: true
+      }),
+      this.db.sessions.count_period_type({
+        ts: new Date(),
+        interval: '7 days',
+        session_type: 'mobile',
+        activated: true
+      }),
+      this.db.sessions.count_period_type({
+        ts: new Date(),
+        interval: '1 day',
+        session_type: 'desktop',
+        activated: true
+      }),
+      this.db.sessions.count_period_type({
+        ts: new Date(),
+        interval: '7 days',
+        session_type: 'desktop',
+        activated: true
+      }),
+      this.db.rooms.count_period({
+        ts: new Date(),
+        interval: '1 day'
+      }),
+      this.db.rooms.count_period({
+        ts: new Date(),
+        interval: '7 days'
+      }),
+      this.db.rooms.count_period_unique({
+        ts: new Date(),
+        interval: '1 day'
+      }),
+      this.db.rooms.count_period_unique({
+        ts: new Date(),
+        interval: '7 days'
+      }),
+      this.db.sessions.count_period_turn({
+        ts: new Date(),
+        interval: '1 day',
+        used_turn: true,
+        activated: true
+      }),
+      this.db.sessions.count_period_turn({
+        ts: new Date(),
+        interval: '7 days',
+        used_turn: true,
+        activated: true
+      })
+    ]);
 
     return h.view('system_stats', {
       eventClock,
@@ -158,7 +182,9 @@ module.exports = {
       prevDayMobileSessionCount: sessionMobileDayCount.count,
       prevWeekMobileSessionCount: sessionMobileWeekCount.count,
       prevDayWebSessionCount: sessionWebDayCount.count,
-      prevWeekWebSessionCount: sessionWebWeekCount.count
+      prevWeekWebSessionCount: sessionWebWeekCount.count,
+      prevDayTurnSessionCount: sessionTurnDayCount.count,
+      prevWeekTurnSessionCount: sessionTurnWeekCount.count
     });
   },
   validate: {

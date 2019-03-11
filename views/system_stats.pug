@@ -48,22 +48,39 @@ block dashboardContent
         tr
           th Sessions
           td Total
-          td #{activeSessionCount}
-          td #{prevDaySessionCount}
-          td #{prevWeekSessionCount}
+          td #{sessionStats.total.active}
+          td #{sessionStats.total.one_day}
+          td #{sessionStats.total.week}
         tr
           td
           td Mobile
-          td #{activeMobileSessionCount}
-          td #{prevDayMobileSessionCount}
-          td #{prevWeekMobileSessionCount}
+          td #{sessionStats.mobile.active}
+          td #{sessionStats.mobile.one_day}
+          td #{sessionStats.mobile.week}
         tr
           td
           td Web
-          td #{activeWebSessionCount}
-          td #{prevDayWebSessionCount}
-          td #{prevWeekWebSessionCount}
-
+          td #{sessionStats.web.active}
+          td #{sessionStats.web.one_day}
+          td #{sessionStats.web.week}
+        tr
+          th TURN-using Sessions
+          td Total
+          td -
+          td #{sessionStats.total_turn.one_day} (#{(sessionStats.total_turn.one_day / (sessionStats.total.one_day || 1)).toFixed(1)}%)
+          td #{sessionStats.total_turn.week} (#{(sessionStats.total_turn.week / (sessionStats.total.week || 1)).toFixed(1)}%)
+        tr
+          td
+          td Mobile 
+          td -
+          td #{sessionStats.mobile_turn.one_day} (#{(sessionStats.mobile_turn.one_day / (sessionStats.mobile.one_day || 1)).toFixed(1)}%)
+          td #{sessionStats.mobile_turn.week} (#{(sessionStats.mobile_turn.week / (sessionStats.mobile.week || 1)).toFixed(1)}%)
+        tr
+          td
+          td Web 
+          td -
+          td #{sessionStats.web_turn.one_day} (#{(sessionStats.web_turn.one_day / (sessionStats.web.one_day || 1)).toFixed(1)}%)
+          td #{sessionStats.web_turn.week} (#{(sessionStats.web_turn.week / (sessionStats.web.week || 1)).toFixed(1)}%)
 
     table
       thead

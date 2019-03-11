@@ -17,6 +17,7 @@ module.exports = {
       created_at: now,
       server: params.server,
       org_id: params.orgId,
+      session_id: params.sessionId,
       bytes_sent: params.bytesSent,
       bytes_received: params.bytesReceived
     };

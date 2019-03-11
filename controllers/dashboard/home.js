@@ -74,67 +74,72 @@ module.exports = {
       });
     }
 
+    const sessionStats = {
+      total: { active: 0, one_day: 0, week: 0 },
+      mobile: { active: 0, one_day: 0, week: 0 },
+      web: { active: 0, one_day: 0, week: 0 },
+      total_turn: { active: 0, one_day: 0, week: 0 },
+      mobile_turn: { active: 0, one_day: 0, week: 0 },
+      web_turn: { active: 0, one_day: 0, week: 0 }
+    };
 
-    const activeCount = await this.db.rooms.count_active();
-    const sessionCount = await this.db.sessions.count_active();
-    const sessionMobileCount = await this.db.sessions.count_active_type({ session_type: 'mobile', activated: true });
-    const sessionWebCount = await this.db.sessions.count_active_type({ session_type: 'desktop', activated: true });
+    const sessionData = await this.db.sessions.period_stats();
+    const categorize = (data, field) => {
 
-    const sessionDayCount = await this.db.sessions.count_period({
-      ts: new Date(),
-      interval: '1 day',
-      activated: true
-    });
-    const sessionWeekCount = await this.db.sessions.count_period({
-      ts: new Date(),
-      interval: '7 days',
-      activated: true
-    });
+      sessionStats.total[field] += data.count;
+      if (data.used_turn) {
+        sessionStats.total_turn[field] += data.count;
+      }
 
-    const sessionMobileDayCount = await this.db.sessions.count_period_type({
-      ts: new Date(),
-      interval: '1 day',
-      session_type: 'mobile',
-      activated: true
-    });
-    const sessionMobileWeekCount = await this.db.sessions.count_period_type({
-      ts: new Date(),
-      interval: '7 days',
-      session_type: 'mobile',
-      activated: true
-    });
+      if (data.type === 'mobile') {
+        sessionStats.mobile[field] += data.count;
+        if (data.used_turn) {
+          sessionStats.mobile_turn[field] += data.count;
+        }
+      }
+      if (data.type === 'desktop') {
+        sessionStats.web[field] += data.count;
+        if (data.used_turn) {
+          sessionStats.web_turn[field] += data.count;
+        }
+      }
+    };
 
-    const sessionWebDayCount = await this.db.sessions.count_period_type({
-      ts: new Date(),
-      interval: '1 day',
-      session_type: 'desktop',
-      activated: true
-    });
-    const sessionWebWeekCount = await this.db.sessions.count_period_type({
-      ts: new Date(),
-      interval: '7 days',
-      session_type: 'desktop',
-      activated: true
-    });
+    for (const data of sessionData) {
+      if (data.live) {
+        categorize(data, 'active');
+      }
+      if (data.one_day) {
+        categorize(data, 'one_day');
+      }
+      categorize(data, 'week');
+    }
 
-    const roomDayCount = await this.db.rooms.count_period({
-      ts: new Date(),
-      interval: '1 day'
-    });
-    const roomWeekCount = await this.db.rooms.count_period({
-      ts: new Date(),
-      interval: '7 days'
-    });
-
-    const roomUniqueDayCount = await this.db.rooms.count_period_unique({
-      ts: new Date(),
-      interval: '1 day'
-    });
-    const roomUniqueWeekCount = await this.db.rooms.count_period_unique({
-      ts: new Date(),
-      interval: '7 days'
-    });
-
+    const [
+      activeCount,
+      roomDayCount,
+      roomWeekCount,
+      roomUniqueDayCount,
+      roomUniqueWeekCount
+    ] = await Promise.all([
+      this.db.rooms.count_active(),
+      this.db.rooms.count_period({
+        ts: new Date(),
+        interval: '1 day'
+      }),
+      this.db.rooms.count_period({
+        ts: new Date(),
+        interval: '7 days'
+      }),
+      this.db.rooms.count_period_unique({
+        ts: new Date(),
+        interval: '1 day'
+      }),
+      this.db.rooms.count_period_unique({
+        ts: new Date(),
+        interval: '7 days'
+      })
+    ]);
 
     return h.view('system_stats', {
       eventClock,
@@ -145,20 +150,12 @@ module.exports = {
       iceQueue,
       iceUsage,
       iceOrgUsage,
+      sessionStats,
       activeRoomCount: activeCount.count,
-      activeSessionCount: sessionCount.count,
-      activeMobileSessionCount: sessionMobileCount.count,
-      activeWebSessionCount: sessionWebCount.count,
       prevDayRoomCount: roomDayCount.count,
       prevWeekRoomCount: roomWeekCount.count,
-      prevDaySessionCount: sessionDayCount.count,
-      prevWeekSessionCount: sessionWeekCount.count,
       prevDayUniqueRoomCount: roomUniqueDayCount.count,
-      prevWeekUniqueRoomCount: roomUniqueWeekCount.count,
-      prevDayMobileSessionCount: sessionMobileDayCount.count,
-      prevWeekMobileSessionCount: sessionMobileWeekCount.count,
-      prevDayWebSessionCount: sessionWebDayCount.count,
-      prevWeekWebSessionCount: sessionWebWeekCount.count
+      prevWeekUniqueRoomCount: roomUniqueWeekCount.count
     });
   },
   validate: {

@@ -1,5 +1,6 @@
 {
   "billing": {
+    "activity": false,
     "ice": false,
     "roomReports": false
   },

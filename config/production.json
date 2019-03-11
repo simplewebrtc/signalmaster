@@ -23,6 +23,7 @@
     }
   },
   "billing": {
+    "activity": false,
     "ice": true,
     "roomReports": false 
   },

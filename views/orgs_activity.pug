@@ -1,0 +1,64 @@
+extends layout_dashboard
+
+block dashboardContent
+  section
+
+    ul
+      li
+        a(href='/dashboard') Dashboard
+
+        //config_request_count | used_turn_count | session_connected_count | web_count | mobile_count |       last_activity        | org_id  | live | one_day
+    table
+      thead
+        tr
+          th Duration
+          th Live
+          th Active
+          th Config Requests
+          th Sessions
+          th Used Turn
+          th Browser Sessions
+          th Mobile Sessions
+      tbody
+        tr
+          td Today
+          td #{day.live}
+          td #{day.one_day}
+          td #{day.config_request_count}
+          td #{day.session_connected_count}
+          td #{day.used_turn_count}
+          td #{day.web_count}
+          td #{day.mobile_count}
+        tr
+          td This Week
+          td #{week.live}
+          td #{week.one_day}
+          td #{week.config_request_count}
+          td #{week.session_connected_count}
+          td #{week.used_turn_count}
+          td #{week.web_count}
+          td #{week.mobile_count}
+    table
+      thead
+        tr
+          th Org
+          th Live
+          th Active Today
+          th Last Active
+          th Config Requests
+          th Sessions
+          th Used Turn
+          th Browser Sessions
+          th Mobile Sessions
+      tbody
+        each org in activity
+          tr
+            td #{org.org_id}
+            td #{org.live}
+            td #{org.one_day}
+            td #{org.last_activity.toLocaleString()}
+            td #{org.config_request_count}
+            td #{org.session_connected_count}
+            td #{org.used_turn_count}
+            td #{org.web_count}
+            td #{org.mobile_count}

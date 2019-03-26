@@ -17,7 +17,7 @@
     "purge-pii": "node ./scripts/purge-pii",
     "prosody-config": "node ./scripts/prosody-config",
     "prosody-config-install-docker": "npm run -s prosody-config > config/prosody.cfg.lua",
-    "prosody-config-install-local": "npm run -s prosody-config > /usr/local/etc/prosody/prosody.cfg.lua",
+    "prosody-config-install-local": "npm run -s prosody-config > $HOME/.local/etc/prosody/prosody.cfg.lua",
     "prosody-config-install-etc": "npm run -s prosody-config > /etc/prosody/prosody.cfg.lua",
     "prosody-config-generate": "npm run -s prosody-config > ./prosody.cfg.lua",
     "certgen": "openssl req -nodes -new -x509 -keyout config/key.pem -out config/cert.pem -days 365"

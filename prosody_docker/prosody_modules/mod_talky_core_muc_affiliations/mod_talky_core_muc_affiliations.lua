@@ -74,7 +74,7 @@ end
 
 module:hook("muc-room-pre-create", function (event)
     apply_api_affiliation(event.room, event.stanza);
-end, -100);
+end, -1100);
 
 -- ////////////////////////////////////////////////////////////////////
 -- This hook needs to run _after_ the password check handler in the
@@ -87,7 +87,7 @@ end, -100);
 -- ////////////////////////////////////////////////////////////////////
 module:hook("muc-occupant-pre-join", function (event)
     apply_api_affiliation(event.room, event.stanza);
-end, -100);
+end, -1100);
 
 module:hook("muc-occupant-left", function (event)
     local jid = event.occupant.bare_jid;

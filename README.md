@@ -44,6 +44,8 @@ I think it's safe for us to just work out of the [initial migrations]('./migrati
     $ npm run prosody-config-install-local
     ```
 
+    If you need to put the config in a different spot (e.g. you have homebrew running from home directory), you can run `npm run -s prosody-config` and save the result where you need it to be.
+
     The Prosody config file is not regenerated automatically, so this step will need to be run any time you change the service configuration.
 
 #### Linux (Debian based)
@@ -91,26 +93,6 @@ I think it's safe for us to just work out of the [initial migrations]('./migrati
 
     The Prosody config file is not regenerated automatically, so this step will need to be run any time you change the service configuration.
 
-### 3. Generate Certificates
-
-To run the API with HTTPS (needed for local testing clients), run:
-
-```sh
-$ npm run create-key-pair
-```
-
-You will be prompted to fill in information for the certificate. The `Common Name` setting MUST be set to the domain/port you are using:
-
-```sh
-Country Name (2 letter code) [AU]:US
-State or Province Name (full name) [Some-State]:WA
-Locality Name (eg, city) []:
-Organization Name (eg, company) [Internet Widgits Pty Ltd]:
-Organizational Unit Name (eg, section) []:
-Common Name (e.g. server FQDN or YOUR name) []:localhost:8001
-Email Address []:
-```
-
 ### 3. Start the Service
 
 The API server (along with Prosody when not in production mode), can be started with:
@@ -118,8 +100,6 @@ The API server (along with Prosody when not in production mode), can be started 
 ```sh
 $ npm start
 ```
-
-If HTTPS is used, you will need to load the API home page in your browser to approve using the generated certificate.
 
 ## Schema
 

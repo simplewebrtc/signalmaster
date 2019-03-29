@@ -58,8 +58,12 @@ module.exports = {
           ],
           talky_core_muc_affiliation_url: `${BuildInternalUrl()}/prosody/rooms/affiliation`,
           talky_core_muc_user_info_url: `${BuildInternalUrl()}/prosody/rooms/user-info`,
+          muc_room_default_public: false,
+          muc_room_default_persistent: false,
           muc_room_allow_public: false,
+          muc_room_allow_persistent: false,
           muc_room_locking: false,
+          muc_tombstones: false,
           muc_config_restricted: [
             'muc#roomconfig_moderatedroom',
             'muc#roomconfig_whois',

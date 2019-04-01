@@ -1,6 +1,7 @@
 local async = require "util.async";
 local http = require "net.http";
 local json_encode = require "util.json".encode;
+local json_decode = require "util.json".decode;
 local jid_split = require "util.jid".split;
 local jid_bare = require "util.jid".bare;
 local hmac_sha1 = require "util.hashes".hmac_sha1;
@@ -21,7 +22,7 @@ local function fetch_affiliation(room, jid)
 
     local cached = affiliation_cache[jid];
     if cached then
-        module:log("debug", "Using cached affiliation: "..cached);
+        module:log("debug", "Using cached affiliation: %s %s", cached.affiliation, cached.role);
         return cached;
     end
 
@@ -53,8 +54,9 @@ local function fetch_affiliation(room, jid)
 
     if type(code) == "number" and code >= 200 and code <= 299 then
         module:log("debug", "HTTP API returned affiliation: "..content);
-        affiliation_cache[jid] = content;
-        return content;
+        local info = json_decode(content);
+        affiliation_cache[jid] = info;
+        return info;
     else
         module:log("warn", "HTTP API returned status code: "..code);
     end
@@ -62,14 +64,28 @@ local function fetch_affiliation(room, jid)
     return nil, "Affiliation lookup failed: "..content;
 end
 
-local function apply_api_affiliation(room, stanza)
+local function apply_api_affiliation(room, stanza, occupant)
     local jid = jid_bare(stanza.attr.from);
-    local affiliation, err = fetch_affiliation(room, jid);
+    local info, err = fetch_affiliation(room, jid);
+    local affilation, role;
     if err then
         affiliation = "outcast";
+        role = "none";
+    else
+        affiliation = info.affiliation;
+        role = info.role;
     end
 
     room:set_affiliation(true, jid, affiliation);
+    for occupant_jid, occupant in room:each_occupant() do
+        if occupant.bare_jid == jid then
+            room:set_role(true, occupant_jid, role);
+        end
+    end
+
+    if occupant then
+        occupant.role = role;
+    end
 end
 
 module:hook("muc-room-pre-create", function (event)
@@ -86,7 +102,7 @@ end, -1100);
 -- affiliation that would allow changing the password.
 -- ////////////////////////////////////////////////////////////////////
 module:hook("muc-occupant-pre-join", function (event)
-    apply_api_affiliation(event.room, event.stanza);
+    apply_api_affiliation(event.room, event.stanza, event.occupant);
 end, -1100);
 
 module:hook("muc-occupant-left", function (event)

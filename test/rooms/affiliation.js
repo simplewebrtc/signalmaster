@@ -55,7 +55,8 @@ describe('POST /prosody/rooms/affiliation', () => {
         return res.result;
       }).then((result) => {
 
-        expect(result).to.equal('owner');
+        expect(result.affiliation).to.equal('owner');
+        expect(result.role).to.equal('moderator');
         return db.rooms.destroy({ id: newRoom.id });
       });
   });
@@ -76,7 +77,8 @@ describe('POST /prosody/rooms/affiliation', () => {
       return res.result;
     }).then((result) => {
 
-      expect(result).to.equal('outcast');
+      expect(result.affiliation).to.equal('outcast');
+      expect(result.role).to.equal('none');
     });
   });
 

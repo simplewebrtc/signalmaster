@@ -16,12 +16,12 @@ module.exports = {
 
     // Only allow users to join rooms with matching org IDs
     if (user.orgId !== room.orgId) {
-      return h.response('outcast').type('text/plain').code(200);
+      return h.response({ affiliation: 'outcast', role: 'none' }).code(200);
     }
 
     // By default, we want all room members to be owners so that they
     // can lock/unlock the room.
-    return h.response('owner').type('text/plain').code(200);
+    return h.response({ affiliation: 'owner', role: 'moderator' }).code(200);
   },
   auth: 'internal-api',
   validate: {

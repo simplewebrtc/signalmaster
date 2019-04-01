@@ -14,7 +14,7 @@ prosody:
     prosody-stage: 'yes'
   deployment:
     image:
-      tag: latest-110718
+      tag: latest-040119
 secondaryDomain: stagetalky.io
 global:
   baseDomain: stagesimplewebrtc.com

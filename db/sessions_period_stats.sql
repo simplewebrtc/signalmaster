@@ -13,7 +13,7 @@ SELECT
 FROM
     sessions
 WHERE
-	age(now(), created_at) < interval '7 days'
+	age(now(), created_at) < interval '30 days'
   AND
   activated = true
 GROUP BY

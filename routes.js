@@ -31,6 +31,7 @@ module.exports = [
   { method: 'GET', path: '/dashboard/sessions/{id}', config: Controllers.dashboard.get_one_session },
   { method: 'GET', path: '/dashboard/rooms', config: Controllers.dashboard.get_list_of_rooms },
   { method: 'GET', path: '/dashboard/rooms/{id}', config: Controllers.dashboard.get_one_room },
+  { method: 'GET', path: '/dashboard/orgs', config: Controllers.dashboard.orgs_activity },
 
   // Internal routes for ICE
   // ---------------------------------------------------------------------

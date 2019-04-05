@@ -2,63 +2,77 @@ extends layout_dashboard
 
 block dashboardContent
   section
-
     ul
       li
         a(href='/dashboard') Dashboard
-
-        //config_request_count | used_turn_count | session_connected_count | web_count | mobile_count |       last_activity        | org_id  | live | one_day
+  
+    h2 Total Summary
     table
       thead
         tr
-          th Duration
-          th Live
+          th Period
+          th Config Requests
+          th Connected Sessions
+          th Used TURN
+          th Browser Sessions
+          th Mobile Sessions
+      tbody
+        tr
           th Active
-          th Config Requests
-          th Sessions
-          th Used Turn
-          th Browser Sessions
-          th Mobile Sessions
-      tbody
+          td #{totalStats.active.config_request_count}
+          td #{totalStats.active.session_connected_count}
+          td #{totalStats.active.used_turn_count}
+          td #{totalStats.active.web_count}
+          td #{totalStats.active.mobile_count}
         tr
-          td Today
-          td #{day.live}
-          td #{day.one_day}
-          td #{day.config_request_count}
-          td #{day.session_connected_count}
-          td #{day.used_turn_count}
-          td #{day.web_count}
-          td #{day.mobile_count}
+          th Today
+          td #{totalStats.one_day.config_request_count}
+          td #{totalStats.one_day.session_connected_count}
+          td #{totalStats.one_day.used_turn_count}
+          td #{totalStats.one_day.web_count}
+          td #{totalStats.one_day.mobile_count}
         tr
-          td This Week
-          td #{week.live}
-          td #{week.one_day}
-          td #{week.config_request_count}
-          td #{week.session_connected_count}
-          td #{week.used_turn_count}
-          td #{week.web_count}
-          td #{week.mobile_count}
+          th This Week
+          td #{totalStats.week.config_request_count}
+          td #{totalStats.week.session_connected_count}
+          td #{totalStats.week.used_turn_count}
+          td #{totalStats.week.web_count}
+          td #{totalStats.week.mobile_count}
+
+    h2 Per Customer Summaries
     table
       thead
         tr
-          th Org
-          th Live
-          th Active Today
-          th Last Active
+          th Customer
+          th Period
           th Config Requests
-          th Sessions
-          th Used Turn
+          th Connected Sessions
+          th Used TURN
           th Browser Sessions
           th Mobile Sessions
       tbody
-        each org in activity
+        each org in perCustomerStats
           tr
-            td #{org.org_id}
-            td #{org.live}
-            td #{org.one_day}
-            td #{org.last_activity.toLocaleString()}
-            td #{org.config_request_count}
-            td #{org.session_connected_count}
-            td #{org.used_turn_count}
-            td #{org.web_count}
-            td #{org.mobile_count}
+            th #{org.id}
+            th Active
+            td #{org.active.config_request_count}
+            td #{org.active.session_connected_count}
+            td #{org.active.used_turn_count}
+            td #{org.active.web_count}
+            td #{org.active.mobile_count}
+          tr
+            th #{org.last_activity}
+            th Today
+            td #{org.one_day.config_request_count}
+            td #{org.one_day.session_connected_count}
+            td #{org.one_day.used_turn_count}
+            td #{org.one_day.web_count}
+            td #{org.one_day.mobile_count}
+          tr
+            th
+            th Week
+            td #{org.week.config_request_count}
+            td #{org.week.session_connected_count}
+            td #{org.week.used_turn_count}
+            td #{org.week.web_count}
+            td #{org.week.mobile_count}

@@ -49,7 +49,7 @@ module.exports = {
       orgStats[field].web_count += data.web_count;
       orgStats[field].mobile_count += data.mobile_count;
 
-      if (data.last_activity && data.last_activity > orgStats.last_activity) {
+      if (data.last_activity && (!orgStats.last_activity || data.last_activity > orgStats.last_activity)) {
         orgStats.last_activity = data.last_activity;
       }
     };

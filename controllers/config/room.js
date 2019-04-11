@@ -1,11 +1,8 @@
 'use strict';
 
-const Config = require('getconfig');
 const Joi = require('joi');
-
 const Schema = require('../../lib/schema');
-const InflateDomains = require('../../lib/domains');
-const Domains = InflateDomains(Config.talky.domains);
+const Domains = require('../../lib/domains');
 
 
 module.exports = {

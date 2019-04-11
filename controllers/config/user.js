@@ -14,20 +14,16 @@ const { promisify } = require('util');
 
 const BuildUrl = require('../../lib/build_url');
 const FetchICE = require('../../lib/fetch_ice');
-const InflateDomains = require('../../lib/domains');
+const Domains = require('../../lib/domains');
 const ExtractCustomerData = require('../../lib/customer_data');
 const LookupOrg = require('../../lib/lookup_org');
-
-const TalkyCoreConfig = require('getconfig').talky;
-const Domains = InflateDomains(TalkyCoreConfig.domains);
-
 
 module.exports = {
   description: 'Auto-configure a registered user client session',
   tags: ['api', 'config'],
   handler: async function (request, h) {
 
-    const org = await LookupOrg(request.params.orgId, this.redis);
+    const org = await LookupOrg({ orgId: request.params.orgId, redis: this.redis });
     if (!org) {
       return Boom.forbidden('Account not enabled');
     }
@@ -41,7 +37,7 @@ module.exports = {
       orgSecrets = [org.secret];
     }
 
-    const customerData = await ExtractCustomerData(request.payload.token, orgSecrets);
+    const customerData = await ExtractCustomerData({ token: request.payload.token, apiSecrets: orgSecrets } );
     const { ua, browser, os } = UAParser(request.headers['user-agent']);
 
     const encodedCustomerData = Base32.encode(StableStringify(customerData));
@@ -66,7 +62,7 @@ module.exports = {
     //   hence the odd looking '##" in the username here.
     const username = `${org_id}##${encodedCustomerData}`;
     const user_id = `${username}@${Domains.users}`;
-    const ice = FetchICE(org_id, id);
+    const ice = FetchICE({ org_id, session_id: id });
     const sdkVersion = request.payload.clientVersion;
 
 
@@ -86,14 +82,16 @@ module.exports = {
     };
     await redis_rpush('events', JSON.stringify(event));
 
+    const overridePort = Config.getconfig.isDev ? 5280 : 80;
+
     const result = {
       id,
       userId: user_id,
       orgId: org_id,
       customerData,
-      signalingUrl: `${BuildUrl('ws', Domains.signaling, Config.getconfig.isDev ? 5280 : 80)}/ws-bind`,
-      telemetryUrl: `${BuildUrl('http', Domains.api)}/telemetry`,
-      roomConfigUrl: `${BuildUrl('http', Domains.api)}/config/room`,
+      signalingUrl: `${BuildUrl({ proto: 'ws', domain: Domains.signaling, overridePort })}/ws-bind`,
+      telemetryUrl: `${BuildUrl({ proto: 'http', domain: Domains.api })}/telemetry`,
+      roomConfigUrl: `${BuildUrl({ proto: 'http', domain: Domains.api })}/config/room`,
       roomServer: Domains.rooms,
       iceServers: ice,
       displayName: customerData.displayName || '',

@@ -5,8 +5,7 @@ const Muckraker = require('muckraker');
 const Config = require('getconfig');
 const Redis = require(Config.redis.module);
 
-const InflateDomains = require('./lib/domains');
-const Domains = InflateDomains(Config.talky.domains);
+const Domains = require('./lib/domains');
 
 const InternalAuth = require('./lib/internal_auth');
 const ProsodyAuth = require('./lib/prosody_auth');

@@ -1,11 +1,9 @@
 'use strict';
 
-const Config = require('getconfig');
 const Joi = require('joi');
 
-const InflateDomains = require('../../lib/domains');
-const BuildInternalUrl = require('../../lib/build_internal_url');
-const Domains = InflateDomains(Config.talky.domains);
+const Domains = require('../../lib/domains');
+const InternalUrl = require('../../lib/internal_url');
 
 const ResetDB = require('../../lib/reset_db');
 
@@ -25,7 +23,7 @@ module.exports = {
 
       log_level: 'info',
 
-      talky_core_telemetry_url: `${BuildInternalUrl()}/prosody/telemetry`,
+      talky_core_telemetry_url: `${InternalUrl}/prosody/telemetry`,
 
       hosts: {
         [Domains.api]: {},
@@ -33,17 +31,17 @@ module.exports = {
 
         [Domains.guests]: {
           authentication: 'talky_core',
-          talky_core_auth_url: `${BuildInternalUrl()}/prosody/auth/guest`
+          talky_core_auth_url: `${InternalUrl}/prosody/auth/guest`
         },
 
         [Domains.users]: {
           authentication: 'talky_core',
-          talky_core_auth_url: `${BuildInternalUrl()}/prosody/auth/user`
+          talky_core_auth_url: `${InternalUrl}/prosody/auth/user`
         },
 
         [Domains.bots]: {
           authentication: 'talky_core',
-          talky_core_auth_url: `${BuildInternalUrl()}/prosody/auth/bot`
+          talky_core_auth_url: `${InternalUrl}/prosody/auth/bot`
         }
       },
 
@@ -56,8 +54,8 @@ module.exports = {
             'talky_core_muc_affiliations',
             'talky_core_muc_info'
           ],
-          talky_core_muc_affiliation_url: `${BuildInternalUrl()}/prosody/rooms/affiliation`,
-          talky_core_muc_user_info_url: `${BuildInternalUrl()}/prosody/rooms/user-info`,
+          talky_core_muc_affiliation_url: `${InternalUrl}/prosody/rooms/affiliation`,
+          talky_core_muc_user_info_url: `${InternalUrl}/prosody/rooms/user-info`,
           muc_room_default_public: false,
           muc_room_default_persistent: false,
           muc_room_allow_public: false,
@@ -80,7 +78,7 @@ module.exports = {
       }
     };
 
-    await ResetDB(this.db, this.redis, request.payload.server);
+    await ResetDB({ db: this.db, redis: this.redis, shard: request.payload.server });
 
     return prosodyConfig;
   },

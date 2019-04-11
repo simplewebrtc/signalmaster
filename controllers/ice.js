@@ -9,7 +9,7 @@ module.exports = {
   handler: function (request, h) {
 
     const session = request.auth.credentials;
-    const result = FetchICE(session.orgId, session.id);
+    const result = FetchICE({ org_id: session.orgId, session_id: session.id });
     return result;
   },
   response: {

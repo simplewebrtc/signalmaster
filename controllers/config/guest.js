@@ -11,19 +11,15 @@ const { promisify } = require('util');
 
 const BuildUrl = require('../../lib/build_url');
 const FetchICE = require('../../lib/fetch_ice');
-const InflateDomains = require('../../lib/domains');
+const Domains = require('../../lib/domains');
 const LookupOrg = require('../../lib/lookup_org');
-
-const TalkyCoreConfig = require('getconfig').talky;
-const Domains = InflateDomains(TalkyCoreConfig.domains);
-
 
 module.exports = {
   description: 'Auto-configure a registered user client session',
   tags: ['api', 'config'],
   handler: async function (request, h) {
 
-    const org = await LookupOrg(request.params.orgId, this.redis);
+    const org = await LookupOrg({ orgId: request.params.orgId, redis: this.redis });
     if (!org) {
       return Boom.forbidden('Account not enabled');
     }
@@ -33,7 +29,7 @@ module.exports = {
     const id = UUID.v4();
     const org_id = org.key;
     const user_id = `${org_id}#${id}@${Domains.guests}`;
-    const ice = FetchICE(org_id, id);
+    const ice = FetchICE({ org_id, session_id: id });
     const sdkVersion = request.payload.clientVersion;
 
     const redis_rpush = promisify(this.redis.rpush.bind(this.redis));
@@ -53,13 +49,15 @@ module.exports = {
 
     await redis_rpush('events', JSON.stringify(event));
 
+    const overridePort = Config.getconfig.isDev ? 5280 : 80;
+
     const result = {
       id,
       userId: user_id,
       orgId: org_id,
-      signalingUrl: `${BuildUrl('ws', Domains.signaling, Config.getconfig.isDev ? 5280 : 80)}/ws-bind`,
-      telemetryUrl: `${BuildUrl('http', Domains.api)}/telemetry`,
-      roomConfigUrl: `${BuildUrl('http', Domains.api)}/config/room`,
+      signalingUrl: `${BuildUrl({ proto: 'ws', domain: Domains.signaling, overridePort })}/ws-bind`,
+      telemetryUrl: `${BuildUrl({ proto: 'http', domain: Domains.api })}/telemetry`,
+      roomConfigUrl: `${BuildUrl({ proto: 'http', domain: Domains.api })}/config/room`,
       roomServer: Domains.rooms,
       iceServers: ice,
       displayName: '',

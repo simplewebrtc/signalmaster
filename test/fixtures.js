@@ -5,9 +5,8 @@ const Faker = require('faker');
 const JWT = require('jsonwebtoken');
 const Config = require('getconfig');
 const Crypto = require('crypto');
-const InflateDomains = require('../lib/domains');
+const Domains = require('../lib/domains');
 const LookupOrg = require('../lib/lookup_org');
-const Domains = InflateDomains(Config.talky.domains);
 
 exports.Server = Server.Server;
 exports.db = Server.db;
@@ -87,7 +86,7 @@ exports.apiToken = async function (unsigned, attrs, org) {
   };
 
   const tokenAttrs = Object.assign(defaults, attrs);
-  const orgData = await LookupOrg(org);
+  const orgData = await LookupOrg({ orgId: org });
 
   return JWT.sign(unsigned, orgData.secret, tokenAttrs);
 };

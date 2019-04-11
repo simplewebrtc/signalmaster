@@ -25,7 +25,7 @@
   "billing": {
     "activity": false,
     "ice": true,
-    "roomReports": false 
+    "roomReports": false
   },
   "talky": {
     "apiVersion": "2.0.0",

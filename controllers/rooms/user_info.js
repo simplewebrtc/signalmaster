@@ -9,7 +9,7 @@ module.exports = {
   tags: ['api', 'prosody'],
   handler: function (request, h) {
 
-    const info = UserInfo(request.payload.user_id, request.payload.session_id);
+    const info = UserInfo(request.payload);
     return h.response(info).type('application/json').code(200);
   },
   auth: 'internal-api',

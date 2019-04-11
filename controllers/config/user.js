@@ -7,6 +7,8 @@ const UUID = require('uuid');
 const Boom = require('boom');
 const UAParser = require('ua-parser-js');
 const Base32 = require('base32-crockford-browser');
+const StableStringify = require('json-stringify-deterministic');
+
 const Schema = require('../../lib/schema');
 const { promisify } = require('util');
 
@@ -42,11 +44,27 @@ module.exports = {
     const customerData = await ExtractCustomerData(request.payload.token, orgSecrets);
     const { ua, browser, os } = UAParser(request.headers['user-agent']);
 
-    const encodedCustomerData = Base32.encode(JSON.stringify(customerData));
+    const encodedCustomerData = Base32.encode(StableStringify(customerData));
 
     const id = UUID.v4();
     const org_id = org.key;
-    const username = `${org_id}#${id}#${encodedCustomerData}`;
+
+    // HISTORY: The original format we used for the username of JIDs was
+    //   sessionid@domain for guests, and sessionid#data@domain for
+    //   users with customer data. Later, we added an org (customer)
+    //   id prefix, again delimited by #. So the full format is now
+    //   customer#sessionid#data@domain
+    //
+    //   The talky org was special, since we had to grandfather in the
+    //   older iOS client that generated its own JID. So if a JID doesn't
+    //   have the expected number of segments, we assume it was for the talky
+    //   iOS client.
+    //
+    //   We no longer want sessionid included in the JID for non-guest users
+    //   so that we can consistently and predictably generate them based on
+    //   customer JWT data. So for now, we end up with an empty second segment,
+    //   hence the odd looking '##" in the username here.
+    const username = `${org_id}##${encodedCustomerData}`;
     const user_id = `${username}@${Domains.users}`;
     const ice = FetchICE(org_id, id);
     const sdkVersion = request.payload.clientVersion;

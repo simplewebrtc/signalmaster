@@ -11,8 +11,8 @@ module.exports = {
   tags: ['api', 'prosody', 'auth'],
   handler: function (request, h) {
 
-    const user = UserInfo(request.payload.user_id);
-    const room = RoomInfo(request.payload.room_id);
+    const user = UserInfo(request.payload);
+    const room = RoomInfo(request.payload);
 
     // Only allow users to join rooms with matching org IDs
     if (user.orgId !== room.orgId) {

@@ -1,8 +1,7 @@
 'use strict';
 
 const Config = require('getconfig');
-const InflateDomains = require('../lib/domains');
-const Domains = InflateDomains(Config.talky.domains);
+const Domains = require('../lib/domains');
 
 
 module.exports = {

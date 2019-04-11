@@ -7,6 +7,8 @@ const UUID = require('uuid');
 const Boom = require('boom');
 const UAParser = require('ua-parser-js');
 const Base32 = require('base32-crockford-browser');
+const StableStringify = require('json-stringify-deterministic');
+
 const Schema = require('../../lib/schema');
 const { promisify } = require('util');
 
@@ -42,11 +44,11 @@ module.exports = {
     const customerData = await ExtractCustomerData(request.payload.token, orgSecrets);
     const { ua, browser, os } = UAParser(request.headers['user-agent']);
 
-    const encodedCustomerData = Base32.encode(JSON.stringify(customerData));
+    const encodedCustomerData = Base32.encode(StableStringify(customerData));
 
     const id = UUID.v4();
     const org_id = org.key;
-    const username = `${org_id}#${id}#${encodedCustomerData}`;
+    const username = `${org_id}##${encodedCustomerData}`;
     const user_id = `${username}@${Domains.users}`;
     const ice = FetchICE(org_id, id);
     const sdkVersion = request.payload.clientVersion;

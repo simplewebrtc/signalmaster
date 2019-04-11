@@ -50,8 +50,8 @@ block dashboardContent
           th Used TURN
           th Browser Sessions
           th Mobile Sessions
-      each org in perCustomerStats
-        tbody
+      tbody
+        each org in perCustomerStats
           tr
             th #{org.id}
             th Active

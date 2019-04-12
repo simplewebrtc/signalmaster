@@ -5,7 +5,7 @@ swrtc-ice:
     ice-prod: 'yes'
   deployment:
     image:
-      repository: andyet/talky-core-ice:0.25
+      repository: andyet/talky-core-ice:0.26
   config:
     data:
       PUBLIC_IP: 35.193.222.116
@@ -14,7 +14,7 @@ prosody:
     prosody-prod: 'yes'
   deployment:
     image:
-      tag: latest-110718
+      tag: latest-041119
 secondaryDomain: talky.io
 global:
   baseDomain: simplewebrtc.com

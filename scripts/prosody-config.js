@@ -1,7 +1,7 @@
 'use strict';
 
 const Config = require('getconfig');
-const BuildInternalUrl = require('../lib/build_internal_url');
+const InternalUrl = require('../lib/internal_url');
 
 
 console.log(`
@@ -25,7 +25,7 @@ modules_enabled = {
 }
 
 talky_core_api_key = "${Config.auth.secret}"
-talky_core_config_url = "${BuildInternalUrl()}/prosody/config";
+talky_core_config_url = "${InternalUrl}/prosody/config";
 
 VirtualHost "_placeholder_";
 `);

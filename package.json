@@ -61,7 +61,7 @@
     "lab": "^18.0.2",
     "nock": "^10.0.0",
     "readline-sync": "^1.4.9",
-    "redis-mock": "^0.43.0"
+    "redis-mock": "^0.44.0"
   },
   "pre-commit": [
     "lint",

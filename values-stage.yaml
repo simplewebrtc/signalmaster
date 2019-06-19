@@ -1,14 +1,5 @@
 nodeSelector:
   swrtc-api-stage: 'yes'
-swrtc-ice:
-  nodeSelector:
-    ice-stage: 'yes'
-  deployment:
-    image:
-      repository: andyet/talky-core-ice:0.26
-  config:
-    data:
-      PUBLIC_IP: 35.202.210.1
 prosody:
   nodeSelector:
     prosody-stage: 'yes'
@@ -22,7 +13,6 @@ global:
 config:
   data:
     REDIS_HOST: "10.128.0.6"
-    REDIS_PORT: "6379"
     CHROME_EXTENSION_ID: kochadnnpmbkfdhlaajaemgjmkjfhfkb
 ingress:
   tls:

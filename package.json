@@ -54,7 +54,7 @@
   "devDependencies": {
     "cheerio": "^1.0.0-rc.2",
     "code": "^5.2.0",
-    "eslint": "^5.15.1",
+    "eslint": "^6.0.0",
     "eslint-config-andyet": "^2.1.0",
     "faker": "^4.1.0",
     "git-validate": "^2.2.4",

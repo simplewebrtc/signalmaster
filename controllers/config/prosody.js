@@ -37,11 +37,6 @@ module.exports = {
         [Domains.users]: {
           authentication: 'talky_core',
           talky_core_auth_url: `${InternalUrl}/prosody/auth/user`
-        },
-
-        [Domains.bots]: {
-          authentication: 'talky_core',
-          talky_core_auth_url: `${InternalUrl}/prosody/auth/bot`
         }
       },
 

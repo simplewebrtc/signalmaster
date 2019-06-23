@@ -96,7 +96,6 @@ module.exports = {
       iceServers: ice,
       displayName: customerData.displayName || '',
       apiVersion: Config.talky.apiVersion,
-      screensharingExtensions: org.screensharingExtensions || {},
       credential: JWT.sign({
         id,
         orgId: org_id,

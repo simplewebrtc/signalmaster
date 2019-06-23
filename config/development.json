@@ -34,17 +34,11 @@
     "orgs": {
       "andyet": {
         "active": true,
-        "secret": "customer-api-shared-jwt-password-makethisoneprettysecureok",
-        "screensharingExtensions": {
-          "chrome": "ikljcimogjdaoojhmkbioipmffflodgk"
-        }
+        "secret": "customer-api-shared-jwt-password-makethisoneprettysecureok"
       },
       "talky": {
         "active": true,
-        "secret": "customer-api-shared-jwt-password-makethisoneprettysecureok",
-        "screensharingExtensions": {
-          "chrome": "ikljcimogjdaoojhmkbioipmffflodgk"
-        }
+        "secret": "customer-api-shared-jwt-password-makethisoneprettysecureok"
       }
     }
   },

@@ -52,18 +52,12 @@
       "andyet": {
         "active": true,
         "secret": "$CUSTOMER_API_KEY",
-        "maskRoomNames": true,
-        "screensharingExtensions": {
-          "chrome": "$CHROME_EXTENSION_ID"
-        }
+        "maskRoomNames": true
       },
       "talky": {
         "active": true,
         "secret": "$CUSTOMER_API_KEY",
-        "maskRoomNames": true,
-        "screensharingExtensions": {
-          "chrome": "$CHROME_EXTENSION_ID"
-        }
+        "maskRoomNames": true
       }
     }
   },

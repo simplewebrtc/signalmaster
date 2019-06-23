@@ -50,7 +50,6 @@ module.exports = [
   // Authentication
   { method: 'GET', path: '/prosody/auth/user', config: Controllers.auth.user },
   { method: 'GET', path: '/prosody/auth/guest', config: Controllers.auth.guest },
-  { method: 'GET', path: '/prosody/auth/bot', config: Controllers.auth.bot },
 
   // Room affiliations
   { method: 'POST', path: '/prosody/rooms/affiliation', config: Controllers.rooms.affiliation },

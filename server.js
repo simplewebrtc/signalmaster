@@ -87,10 +87,6 @@ exports.Server = server.register(require('hapi-auth-basic')).then(() => {
     validate: ProsodyAuth('users')
   });
 
-  server.auth.strategy('prosody-bots', 'basic', {
-    validate: ProsodyAuth('bots')
-  });
-
   server.auth.strategy('internal-api', 'basic', {
     validate: InternalAuth
   });

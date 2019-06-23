@@ -11,7 +11,7 @@
     "knex": "knex",
     "createdb": "psql -d postgres -c \"CREATE ROLE $(node -pe 'require(\"getconfig\").db.user') WITH PASSWORD '$(node -pe 'require(\"getconfig\").db.password')' NOSUPERUSER NOCREATEDB NOCREATEROLE INHERIT LOGIN\" && createdb $(node -pe 'require(\"getconfig\").db.database') -O $(node -pe 'require(\"getconfig\").db.user')",
     "destroydb": "psql -d postgres -c \"DROP DATABASE $(node -pe 'require(\"getconfig\").db.database')\" && psql -d postgres -c \"DROP ROLE $(node -pe 'require(\"getconfig\").db.user');\"",
-    "test": "lab -a code -L -v -e test -I __core-js_shared__,core",
+    "test": "lab -a code -L -v -e test -I __core-js_shared__,core,CSS",
     "coverage": "lab -a code -e test -L -r html -o coverage.html",
     "start-prosody": "node ./scripts/start-prosody",
     "purge-pii": "node ./scripts/purge-pii",
@@ -25,7 +25,7 @@
   "author": "",
   "license": "See LICENSE file",
   "dependencies": {
-    "@now-ims/hapi-now-auth": "^1.1.1",
+    "@now-ims/hapi-now-auth": "^2.0.0",
     "array-shuffle": "^1.0.1",
     "base32-crockford-browser": "^1.0.0",
     "boom": "^7.2.0",

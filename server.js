@@ -1,6 +1,6 @@
 'use strict';
 
-const Hapi = require('hapi');
+const Hapi = require('@hapi/hapi');
 const Muckraker = require('muckraker');
 const Config = require('getconfig');
 const Redis = require(Config.redis.module);
@@ -36,7 +36,7 @@ exports.eventWorker = eventWorker;
 exports.roomReports = roomReports;
 exports.iceWorker = iceWorker;
 
-exports.Server = server.register(require('hapi-auth-basic')).then(() => {
+exports.Server = server.register(require('@hapi/basic')).then(() => {
 
   server.auth.strategy('admin', 'basic', {
     validate: (request, username, password, h) => {
@@ -49,14 +49,14 @@ exports.Server = server.register(require('hapi-auth-basic')).then(() => {
 }).then(async () => {
 
   await server.register([{
-    plugin: require('good'),
+    plugin: require('@hapi/good'),
     options: Config.good
   }, {
     plugin: require('@now-ims/hapi-now-auth')
   }, {
-    plugin: require('vision')
+    plugin: require('@hapi/vision')
   }, {
-    plugin: require('inert')
+    plugin: require('@hapi/inert')
   }, {
     plugin: require('hapi-swagger'),
     options: {

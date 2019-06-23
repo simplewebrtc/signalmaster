@@ -73,7 +73,7 @@
     },
     "reporters": {
       "console": [{
-        "module": "good-squeeze",
+        "module": "@hapi/good-squeeze",
         "name": "Squeeze",
         "args": [{
           "log": "*",
@@ -82,7 +82,7 @@
           "error": "*"
         }]
       }, {
-        "module": "good-console"
+        "module": "@hapi/good-console"
       }, "stdout"
       ]
     }

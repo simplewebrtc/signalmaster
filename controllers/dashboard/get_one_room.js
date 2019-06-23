@@ -1,7 +1,7 @@
 'use strict';
 
 const Duration = require('humanize-duration');
-const Boom = require('boom');
+const Boom = require('@hapi/boom');
 
 module.exports = {
   description: 'Dashboard',

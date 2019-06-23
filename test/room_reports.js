@@ -1,6 +1,6 @@
 'use strict';
 
-const Lab = require('lab');
+const Lab = require('@hapi/lab');
 const Code = require('code');
 const Cheerio = require('cheerio');
 const Fixtures = require('./fixtures');

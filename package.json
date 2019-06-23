@@ -42,7 +42,7 @@
     "json-stringify-deterministic": "^1.0.1",
     "jsonwebtoken": "^8.3.0",
     "keyfob": "^1.0.0",
-    "knex": "^0.16.3",
+    "knex": "^0.17.6",
     "minimist": "^1.2.0",
     "muckraker": "^4.0.1",
     "pg": "^7.4.3",

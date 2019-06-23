@@ -36,7 +36,7 @@
     "hapi": "^18.1.0",
     "hapi-auth-basic": "^5.0.0",
     "hapi-pagination": "^2.0.0",
-    "hapi-swagger": "^9.4.1",
+    "hapi-swagger": "^10.0.2",
     "humanize-duration": "^3.15.1",
     "inert": "^5.1.0",
     "json-stringify-deterministic": "^1.0.1",

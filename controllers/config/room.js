@@ -13,6 +13,11 @@ module.exports = {
     const session = request.auth.credentials;
     const orgId = session.orgId;
 
+    const org = await LookupOrg({ orgId, redis: this.redis });
+    if (!org) {
+      return Boom.forbidden('Account not enabled');
+    }
+
     const providedName = request.payload.name;
 
     // TODO: Drop compatibility for talky org once mobile app upgrades to use

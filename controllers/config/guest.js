@@ -1,6 +1,7 @@
 'use strict';
 
 const Config = require('getconfig');
+const Crypto = require('crypto');
 const Joi = require('joi');
 const JWT = require('jsonwebtoken');
 const UUID = require('uuid');
@@ -28,7 +29,8 @@ module.exports = {
 
     const id = UUID.v4();
     const org_id = org.key;
-    const user_id = `${org_id}#${id}@${Domains.guests}`;
+    const username = `${org_id}#${id}`;
+    const user_id = `${username}@${Domains.guests}`;
     const ice = FetchICE({ org_id, session_id: id });
     const sdkVersion = request.payload.clientVersion;
 
@@ -73,7 +75,7 @@ module.exports = {
         expiresIn: '1 day',
         issuer: Domains.api,
         audience: Domains.guests,
-        subject: `${org_id}#${id}`
+        subject: Crypto.createHash('sha256').update(username).digest('base64')
       })
     };
 

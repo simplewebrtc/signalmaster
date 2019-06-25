@@ -1,6 +1,7 @@
 'use strict';
 
 const Config = require('getconfig');
+const Crypto = require('crypto');
 const Joi = require('joi');
 const JWT = require('jsonwebtoken');
 const UUID = require('uuid');
@@ -107,7 +108,7 @@ module.exports = {
         expiresIn: '1 day',
         issuer: Domains.api,
         audience: Domains.users,
-        subject: username
+        subject: Crypto.createHash('sha256').update(username).digest('base64')
       })
     };
 

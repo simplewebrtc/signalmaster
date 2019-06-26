@@ -31,7 +31,7 @@ module.exports = {
     const org_id = org.key;
     const username = `${org_id}#${id}`;
     const user_id = `${username}@${Domains.guests}`;
-    const ice = FetchICE({ org_id, session_id: id });
+    const ice = FetchICE({ org, session_id: id });
     const sdkVersion = request.payload.clientVersion;
 
     const redis_rpush = promisify(this.redis.rpush.bind(this.redis));

@@ -71,6 +71,7 @@ exports.session = function (attrs) {
 
   const defaults = {
     id: Faker.random.word(),
+    orgId: 'testorg',
     user_id: Faker.internet.email(),
     scopes: ['mod']
   };

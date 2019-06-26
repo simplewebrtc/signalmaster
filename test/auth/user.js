@@ -31,7 +31,7 @@ describe('GET /prosody/auth/user', () => {
   it('works', () => {
 
     const headers = {
-      authorization: Fixtures.prosodyTokenHeader({ id: 'testUser' }, 'users')
+      authorization: Fixtures.prosodyTokenHeader({ id: 'testUser', orgId: 'testorg' }, 'users')
     };
     return server.inject({ method: 'GET', url: '/prosody/auth/user', headers })
       .then((res) => {

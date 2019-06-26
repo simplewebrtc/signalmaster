@@ -2,7 +2,7 @@
 
 const Config = require('getconfig');
 const Crypto = require('crypto');
-const Joi = require('joi');
+const Joi = require('@hapi/joi');
 const JWT = require('jsonwebtoken');
 const UUID = require('uuid');
 const Boom = require('@hapi/boom');

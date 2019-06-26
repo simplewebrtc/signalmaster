@@ -1,14 +1,16 @@
 'use strict';
 
-const Joi = require('joi');
+const Joi = require('@hapi/joi');
+const Boom = require('boom');
 const Schema = require('../../lib/schema');
 const Domains = require('../../lib/domains');
+const LookupOrg = require('../../lib/lookup_org');
 
 
 module.exports = {
   description: 'Fetch configuration for a room',
   tags: ['api', 'config'],
-  handler: function (request, h) {
+  handler: async function (request, h) {
 
     const session = request.auth.credentials;
     const orgId = session.orgId;

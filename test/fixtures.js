@@ -133,7 +133,7 @@ exports.prosodyBasicHeader = function (username) {
 exports.prosodyTokenHeader = function (unsigned, kind, attrs) {
 
   const defaults = {
-    algorithm: 'HS256', expiresIn: '1 day',
+    algorithm: 'HS256',
     issuer: Domains.api,
     audience: Domains[kind],
     subject: unsigned.id

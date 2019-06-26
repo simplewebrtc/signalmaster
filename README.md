@@ -160,6 +160,5 @@ If you are running this in a container these environment variables are needed
 - REDIS_HOST
 - REDIS_PASSWORD
 - REDIS_PASSWORD
-- TALKY_LICENSE
 - TURN_SECRET               # Auth secret used to connect to TURN
 ```

@@ -1,6 +1,6 @@
 'use strict';
 
-const Joi = require('joi');
+const Joi = require('@hapi/joi');
 
 const RoomInfo = require('../../lib/room_info');
 const UserInfo = require('../../lib/user_info');

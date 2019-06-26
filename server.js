@@ -80,11 +80,11 @@ exports.Server = server.register(require('@hapi/basic')).then(() => {
 }).then(async () => {
 
   server.auth.strategy('prosody-guests', 'basic', {
-    validate: ProsodyAuth('guests')
+    validate: ProsodyAuth('guests', redisClient)
   });
 
   server.auth.strategy('prosody-users', 'basic', {
-    validate: ProsodyAuth('users')
+    validate: ProsodyAuth('users', redisClient)
   });
 
   server.auth.strategy('internal-api', 'basic', {

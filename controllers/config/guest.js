@@ -2,7 +2,7 @@
 
 const Config = require('getconfig');
 const Crypto = require('crypto');
-const Joi = require('joi');
+const Joi = require('@hapi/joi');
 const JWT = require('jsonwebtoken');
 const UUID = require('uuid');
 const Boom = require('@hapi/boom');
@@ -63,7 +63,6 @@ module.exports = {
       roomServer: Domains.rooms,
       iceServers: ice,
       displayName: '',
-      screensharingExtensions: org.screensharingExtensions || {},
       apiVersion: Config.talky.apiVersion,
       credential: JWT.sign({
         id,
@@ -72,7 +71,6 @@ module.exports = {
         sdkVersion
       }, Config.auth.secret, {
         algorithm: 'HS256',
-        expiresIn: '1 day',
         issuer: Domains.api,
         audience: Domains.guests,
         subject: Crypto.createHash('sha256').update(username).digest('base64')

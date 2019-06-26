@@ -63,7 +63,7 @@ module.exports = {
     //   hence the odd looking '##" in the username here.
     const username = `${org_id}##${encodedCustomerData}`;
     const user_id = `${username}@${Domains.users}`;
-    const ice = FetchICE({ org_id, session_id: id });
+    const ice = FetchICE({ org, session_id: id });
     const sdkVersion = request.payload.clientVersion;
 
 

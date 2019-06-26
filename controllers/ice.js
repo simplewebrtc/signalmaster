@@ -1,15 +1,22 @@
 'use strict';
 
 const FetchICE = require('../lib/fetch_ice');
+const LookupOrg = require('../lib/lookup_org');
 const Schema = require('../lib/schema');
 
 module.exports = {
   description: 'Provide ICE servers and credentials',
   tags: ['api', 'ice'],
-  handler: function (request, h) {
+  handler: async function (request, h) {
 
     const session = request.auth.credentials;
-    const result = FetchICE({ org_id: session.orgId, session_id: session.id });
+
+    const org = await LookupOrg({ orgId: session.orgId, redis: this.redis });
+    if (!org) {
+      return Boom.forbidden('Account not enabled');
+    }
+
+    const result = FetchICE({ org, session_id: session.id });
     return result;
   },
   response: {
@@ -19,4 +26,3 @@ module.exports = {
   },
   auth: 'client-token'
 };
-

@@ -40,8 +40,6 @@ pipeline:
   drone_helm_stage:
     image: andyet/drone-helm
     pull: true
-    debug: true
-    dry-run: true
     skip_tls_verify: false
     chart: andyet/swrtc-api
     prefix: staging

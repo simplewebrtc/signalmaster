@@ -102,14 +102,15 @@ module.exports = {
         id,
         orgId: org_id,
         registeredUser: true,
-        sdkVersion
+        sdkVersion,
+        exp: customerData.exp
       }, Config.auth.secret, {
         algorithm: 'HS256',
-        expiresIn: '1 day',
         issuer: Domains.api,
         audience: Domains.users,
         subject: Crypto.createHash('sha256').update(username).digest('base64')
-      })
+      }),
+      expires: customerData.exp ? new Date(customerData.exp * 1000).toISOString() : undefined
     };
 
     return result;

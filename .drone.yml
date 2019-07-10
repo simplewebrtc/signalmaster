@@ -1,7 +1,7 @@
 pipeline:
   build_docker:
     image: plugins/docker
-    repo: andyet/signalmaster-sandbox
+    repo: simplewebrtc/signalmaster
     tags:
       - latest
       - ${DRONE_COMMIT_SHA:0:8}
@@ -14,7 +14,7 @@ pipeline:
     kubernetes_cert: ${KUBERNETES_CERT}
     kubernetes_token: ${KUBERNETES_TOKEN}
     deployment: signalmaster-sandbox
-    repo: andyet/signalmaster-sandbox
+    repo: simplewebrtc/signalmaster
     container: signalmaster-sandbox
     namespace: default
     tag: ${DRONE_COMMIT_SHA:0:8}

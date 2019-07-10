@@ -22,7 +22,11 @@ pipeline:
       event: deployment
     secrets: [ kubernetes_cert, kubernetes_server, kubernetes_token ]
   slack:
-    image: plugins/slack
+    image: andyet/drone-slack:stable
+    pull: true
     username: drone
-    channel: alerts
-    secrets: [ slack_webhook ]
+    channel: io-alerts
+    secrets: [ slack_webhook, github_access_token, github_slack_lookup ]
+    when:
+      status: [ success, failure ]
+

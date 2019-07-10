@@ -126,7 +126,7 @@ module.exports = function (server, config) {
 
     function describeRoom(name) {
         var adapter = io.nsps['/'].adapter;
-        var clients = adapter.rooms[name] || {};
+        var clients = adapter.rooms[name] ? adapter.rooms[name].sockets : {};
         var result = {
             clients: {}
         };

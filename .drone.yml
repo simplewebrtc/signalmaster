@@ -21,7 +21,7 @@ pipeline:
       - database_url_prod
   build_docker_stage:
     image: plugins/docker
-    repo: andyet/talky-api
+    repo: simplewebrtc/api
     tags:
       - "${DRONE_COMMIT_SHA:0:8}"
       - "${DRONE_TAG##v}"
@@ -30,7 +30,7 @@ pipeline:
       event: [ tag ]
   build_docker_prod:
     image: plugins/docker
-    repo: andyet/talky-api
+    repo: simplewebrtc/api
     tags:
       - "${DRONE_COMMIT_SHA:0:8}"
       - latest
@@ -47,7 +47,7 @@ pipeline:
     helm_repos: andyet=https://andyet-helm-charts.storage.googleapis.com/
     release: swrtc-api-stage
     values_files: values-stage.yaml
-    values: deployment.image.repository=andyet/talky-api:${DRONE_TAG##v},secrets.data.REDIS_PASSWORD=$${REDIS_PASSWORD},secrets.data.DATABASE_URL=$${DATABASE_URL},secrets.data.TURN_SECRET=$${TURN_SECRET},secrets.data.ADMIN_PASSWORD=$${ADMIN_PASSWORD},secrets.data.CUSTOMER_API_KEY=$${CUSTOMER_API_KEY},secrets.data.INTERNAL_API_KEY=$${INTERNAL_API_KEY},secrets.data.TALKY_LICENSE=$${TALKY_LICENSE}
+    values: deployment.image.repository=simplewebrtc/api:${DRONE_TAG##v},secrets.data.REDIS_PASSWORD=$${REDIS_PASSWORD},secrets.data.DATABASE_URL=$${DATABASE_URL},secrets.data.TURN_SECRET=$${TURN_SECRET},secrets.data.ADMIN_PASSWORD=$${ADMIN_PASSWORD},secrets.data.CUSTOMER_API_KEY=$${CUSTOMER_API_KEY},secrets.data.INTERNAL_API_KEY=$${INTERNAL_API_KEY},secrets.data.TALKY_LICENSE=$${TALKY_LICENSE}
     secrets:
       - staging_ADMIN_PASSWORD
       - staging_API_SERVER
@@ -71,7 +71,7 @@ pipeline:
     helm_repos: andyet=https://andyet-helm-charts.storage.googleapis.com/
     release: swrtc-api-prod
     values_files: values-prod.yaml
-    values: deployment.image.repository=andyet/talky-api:${DRONE_COMMIT_SHA:0:8},secrets.data.REDIS_PASSWORD=$${REDIS_PASSWORD},secrets.data.DATABASE_URL=$${DATABASE_URL},secrets.data.TURN_SECRET=$${TURN_SECRET},secrets.data.ADMIN_PASSWORD=$${ADMIN_PASSWORD},secrets.data.CUSTOMER_API_KEY=$${CUSTOMER_API_KEY},secrets.data.INTERNAL_API_KEY=$${INTERNAL_API_KEY},secrets.data.TALKY_LICENSE=$${TALKY_LICENSE}
+    values: deployment.image.repository=simplewebrtc/api:${DRONE_COMMIT_SHA:0:8},secrets.data.REDIS_PASSWORD=$${REDIS_PASSWORD},secrets.data.DATABASE_URL=$${DATABASE_URL},secrets.data.TURN_SECRET=$${TURN_SECRET},secrets.data.ADMIN_PASSWORD=$${ADMIN_PASSWORD},secrets.data.CUSTOMER_API_KEY=$${CUSTOMER_API_KEY},secrets.data.INTERNAL_API_KEY=$${INTERNAL_API_KEY},secrets.data.TALKY_LICENSE=$${TALKY_LICENSE}
     secrets:
       - prod_ADMIN_PASSWORD
       - prod_API_SERVER

@@ -1,0 +1,14 @@
+deployment:
+  image:
+    repository: simplewebrtc/signalmaster
+  imagePullSecrets: talky-registry
+service:
+  internalPort: 8888
+  internalPortName: websocket
+  healthcheckPath: /healthcheck
+ingress:
+  domain: sandbox.stagesimplewebrtc.com
+  tls:
+    enabled: false
+  annotations:
+    kubernetes.io/ingress.class: gce

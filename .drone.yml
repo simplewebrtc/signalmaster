@@ -8,19 +8,44 @@ pipeline:
     secrets: [ docker_username, docker_password ]
     when:
       event: deployment
-  deploy:
-    image: quay.io/honestbee/drone-kubernetes
-    kubernetes_server: ${KUBERNETES_SERVER}
-    kubernetes_cert: ${KUBERNETES_CERT}
-    kubernetes_token: ${KUBERNETES_TOKEN}
-    deployment: signalmaster-sandbox
-    repo: simplewebrtc/signalmaster
-    container: signalmaster-sandbox
-    namespace: default
-    tag: ${DRONE_COMMIT_SHA:0:8}
+  drone_helm_tag:
+    image: andyet/drone-helm:latest
+    skip_tls_verify: false
+    chart: andyet/signalmaster
+    prefix: staging
+    recreate_pods: true
+    helm_repos: andyet=https://andyet-helm-charts.storage.googleapis.com/
+    release: signalmaster
+    values_files: values-stage.yaml
+    values: secrets.data.STUNSERVER_URL=$${STUNSERVER_URL},secrets.data.TURNSERVER_URL=$${TURNSERVER_URL},secrets.data.TURNSERVER_SECRET=$${TURNSERVER_SECRET}
+    secrets: [
+      staging_STUNSERVER_URL,
+      staging_TURNSERVER_URL,
+      staging_TURNSERVER_SECRET,
+      staging_KUBERNETES_CERTIFICATE,
+      staging_KUBERNETES_TOKEN,
+      staging_API_SERVER ]
+    when:
+      event: tag
+  drone_helm_deploy:
+    image: andyet/drone-helm:latest
+    skip_tls_verify: false
+    chart: andyet/signalmaster
+    prefix: prod
+    recreate_pods: true
+    helm_repos: andyet=https://andyet-helm-charts.storage.googleapis.com/
+    release: signalmaster
+    values_files: values-prod.yaml
+    values: secrets.data.STUNSERVER_URL=$${STUNSERVER_URL},secrets.data.TURNSERVER_URL=$${TURNSERVER_URL},secrets.data.TURNSERVER_SECRET=$${TURNSERVER_SECRET}
+    secrets: [
+      prod_STUNSERVER_URL,
+      prod_TURNSERVER_URL,
+      prod_TURNSERVER_SECRET,
+      prod_KUBERNETES_CERTIFICATE,
+      prod_KUBERNETES_TOKEN,
+      prod_API_SERVER ]
     when:
       event: deployment
-    secrets: [ kubernetes_cert, kubernetes_server, kubernetes_token ]
   slack:
     image: andyet/drone-slack:stable
     pull: true

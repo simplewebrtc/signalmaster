@@ -17,7 +17,7 @@ pipeline:
     helm_repos: andyet=https://andyet-helm-charts.storage.googleapis.com/
     release: signalmaster
     values_files: values-stage.yaml
-    values: secrets.data.STUNSERVER_URL=$${STUNSERVER_URL},secrets.data.TURNSERVER_URL=$${TURNSERVER_URL},secrets.data.TURNSERVER_SECRET=$${TURNSERVER_SECRET}
+    values: deployment.image.repository=simplewebrtc/signalmaster:${DRONE_COMMIT_SHA:0:8},secrets.data.STUNSERVER_URL=$${STUNSERVER_URL},secrets.data.TURNSERVER_URL=$${TURNSERVER_URL},secrets.data.TURNSERVER_SECRET=$${TURNSERVER_SECRET}
     secrets: [
       staging_STUNSERVER_URL,
       staging_TURNSERVER_URL,

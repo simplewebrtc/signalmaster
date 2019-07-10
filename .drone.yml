@@ -7,7 +7,7 @@ pipeline:
       - ${DRONE_COMMIT_SHA:0:8}
     secrets: [ docker_username, docker_password ]
     when:
-      event: deployment
+      event: [ deployment, tag ]
   drone_helm_tag:
     image: andyet/drone-helm:latest
     skip_tls_verify: false

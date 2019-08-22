@@ -9,7 +9,7 @@ pipeline:
     when:
       event: [ deployment, tag ]
   drone_helm_tag:
-    image: andyet/drone-helm:latest
+    image: one000mph/drone-helm:stage
     skip_tls_verify: false
     chart: andyet/signalmaster
     prefix: staging
@@ -28,7 +28,7 @@ pipeline:
     when:
       event: tag
   drone_helm_deploy:
-    image: andyet/drone-helm:latest
+    image: one000mph/drone-helm:stage
     skip_tls_verify: false
     chart: andyet/signalmaster
     prefix: prod

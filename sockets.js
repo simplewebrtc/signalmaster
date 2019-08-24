@@ -137,7 +137,14 @@ module.exports = function (server, config) {
     }
 
     function clientsInRoom(name) {
-        return io.sockets.clients(name).length;
+        // return io.sockets.clients(name).length;
+        var clientsList = io.sockets.adapter.rooms[name];
+        var ret = 0;
+        if (clientsList) {
+            ret = Object.keys(clientsList).length;
+        }
+        // console.log("clientsInRoom", name, ret);
+        return ret;
     }
 
 };

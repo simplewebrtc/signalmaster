@@ -1,5 +1,5 @@
 var socketIO = require('socket.io'),
-    uuid = require('node-uuid'),
+    uuid = require('uuid/v1'),
     crypto = require('crypto');
 
 module.exports = function (server, config) {
@@ -94,7 +94,7 @@ module.exports = function (server, config) {
         // useful for large-scale error monitoring
         client.on('trace', function (data) {
             console.log('trace', JSON.stringify(
-            [data.type, data.session, data.prefix, data.peer, data.time, data.value]
+                [data.type, data.session, data.prefix, data.peer, data.time, data.value]
             ));
         });
 

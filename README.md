@@ -45,7 +45,7 @@ $ NODE_ENV=production node server.js
 
 ## Use with Express
     var express = require('express')
-    var sockets = require('signalmaster/sockets')
+    var sockets = require('signal-master/sockets')
 
     var app = express()
     var server = app.listen(port)

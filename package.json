@@ -6,7 +6,8 @@
     "getconfig": "^4.3.0",
     "node-uuid": "1.2.0",
     "socket.io": "^1.7.4",
-    "yetify": "0.0.1"
+    "yetify": "0.0.1",
+    "express": "^4.17.1"
   },
   "main": "server.js",
   "repository": {
@@ -21,5 +22,8 @@
   "license": "MIT",
   "scripts": {
     "test": "node test.js"
+  },
+  "scripts": {
+    "start": "node server.js"
   }
 }

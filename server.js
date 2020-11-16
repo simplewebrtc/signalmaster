@@ -1,4 +1,17 @@
 /*global console*/
+
+var express = require('express')
+var sockets = require('./sockets')
+
+var app = express()
+var config = require('getconfig')
+var port = parseInt(process.env.PORT || config.server.port, 10)
+var server = app.listen(port, () =>
+  console.log(`Your app is listening on port ${process.env.PORT || 8080}`))
+
+sockets(server, config) // config is the same that server.js uses
+
+/*
 var yetify = require('yetify'),
     config = require('getconfig'),
     fs = require('fs'),
@@ -39,3 +52,4 @@ if (config.server.secure) {
     httpUrl = "http://localhost:" + port;
 }
 console.log(yetify.logo() + ' -- signal master is running at: ' + httpUrl);
+*/
